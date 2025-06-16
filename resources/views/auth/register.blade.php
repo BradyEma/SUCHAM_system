@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="flex flex-col items-center justify-center h-[92vh] bg-gray-100">
+    <div class="flex flex-col items-center justify-center h-[100vh] bg-gray-100">
         <img src="{{ asset('sucham.jpg') }}" alt="SUCHAM Logo" class="w-24 mb-4">
         <h1 class="text-2xl font-bold mb-6 text-sky-800">Create a SUCHAM Account</h1>
 
@@ -10,6 +10,15 @@
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <input id="name" class="mt-1 w-full border-gray-300 rounded shadow-sm" type="text" name="name" required autofocus />
+            </div>
+            <!-- Role -->
+            <div class="mb-4">
+              <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                <select id="role" name="role" required class="mt-1 w-full border-gray-300 rounded shadow-sm">
+                    <option value="customer">Customer</option>
+                    <option value="supplier">Supplier</option>
+                    <option value="admin">Admin</option>
+                </select>
             </div>
 
             <!-- Email -->
@@ -36,6 +45,8 @@
                 </button>
                 <a href="{{ route('login') }}" class="text-sm text-sky-600 hover:underline">Already have an account?</a>
             </div>
+           
+
         </form>
     </div>
 </x-guest-layout>

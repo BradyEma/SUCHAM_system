@@ -28,7 +28,7 @@
             
             <div class="w-full sm:w-1/2 pr-0 sm:pr-6 flex flex-col justify-center order-2 sm:order-1 mt-6 sm:mt-0">
                 <h1 class="text-3xl sm:text-4xl font-bold mb-4 text-gray-800">Welcome to SUCHAM</h1>
-                <p class="text-2xl sm:text-4xl italic mb-3 text-gray-500">"Naturally. Sweet"</p>
+                <p class="text-2xl sm:text-4xl italic mb-3 text-gray-500">"Naturally Sweet"</p>
                 <p class="text-base sm:text-lg text-gray-600 mb-4">
                     Efficient supply chain management for sugar suppliers, customers, and administrators.
                 </p>

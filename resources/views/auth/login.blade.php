@@ -2,11 +2,15 @@
     <div class="flex flex-col items-center justify-center h-[80vh] bg-gray-100">
         <img src="{{ asset('sucham.jpg') }}" alt="SUCHAM Logo" class="w-24 mb-4">
         <h1 class="text-2xl font-bold mb-6 text-sky-800">Login to SUCHAM</h1>
-
+          @if (session('status'))
+            <div class="mb-4 text-green-600 font-bold">
+             {{ session('status') }}
+            </div>
+            @endif
         <!-- Default Breeze login form -->
         <form method="POST" action="{{ route('login') }}" class="w-full max-w-sm bg-white p-6 rounded shadow">
             @csrf
-
+            
             <!-- Email -->
             <div class="mb-4">
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
