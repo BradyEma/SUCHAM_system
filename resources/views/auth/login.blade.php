@@ -7,6 +7,8 @@
              {{ session('status') }}
             </div>
             @endif
+           
+
         <!-- Default Breeze login form -->
         <form method="POST" action="{{ route('login') }}" class="w-full max-w-sm bg-white p-6 rounded shadow">
             @csrf

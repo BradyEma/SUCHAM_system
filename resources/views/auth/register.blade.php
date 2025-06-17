@@ -6,20 +6,12 @@
         <form method="POST" action="{{ route('register') }}" class="w-full max-w-sm bg-white p-6 rounded shadow">
             @csrf
 
-            <!-- Name -->
+            
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <input id="name" class="mt-1 w-full border-gray-300 rounded shadow-sm" type="text" name="name" required autofocus />
             </div>
-            <!-- Role -->
-            <div class="mb-4">
-              <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                <select id="role" name="role" required class="mt-1 w-full border-gray-300 rounded shadow-sm">
-                    <option value="customer">Customer</option>
-                    <option value="supplier">Supplier</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
+            
 
             <!-- Email -->
             <div class="mb-4">

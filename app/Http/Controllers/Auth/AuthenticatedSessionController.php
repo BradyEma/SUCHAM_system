@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 use App\Providers\RouteServiceProvider;
 
+use App\Models\Supplier;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -25,23 +27,48 @@ class AuthenticatedSessionController extends Controller
      */
   
 
-public function store(LoginRequest $request): RedirectResponse
+public function store(Request $request)
 {
-    $request->authenticate();
-    $request->session()->regenerate();
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-    $user = Auth::user();
+    $credentials = $request->only('email', 'password');
 
-    // Redirect based on role
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    } elseif ($user->role === 'supplier') {
-        return redirect()->route('supplier.dashboard');
-    } else {
-        return redirect()->route('customer.dashboard'); // default fallback
+    // Try authenticating user from users table
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->role === 'customer') {
+            return redirect()->route('customer.dashboard');
+        }
+
+        return redirect()->route('dashboard'); // Fallback
     }
-}
 
+    // Try authenticating supplier from suppliers table
+    $supplier = Supplier::where('email', $request->email)->first();
+
+    if ($supplier && Hash::check($request->password, $supplier->password)) {
+        if ($supplier->status !== 'approved') {
+            return back()->withErrors(['email' => 'Your supplier account is pending approval.']);
+        }
+
+        // Manually login the supplier
+        Auth::guard('supplier')->login($supplier);
+        $request->session()->regenerate();
+
+        return redirect()->route('supplier.dashboard');
+    }
+
+    return back()->withErrors([
+        'email' => 'The provided account doenot exist.',
+    ]);
+}
 
     /**
      * Destroy an authenticated session.

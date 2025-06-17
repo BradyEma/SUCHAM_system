@@ -1,12 +1,27 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SupplierRegisterController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/login', function () {
+    return view('auth.login'); // adjust this if your view is in a different location
+})->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
+// Supplier-specific routes
+Route::get('/supplier/dashboard', function () {
+    return view('dashboard.supplier');
+})->middleware('auth:supplier')->name('supplier.dashboard');
+
+Route::get('/register/supplier', [SupplierRegisterController::class, 'showRegistrationForm'])->name('register.supplier');
+Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
+
+// General dashboard (web auth guard)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -17,9 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Dashboard routes
+    // Admin and Customer Dashboards
     Route::get('/admin/dashboard', fn () => view('dashboard.admin'))->name('admin.dashboard');
-    Route::get('/supplier/dashboard', fn () => view('dashboard.supplier'))->name('supplier.dashboard');
     Route::get('/customer/dashboard', fn () => view('dashboard.customer'))->name('customer.dashboard');
 });
+
 require __DIR__.'/auth.php';

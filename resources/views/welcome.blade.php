@@ -19,6 +19,10 @@
             <div class="space-x-4">
                 <a href="{{ route('login') }}" class="text-indigo-600 hover:underline">Login</a>
                 <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500">Sign Up</a>
+                <a href="{{ route('register.supplier') }}" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500">
+                 Register as Supplier
+                </a>
+
             </div>
         </div>
     </header>
@@ -35,6 +39,10 @@
                 <a href="/login" class="mt-4 inline-block bg-indigo-600 hover:scale-105 transition-transform text-white font-semibold py-2 px-4 rounded">
                     Get Started
                 </a>
+                <a href="{{ route('register.supplier') }}" class="mt-2 inline-block bg-white text-black px-4 py-2 rounded border border-black hover:scale-105 transition-transform">
+                    Register as Supplier
+                </a>
+
             </div>
 
             
