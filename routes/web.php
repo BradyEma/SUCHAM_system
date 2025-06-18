@@ -1,11 +1,25 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Chat;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/chat/{receiver_id}', Chat::class)->middleware('auth')->name('chat');
+
+Route::get('/chat/{receiver_id}', [ChatController::class, 'index'])->name('chat');
+
+Route::get('/chat-contacts', function () {
+    return view('chat.contacts');
+})->middleware('auth')->name('chat.contacts');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
