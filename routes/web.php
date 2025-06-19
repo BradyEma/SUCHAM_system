@@ -12,9 +12,11 @@ Route::get('/', function () {
 });
 
 
-Route::get('/chat/{receiver_id}', Chat::class)->middleware('auth')->name('chat');
+Route::get('/chat/{receiver_id?}', Chat::class)->name('chat');
+Route::get('/chat/{receiver_id?}', function ($receiver_id = null) {
+    return view('chat', compact('receiver_id'));
+})->middleware('auth')->name('chat');
 
-Route::get('/chat/{receiver_id}', [ChatController::class, 'index'])->name('chat');
 
 Route::get('/chat-contacts', function () {
     return view('chat.contacts');
