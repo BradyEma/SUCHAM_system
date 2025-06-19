@@ -30,11 +30,10 @@
         </header>
     @endisset --}} 
 
-    <!-- Page Content -->
-    <main class="min-h-screen">
-        {{ $slot }}
-    </main>
-
-    @livewireScripts
-</body>
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
+    </body>
 </html>
