@@ -13,6 +13,16 @@ use App\Http\Controllers\SupplierRegisterController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/supplier/orders', function () {
+    return view('dashboard.supplier-orders');
+})->middleware('auth:supplier')->name('supplier.orders');
+
+Route::get('/supplier/profile', function () {
+    return view('dashboard.supplier-profile');
+})->middleware('auth:supplier')->name('supplier.profile');
+
+
 Route::get('/login', function () {
     return view('auth.login'); // adjust this if your view is in a different location
 })->name('login');
