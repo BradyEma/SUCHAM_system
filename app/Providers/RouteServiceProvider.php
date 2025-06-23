@@ -7,19 +7,16 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    public static function redirectTo()
+   public static function redirectToDashboard()
 {
-    $user = auth()->user();
+    $role = auth()->user()->role;
 
-    if (!$user) {
-        return '/login';
-    }
-
-    return match ($user->role) {
-        'admin' => '/admin/dashboard',
-        'supplier' => '/supplier/dashboard',
-        'customer' => '/customer/dashboard',
-        default => '/dashboard',
+    return match ($role) {
+        'supplier'   => route('supplier.dashboard'),
+        'retailer'   => route('retailer.dashboard'),
+        'wholesaler' => route('wholesaler.dashboard'),
+        'customer'   => route('customer.dashboard'),
+        default      => '/login', // fallback
     };
 }
  
