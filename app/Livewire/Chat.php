@@ -33,11 +33,17 @@ class Chat extends Component
         })->orWhere(function ($q) {
             $q->where('sender_id', $this->receiver_id)
               ->where('receiver_id', Auth::id());
-        })->orderBy('created_at')->get();
+        })->orderBy('created_at')->get();  
+         Message::where('sender_id', $this->receiver_id)
+           ->where('receiver_id', Auth::id())
+           ->where('read', false)
+           ->update(['read' => true]);
     }
 
     public function sendMessage()
     {
+        if (!$this->receiver_id || !$this->messageText) return;
+
         Message::create([
             'sender_id' => Auth::id(),
             'receiver_id' => $this->receiver_id,
@@ -51,5 +57,7 @@ class Chat extends Component
     public function render()
     {
         return view('livewire.chat');
+        
+      // ->layout('components.layouts.app') ;
     }
 }

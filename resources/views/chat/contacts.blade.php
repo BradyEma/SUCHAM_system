@@ -17,7 +17,8 @@
             <!--to generate contact list-->
 
             @foreach(App\Models\User::where('id', '!=', auth()->id())->get() as $contact)
-                <a href="{{ route('chat', $contact->id) }}" 
+               <a href="{{ route('chat', ['receiver_id' => $contact->id]) }}"
+
                    class="flex items-center p-3 hover:bg-sky-100 
                           {{ request()->route('receiver_id') == $contact->id ? 'bg-sky-200' : '' }}">
                     <div class="w-10 h-10 rounded-full bg-sky-300 text-white font-bold mr-3 flex items-center justify-center">

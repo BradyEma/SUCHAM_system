@@ -1,18 +1,17 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Chat;
 
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierRegisterController;
+use App\Http\Controllers\SupplierProfileController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+ Route::post('/supplier/profile/update-password', [SupplierProfileController::class, 'updatePassword'])->name('supplier.password.update');
 
 Route::get('/supplier/orders', function () {
     return view('dashboard.supplier-orders');

@@ -23,6 +23,15 @@ class User extends Authenticatable
     'password',
     'role',
 ];
+public function messagesSent()
+{
+    return $this->hasMany(Message::class, 'sender_id');
+}
+
+public function messagesReceived()
+{
+    return $this->hasMany(Message::class, 'receiver_id');
+}
 
 
     /**
