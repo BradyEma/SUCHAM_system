@@ -17,13 +17,13 @@ class LoginController extends Controller
         // Try logging in as a user
         if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/customer/dashboard');
+            return redirect()->intended('/inventory');
         }
 
         // Try logging in as a supplier (regardless of status)
         if (Auth::guard('supplier')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/supplier/dashboard');
+            return redirect()->intended('/inventory');
         }
 
         return back()->withErrors([
