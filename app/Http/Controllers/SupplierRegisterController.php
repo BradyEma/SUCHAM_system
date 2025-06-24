@@ -45,7 +45,7 @@ class SupplierRegisterController extends Controller
         'location' => $validated['location'],
         'verification_file' => $filePath,
         'password' => Hash::make($validated['password']),
-        'status' => 'pending', // 👈 default pending
+        'status' => 'pending',
          'role' => 'supplier',
 
          
