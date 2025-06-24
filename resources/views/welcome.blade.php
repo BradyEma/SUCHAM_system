@@ -62,7 +62,7 @@
                 
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="text-primary-100 hover:text-white font-medium transition">Home</a>
+                    <a href="#home" class="text-primary-100 hover:text-white font-medium transition">Dashboard</a>
                     <a href="#about" class="text-primary-100 hover:text-white font-medium transition">About Us</a>
                     <a href="#services" class="text-primary-100 hover:text-white font-medium transition">Services</a>
                     <a href="#products" class="text-primary-100 hover:text-white font-medium transition">Products</a>
@@ -87,7 +87,7 @@
         <!-- Mobile Navigation -->
         <div class="md:hidden hidden bg-primary-700 px-4 py-2" id="mobile-menu">
             <div class="flex flex-col space-y-3 pb-3">
-                <a href="#home" class="text-white px-3 py-2 rounded-md font-medium">Home</a>
+                <a href="#home" class="text-white px-3 py-2 rounded-md font-medium">Dashboard</a>
                 <a href="#about" class="text-white px-3 py-2 rounded-md font-medium">About Us</a>
                 <a href="#services" class="text-white px-3 py-2 rounded-md font-medium">Services</a>
                 <a href="#products" class="text-white px-3 py-2 rounded-md font-medium">Products</a>
@@ -686,7 +686,7 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-primary-200 hover:text-white transition">Home</a></li>
+                        <li><a href="#home" class="text-primary-200 hover:text-white transition">Dashboard</a></li>
                         <li><a href="#about" class="text-primary-200 hover:text-white transition">About Us</a></li>
                         <li><a href="#services" class="text-primary-200 hover:text-white transition">Services</a></li>
                         <li><a href="#products" class="text-primary-200 hover:text-white transition">Products</a></li>

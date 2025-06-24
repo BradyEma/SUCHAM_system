@@ -23,7 +23,7 @@ class LoginController extends Controller
         // Try logging in as a supplier (regardless of status)
         if (Auth::guard('supplier')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/inventory');
+            return redirect()->intended('/supplier/inventory');
         }
 
         return back()->withErrors([
