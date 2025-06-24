@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'supplier' => [
+        'driver' => 'session',
+        'provider' => 'suppliers',
+    ],
     ],
 
     /*
@@ -65,10 +70,10 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+       'suppliers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Supplier::class,
+    ],
     ],
 
     /*
@@ -97,6 +102,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        'suppliers' => [
+        'provider' => 'suppliers',
+        'table' => 'password_resets', // You can reuse the table
+        'expire' => 60,
+        'throttle' => 60,
+    ],
     ],
 
     /*
