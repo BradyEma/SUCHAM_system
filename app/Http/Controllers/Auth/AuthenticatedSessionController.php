@@ -34,40 +34,25 @@ public function store(Request $request)
         'password' => 'required',
     ]);
 
-    $credentials = $request->only('email', 'password');
-
-    // Try authenticating user from users table
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-
-        $user = Auth::user();
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'customer') {
-            return redirect()->route('customer.dashboard');
-        }
-
-        return redirect()->route('dashboard'); // Fallback
+    if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        return back()->withErrors([
+            'email' => 'Invalid credentials.',
+        ]);
     }
 
-    // Try authenticating supplier from suppliers table
-    $supplier = Supplier::where('email', $request->email)->first();
+    $request->session()->regenerate();
 
-    if ($supplier && Hash::check($request->password, $supplier->password)) {
-        if ($supplier->status !== 'approved') {
-            return back()->withErrors(['email' => 'Your supplier account is pending approval.']);
-        }
+    $user = Auth::user();
 
-        // Manually login the supplier
-        Auth::guard('supplier')->login($supplier);
-        $request->session()->regenerate();
-
-        return redirect()->route('supplier.dashboard');
+    // 🔍 If role is not selected yet → go to role selection
+    if (!$user->role) {
+        return redirect()->route('choose.role');
     }
 
-    return back()->withErrors([
-        'email' => 'The provided account doenot exist.',
-    ]);
+   
+    // ✅ Redirect based on role using centralized method
+    return redirect()->to(RouteServiceProvider::redirectToDashboard());
+
 }
 
     /**
