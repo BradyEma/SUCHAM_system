@@ -44,15 +44,18 @@ public function store(Request $request)
 
     $user = Auth::user();
 
-    // 🔍 If role is not selected yet → go to role selection
+    // ✅ If the user is admin, skip role logic and go to admin dashboard
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+
+    // 🔍 If role not selected (for sign-up flow), send to choose-role page
     if (!$user->role) {
         return redirect()->route('choose.role');
     }
 
-   
-    // ✅ Redirect based on role using centralized method
+    // ✅ Otherwise, continue using centralized role-based redirect
     return redirect()->to(RouteServiceProvider::redirectToDashboard());
-
 }
 
     /**
