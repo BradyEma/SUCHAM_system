@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierRegisterController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SupplierController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,5 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::resource('orders', OrderController::class);
+
+Route::resource('suppliers', SupplierController::class);
+Route::patch('/suppliers/{supplier}/approve', [SupplierController::class, 'approve'])->name('suppliers.approve');
+Route::patch('/suppliers/{supplier}/reject', [SupplierController::class, 'reject'])->name('suppliers.reject');
 
 require __DIR__.'/auth.php';
