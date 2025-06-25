@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', fn () => view('welcome'));
 
+
+
 Route::middleware(['auth'])->group(function () {
     // Dashboards
     Route::view('/supplier/dashboard', 'dashboard.supplier-dashboard')->name('supplier.dashboard');
@@ -17,15 +19,23 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
     Route::view('/admin/dashboard', 'dashboard.admin')->name('admin.dashboard');
     Route::view('/dashboard', 'dashboard')->middleware(['verified'])->name('dashboard');
+    
+    
 
     // Role selection
     Route::get('/choose-role', [RoleSelectionController::class, 'index'])->name('choose.role');
     Route::post('/choose-role', [RoleSelectionController::class, 'store'])->name('choose.role.store');
 
+
     // Supplier pages
     Route::get('/supplier/profile', fn () => view('dashboard.supplier-profile'))->name('supplier.profile');
     Route::get('/supplier/orders', fn () => view('dashboard.supplier-orders'))->name('supplier.orders');
     Route::post('/supplier/profile/update-password', [SupplierProfileController::class, 'updatePassword'])->name('supplier.password.update');
+    Route::get('/supplier/products', fn () => view('dashboard.supplier-products'))->name('supplier.products');
+    Route::get('/supplier/settings', fn () => view('dashboard.supplier-settings'))->name('supplier.settings');
+
+    Route::get('/admin/dashboard', fn () => view('dashboard.admin-dashboard'))->name('admin.dashboard');
+
 
     // User profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
