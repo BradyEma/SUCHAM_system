@@ -16,6 +16,7 @@ Route::get('/', fn () => view('welcome'))->name('home');
 Route::get('/login', fn () => view('auth.login'))->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
+
 // Supplier registration
 Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
 
@@ -28,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
+Route::view('/supplier/dashboard', 'dashboard.supplier-dashboard')->name('supplier.dashboard');
 
     // Role selection
     Route::get('/choose-role', [RoleSelectionController::class, 'index'])->name('choose.role');
