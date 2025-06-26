@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - GoldenFields Supplier Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar {
@@ -36,7 +37,7 @@
         <aside class="w-64 sidebar text-white p-6 space-y-6">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
-                    <img src="{{ asset('sucham.jpg') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
                 </div>
                 <div>
                     <div class="text-xl font-bold">GoldenFields</div>
@@ -106,21 +107,21 @@
                                 <i class="fas fa-user text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Contact Person</p>
-                                    <p class="font-medium">John Kamau</p>
+                                    <p class="font-medium">{{ Auth::user()->name }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <i class="fas fa-envelope text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Email</p>
-                                    <p class="font-medium">john@sweetharvest.co.ug</p>
+                                    <p class="font-medium">{{ Auth::user()->email }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
                                 <i class="fas fa-phone text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Phone</p>
-                                    <p class="font-medium">+256 752 123 456</p>
+                                    <p class="font-medium">+256 *** **** **</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -146,56 +147,66 @@
                     <h2 class="text-xl font-semibold text-green-800 mb-6">Account Settings</h2>
                     
                     <div class="space-y-6">
-                        <!-- Personal Information -->
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Personal Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                    <input type="text" value="John" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                                    <input type="text" value="Kamau" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <input type="email" value="john@sweetharvest.co.ug" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                                    <input type="tel" value="+256752123456" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                            </div>
-                        </div>
+                                             
 
                         <!-- Business Information -->
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Business Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
-                                    <input type="text" value="Sweet Harvest Ltd" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
-                                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                        <option>Sugar Cane Supplier</option>
-                                        <option>Honey Supplier</option>
-                                        <option selected>Sugar Cane & Honey Supplier</option>
-                                        <option>Other</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
-                                    <input type="text" value="TAX-UG-12345678" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
-                                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" rows="2">123 Sugar Lane, Industrial Area, Kampala, Uganda</textarea>
-                                </div>
-                            </div>
-                        </div>
+                       <form method="POST" action="{{ route('supplier.profile.store') }}" enctype="multipart/form-data">
+
+
+                            @csrf
+                            @method('POST') {{-- Use PUT if you're updating an existing record --}}
+    
+                          <h3 class="text-lg font-medium text-gray-800 mb-4">Business Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="md:col-span-2">
+            <label for="business_name" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+            <input type="text" name="business_name" id="business_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+        </div>
+
+        <div>
+        <label for="telNo">Telephone Number</label>
+         <input type="tel" id="telNo" name="telNo" placeholder="+256701234567" class="border rounded px-3 py-2" required>
+         </div>
+
+        <div>
+            <label for="business_type" class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+            <select name="business_type" id="business_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                <option value="Sugar Cane Supplier">Sugar Cane Supplier</option>
+                <option value="Honey Supplier">Honey Supplier</option>
+                <option value="Sugar Cane & Honey Supplier" selected>Sugar Cane & Honey Supplier</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="Tax_ID" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+            <input type="text" name="Tax_ID" id="Tax_ID" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
+            <textarea name="location" id="location" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="tin" class="block text-sm font-medium text-gray-700 mb-1">TIN</label>
+            <input type="text" name="tin" id="tin" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="document" class="block text-sm font-medium text-gray-700 mb-1">Upload Certificate or License (PDF)</label>
+            <input type="file" name="document" id="document" accept="application/pdf" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+        </div>
+
+        <div class="md:col-span-2 text-right mt-4">
+            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded">
+                Save Business Info
+            </button>
+        </div>
+    </div>
+</form>
+
 
                         <!-- Password Change -->
                         <div>
@@ -214,7 +225,7 @@
                                     <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
                                 </div>
                                 <div class="flex justify-end pt-4">
-                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg">
+                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg" type="submit">
                                         Update Password
                                     </button>
                                 </div>

@@ -8,18 +8,20 @@ class Supplier extends Authenticatable
 {
     protected $guard = 'supplier';
 
-    protected $fillable = [
-        'name',
+   protected $fillable = [
+        'user_id',
         'business_name',
-        'email',
-        'raw_material',
-        'tin_or_nin',
+        'business_type',
         'location',
-        'verification_file',
-        'password',
-        'status',
-        'role'
+        'telNo',
+        'Tax_ID',
+        'TIN',
+        'document_path',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected $hidden = ['password'];
 }

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldenFields Industries - Premium Sugar Products Supply Chain</title>
     <meta name="description" content="GoldenFields Industries connects sugar producers with markets through our efficient, transparent supply chain network. Quality sugar products from farm to industry.">
-    <link rel="icon" href="{{ asset('sucham.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     @vite('resources/css/app.css')
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -53,7 +53,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-3">
-                    <img src="{{ asset('sucham.jpg') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full border-2 border-white">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full border-2 border-white">
                     <div>
                         <h1 class="text-2xl text-gold font-bold">GoldenFields</h1>
                         <p class="text-xs text-primary-200">Industries Ltd.</p>
