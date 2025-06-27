@@ -78,6 +78,19 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
+           @if(session('success'))
+    <div class="bg-green-100 text-green-700 p-4 mb-4 border-l-4 border-green-500">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(isset($alert))
+    <div class="bg-yellow-100 text-yellow-700 p-4 mb-4 border-l-4 border-yellow-500">
+        {{ $alert }}
+    </div>
+@endif
+
+
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-3xl font-bold text-green-800">Welcome, {{ Auth::user()->name }}!</h1>

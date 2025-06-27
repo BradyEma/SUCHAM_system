@@ -11,11 +11,16 @@ use App\Http\Controllers\SupplierController;
 
 Route::get('/', fn () => view('welcome'));
 
+Route::middleware(['auth', 'supplier.complete'])->group(function () {
+    Route::view('/supplier/dashboard', 'dashboard.supplier-dashboard')->name('supplier.dashboard');
+    // other protected supplier routes
+});
 
 
 Route::middleware(['auth'])->group(function () {
     // Dashboards
-    Route::view('/supplier/dashboard', 'dashboard.supplier-dashboard')->name('supplier.dashboard');
+    Route::get('/supplier/dashboard', [SupplierController::class, 'showDashboard'])->name('supplier.dashboard');
+
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
     Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');

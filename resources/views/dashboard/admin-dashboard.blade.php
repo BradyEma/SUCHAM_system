@@ -63,13 +63,13 @@
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-leaf text-accent-400 text-xl"></i>
                         <span class="text-xl font-bold">GoldenFields</span>
-                        <span class="bg-accent-500 text-white text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
+                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
                     </div>
                 </div>
                 
                 <!-- User Profile -->
                 <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" class="h-10 w-10 rounded-full border-2 border-accent-400">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" class="h-10 w-10 rounded-full border-2 border-yellow-400">
                     <div>
                         <p class="font-medium">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-primary-200">Super Admin</p>
@@ -103,7 +103,7 @@
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
             <i class="fas fa-comment-dots w-5 text-center"></i>
             <span>Chat</span>
-            <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+            <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
         </a>
         
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">

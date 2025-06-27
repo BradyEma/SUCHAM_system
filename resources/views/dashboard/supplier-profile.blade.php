@@ -74,7 +74,12 @@
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-3xl font-bold text-green-800">Supplier Profile</h1>
-                    <p class="text-gray-600">Manage your GoldenFields account information and settings</p>
+                    @if(session('error'))
+                      <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                          {{ session('error') }}
+                      </div>
+                    @endif
+
                 </div>
             </div>
 

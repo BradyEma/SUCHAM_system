@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,7 +11,22 @@ class SupplierController extends Controller
     public function showProfileForm()
     {
         return view('dashboard.supplier-profile');
+    }
 
+    public function showDashboard()
+    {
+        $user = Auth::user();
+        $supplier = $user->supplier;
+
+        $alert = null;
+
+        if (!$supplier) {
+            $alert = 'Please Fill in your business details in Profile to continue.';
+        } elseif (!$supplier->is_approved ?? false) {
+            $alert = 'Business Profile submitted successfully. Waiting for admin approval.';
+        }
+
+        return view('dashboard.supplier-dashboard', compact('alert'));
     }
 
     public function storeProfile(Request $request)
@@ -27,7 +41,7 @@ class SupplierController extends Controller
             'document' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        $supplier = Supplier::updateOrCreate(
+        Supplier::updateOrCreate(
             ['user_id' => Auth::id()],
             [
                 'business_name' => $request->business_name,
@@ -39,10 +53,10 @@ class SupplierController extends Controller
                 'document_path' => $request->hasFile('document')
                     ? $request->file('document')->store('documents', 'public')
                     : null,
+                'is_approved' => false, // optional default
             ]
         );
 
-        return redirect()->back()->with('success', 'Profile updated successfully!');
+        return redirect()->route('supplier.dashboard')->with('success', '');
     }
 }
-
