@@ -81,7 +81,7 @@
        <nav class="flex-1 p-4 space-y-2">
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
             <i class="fas fa-tachometer-alt w-5 text-center"></i>
-            <span>Dashboard</span>
+            <span>Activity</span>
            
         </a>
         
@@ -195,7 +195,7 @@
 
                 <section class="mb-8">
     <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
-        <h2 class="text-xl font-semibold text-white">User Management: Suppliers</h2>
+        <h2 class="text-xl font-semibold text-white">Supplier Management</h2>
     </div>
     
     <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
@@ -204,48 +204,50 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-green-100">
                 @foreach ($suppliers as $supplier)
-    <tr class="border-t">
-        <td class="px-4 py-2">{{ $supplier->user->name ?? 'Unknown' }}</td>
-        <td class="px-4 py-2">{{ $supplier->user->email ?? 'Unknown' }}</td>
-        <td class="px-4 py-2">{{ $supplier->business_name ?? 'N/A' }}</td>
-        <td class="px-4 py-2">{{ $supplier->location ?? 'N/A' }}</td>
-        <td class="px-4 py-2">
-            @if ($supplier->is_approved)
-                <span class="text-green-600 font-medium">Approved</span>
-            @else
-                <span class="text-yellow-600 font-medium">Pending</span>
-            @endif
-        </td>
-        <td class="px-4 py-2 flex gap-2">
-            @if ($supplier->document_path)
-                <a href="{{ asset('storage/' . $supplier->document_path) }}" 
-                   target="_blank"
-                   class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
-                    View PDF
-                </a>
-            @endif
+                <tr class="hover:bg-green-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $supplier->user->name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->user->email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->business_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->location }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                       <a href="{{ asset('storage/' . $supplier->document_path) }}" target="_blank" class="text-green-600 hover:text-green-800 font-medium flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+    </svg>
+    View PDF
+</a>
 
-            @if (!$supplier->is_approved && $supplier->id)
-                <form method="POST" action="{{ route('admin.suppliers.approve', ['id' => $supplier->id]) }}">
-                    @csrf
-                    @method('PATCH')
-                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
-                        Approve
-                    </button>
-                </form>
-            @endif
-        </td>
-    </tr>
-@endforeach
 
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @if ($supplier->is_approved)
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        @if (!$supplier->is_approved)
+                            <form method="POST" action="{{ route('admin.suppliers.approve', ['id' => $supplier->user_id]) }}">
+                                @csrf
+                                @method('PATCH')
+                                <button class="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm transition-all duration-200 transform hover:scale-105">
+                                    Approve
+                                </button>
+                            </form>
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

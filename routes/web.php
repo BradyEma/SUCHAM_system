@@ -17,7 +17,8 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
     // other protected supplier routes
 });
 
- Route::patch('/admin/suppliers/{id}/approve', [AdminController::class, 'approveSupplier'])->name('admin.suppliers.approve');
+  Route::patch('/admin/suppliers/{id}/approve', [AdminController::class, 'approveSupplier'])->name('admin.suppliers.approve');
+  
 Route::middleware(['auth'])->group(function () {
     // Dashboards
     Route::get('/supplier/dashboard', [SupplierController::class, 'showDashboard'])->name('supplier.dashboard');
@@ -44,7 +45,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
- 
+  
+
 
 
     // User profile routes
