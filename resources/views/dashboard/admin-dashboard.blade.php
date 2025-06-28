@@ -78,7 +78,7 @@
                 
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
-    <nav class="flex-1 p-4 space-y-2">
+       <nav class="flex-1 p-4 space-y-2">
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
             <i class="fas fa-tachometer-alt w-5 text-center"></i>
             <span>Dashboard</span>
@@ -179,6 +179,7 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -192,6 +193,63 @@
                     </div>
                 </div>
 
+                <section class="mb-8">
+    <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
+        <h2 class="text-xl font-semibold text-white">User Management: Suppliers</h2>
+    </div>
+    
+    <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
+        <table class="min-w-full divide-y divide-green-200">
+            <thead class="bg-green-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-green-100">
+                @foreach ($suppliers as $supplier)
+    <tr class="border-t">
+        <td class="px-4 py-2">{{ $supplier->user->name ?? 'Unknown' }}</td>
+        <td class="px-4 py-2">{{ $supplier->user->email ?? 'Unknown' }}</td>
+        <td class="px-4 py-2">{{ $supplier->business_name ?? 'N/A' }}</td>
+        <td class="px-4 py-2">{{ $supplier->location ?? 'N/A' }}</td>
+        <td class="px-4 py-2">
+            @if ($supplier->is_approved)
+                <span class="text-green-600 font-medium">Approved</span>
+            @else
+                <span class="text-yellow-600 font-medium">Pending</span>
+            @endif
+        </td>
+        <td class="px-4 py-2 flex gap-2">
+            @if ($supplier->document_path)
+                <a href="{{ asset('storage/' . $supplier->document_path) }}" 
+                   target="_blank"
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
+                    View PDF
+                </a>
+            @endif
+
+            @if (!$supplier->is_approved && $supplier->id)
+                <form method="POST" action="{{ route('admin.suppliers.approve', ['id' => $supplier->id]) }}">
+                    @csrf
+                    @method('PATCH')
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                        Approve
+                    </button>
+                </form>
+            @endif
+        </td>
+    </tr>
+@endforeach
+
+            </tbody>
+        </table>
+    </div>
+</section>
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Total Orders -->

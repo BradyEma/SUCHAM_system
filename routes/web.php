@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -16,7 +17,7 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
     // other protected supplier routes
 });
 
-
+ Route::patch('/admin/suppliers/{id}/approve', [AdminController::class, 'approveSupplier'])->name('admin.suppliers.approve');
 Route::middleware(['auth'])->group(function () {
     // Dashboards
     Route::get('/supplier/dashboard', [SupplierController::class, 'showDashboard'])->name('supplier.dashboard');
@@ -41,7 +42,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/supplier/products', fn () => view('dashboard.supplier-products'))->name('supplier.products');
     Route::get('/supplier/settings', fn () => view('dashboard.supplier-settings'))->name('supplier.settings');
 
-    Route::get('/admin/dashboard', fn () => view('dashboard.admin-dashboard'))->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+ 
 
 
     // User profile routes
