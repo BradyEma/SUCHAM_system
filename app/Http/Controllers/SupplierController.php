@@ -12,22 +12,31 @@ class SupplierController extends Controller
     {
         return view('dashboard.supplier-profile');
     }
+    
 
-    public function showDashboard()
-    {
-        $user = Auth::user();
-        $supplier = $user->supplier;
 
-        $alert = null;
 
-        if (!$supplier) {
-            $alert = 'Please Fill in your business details in Profile to continue.';
-        } elseif (!$supplier->is_approved ?? false) {
-            $alert = 'Business Profile submitted successfully. Waiting for admin approval.';
+   public function showDashboard()
+{
+    $user = Auth::user();
+    $supplier = $user->supplier;
+
+    $alert = null;
+
+    if (!$supplier) {
+        $alert = 'Please fill in your business details in Profile to continue.';
+    } elseif (!$supplier->is_approved) {
+        $alert = 'Business Profile submitted successfully. Waiting for admin approval.';
+    } else {
+        // Flash success message for approved suppliers (only show once)
+        if (!session()->has('success')) {
+            session()->flash('success', 'Your account is approved. You may now continue with business.');
         }
-
-        return view('dashboard.supplier-dashboard', compact('alert'));
     }
+
+    return view('dashboard.supplier-dashboard', compact('alert'));
+}
+
 
     public function storeProfile(Request $request)
     {

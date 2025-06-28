@@ -79,16 +79,29 @@
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
            @if(session('success'))
-    <div class="bg-green-100 text-green-700 p-4 mb-4 border-l-4 border-green-500">
-        {{ session('success') }}
-    </div>
+  <div id="successAlert" class="relative bg-green-100 text-green-700 p-4 mb-4 border-l-4 border-green-500 rounded">
+    <span>{{ session('success') }}</span>
+    <button 
+  onclick="document.getElementById('successAlert').remove()" 
+  class="absolute top-2 right-2 p-1 rounded-full bg-green-100 hover:bg-green-200 text-green-700 hover:text-green-900 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+  aria-label="Close notification"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+  </svg>
+</button>
+  </div>
 @endif
 
 @if(isset($alert))
-    <div class="bg-yellow-100 text-yellow-700 p-4 mb-4 border-l-4 border-yellow-500">
-        {{ $alert }}
-    </div>
+  <div id="warningAlert" class="relative bg-yellow-100 text-yellow-700 p-4 mb-4 border-l-4 border-yellow-500 rounded">
+    <span>{{ $alert }}</span>
+    <button onclick="document.getElementById('warningAlert').remove()" class="absolute top-1 right-2 text-yellow-700 hover:text-yellow-900">
+      &times;
+    </button>
+  </div>
 @endif
+
 
 
             <div class="flex justify-between items-start mb-8">
@@ -110,7 +123,7 @@
                             <h2 class="text-lg font-semibold mb-2 text-gray-500">Active Orders</h2>
                             <p class="text-3xl font-bold text-green-700">5</p>
                         </div>
-                        <div class="p-3 rounded-full text-yellow-700 bg-yellow-200">
+                        <div class="p-3 rounded-full text-black bg-green-100">
                             <i class="fas fa-clipboard-list"></i>
                         </div>
                     </div>
@@ -126,7 +139,7 @@
                             <h2 class="text-lg font-semibold mb-2 text-gray-500">Total Sales</h2>
                             <p class="text-3xl font-bold text-green-700">UGX 3,500,000</p>
                         </div>
-                        <div class="p-3 rounded-full text-yellow-700 bg-yellow-200">
+                        <div class="p-3 rounded-full text-black bg-green-100">
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
                     </div>
@@ -142,7 +155,7 @@
                             <h2 class="text-lg font-semibold mb-2 text-gray-500">Messages</h2>
                             <p class="text-3xl font-bold text-green-700">2</p>
                         </div>
-                        <div class="p-3 rounded-full  text-yellow-700 bg-yellow-200">
+                        <div class="p-3 rounded-full  text-black bg-green-100">
                             <i class="fas fa-envelope"></i>
                         </div>
                     </div>
@@ -158,7 +171,7 @@
                             <h2 class="text-lg font-semibold mb-2 text-gray-500">Inventory</h2>
                             <p class="text-3xl font-bold text-green-700">87 items</p>
                         </div>
-                        <div class="p-3 rounded-full text-yellow-700 bg-yellow-200">
+                        <div class="p-3 rounded-full text-black bg-green-100">
                             <i class="fas fa-boxes "></i>
                         </div>
                     </div>
