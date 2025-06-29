@@ -12,31 +12,26 @@ class SupplierController extends Controller
     {
         return view('dashboard.supplier-profile');
     }
-    
 
+    public function showDashboard()
+    {
+        $user = Auth::user();
+        $supplier = $user->supplier;
 
+        $alert = null;
 
-   public function showDashboard()
-{
-    $user = Auth::user();
-    $supplier = $user->supplier;
-
-    $alert = null;
-
-    if (!$supplier) {
-        $alert = 'Please fill in your business details in Profile to continue.';
-    } elseif (!$supplier->is_approved) {
-        $alert = 'Business Profile submitted successfully. Waiting for admin approval.';
-    } else {
-        // Flash success message for approved suppliers (only show once)
-        if (!session()->has('success')) {
-            session()->flash('success', 'Your account is approved. You may now continue with business.');
+        if (!$supplier) {
+            $alert = 'Please fill in your business details in Profile to continue.';
+        } elseif ($supplier->status === 'pending') {
+            $alert = 'Business Profile submitted successfully. Waiting for admin approval.';
+        } elseif ($supplier->status === 'approved') {
+            if (!session()->has('success')) {
+                session()->flash('success', 'Your account is approved. You may now continue with business.');
+            }
         }
+
+        return view('dashboard.supplier-dashboard', compact('alert', 'supplier'));
     }
-
-    return view('dashboard.supplier-dashboard', compact('alert'));
-}
-
 
     public function storeProfile(Request $request)
     {
@@ -62,7 +57,7 @@ class SupplierController extends Controller
                 'document_path' => $request->hasFile('document')
                     ? $request->file('document')->store('documents', 'public')
                     : null,
-                'is_approved' => false, // optional default
+                'status' => 'pending', // updated
             ]
         );
 

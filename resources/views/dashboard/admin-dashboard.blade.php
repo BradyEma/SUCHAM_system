@@ -208,7 +208,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Actions</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Profile</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-green-100">
@@ -229,23 +229,26 @@
 
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        @if ($supplier->is_approved)
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-                        @else
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                        @endif
+                       @if ($supplier->status === 'approved')
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+@elseif ($supplier->status === 'pending')
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+@elseif ($supplier->status === 'suspended')
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Suspended</span>
+@elseif ($supplier->status === 'deactivated')
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Deactivated</span>
+@else
+    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Unknown</span>
+@endif
+
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        @if (!$supplier->is_approved)
-                            <form method="POST" action="{{ route('admin.suppliers.approve', ['id' => $supplier->user_id]) }}">
-                                @csrf
-                                @method('PATCH')
-                                <button class="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm transition-all duration-200 transform hover:scale-105">
-                                    Approve
-                                </button>
-                            </form>
-                        @endif
-                    </td>
+                     <a href="{{ route('admin.suppliers.show', ['id' => $supplier->user_id]) }}" class="inline-flex items-center justify-center group">
+    <span class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-blacke font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform group-hover:-translate-y-0.5">
+        View
+    </span>
+                  </td>
+
                 </tr>
                 @endforeach
             </tbody>

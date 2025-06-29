@@ -67,7 +67,7 @@
                 <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
-                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
                 </a>
                 <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-user w-5 text-center"></i>
@@ -78,29 +78,30 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
-           @if(session('success'))
-  <div id="successAlert" class="relative bg-green-100 text-green-700 p-4 mb-4 border-l-4 border-green-500 rounded">
-    <span>{{ session('success') }}</span>
-    <button 
-  onclick="document.getElementById('successAlert').remove()" 
-  class="absolute top-2 right-2 p-1 rounded-full bg-green-100 hover:bg-green-200 text-green-700 hover:text-green-900 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-  aria-label="Close notification"
->
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-  </svg>
-</button>
-  </div>
+         
+
+@if ($supplier && $supplier->status === 'approved')
+    <div class="bg-green-100 text-green-800 p-4 mb-4 border-l-4 border-green-500">
+        You’ve been approved! You may now continue with business.
+    </div>
+@elseif ($supplier && $supplier->status === 'pending')
+    <div class="bg-yellow-100 text-yellow-800 p-4 mb-4 border-l-4 border-yellow-500">
+        Waiting for admin approval to commence business.
+    </div>
+@elseif ($supplier && $supplier->status === 'suspended')
+   <div class="bg-orange-100 text-orange-800 p-4 mb-4 border-l-4 border-orange-500 flex items-center justify-between">
+    <span>Your account has been suspended.</span>
+    <a href="#" class="ml-4 px-4 py-2 bg-orange-600 text-white font-medium rounded hover:bg-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 active:bg-orange-700">
+        HELP
+    </a>
+</div>
+@elseif ($supplier && $supplier->status === 'deactivated')
+    <div class="bg-red-100 text-red-800 p-4 mb-4 border-l-4 border-red-500">
+        Your account is deactivated.
+    </div>
 @endif
 
-@if(isset($alert))
-  <div id="warningAlert" class="relative bg-yellow-100 text-yellow-700 p-4 mb-4 border-l-4 border-yellow-500 rounded">
-    <span>{{ $alert }}</span>
-    <button onclick="document.getElementById('warningAlert').remove()" class="absolute top-1 right-2 text-yellow-700 hover:text-yellow-900">
-      &times;
-    </button>
-  </div>
-@endif
+
 
 
 

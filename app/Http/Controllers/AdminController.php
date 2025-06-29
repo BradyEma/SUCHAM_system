@@ -14,15 +14,45 @@ class AdminController extends Controller
     return view('dashboard.admin-dashboard', compact('suppliers'));
 }
 
-   public function approveSupplier($id)
+   public function activateSupplier($id)
 {
-    // $id is the user's ID, not supplier.id
     $supplier = Supplier::where('user_id', $id)->firstOrFail();
+    $supplier->status = 'active';
+    $supplier->save();
 
-    $supplier->is_approved = true;
-    $supplier->save(); // ✅ Will now update using WHERE user_id = ?
+    return redirect()->back()->with('success', 'Supplier has been activated.');
+}
 
-    return redirect()->back()->with('success', 'Supplier approved successfully.');
+  public function showSupplier($id)
+    {
+        $supplier = Supplier::where('user_id', $id)->firstOrFail();
+        $user = $supplier->user;
+
+        return view('admin.supplier-show', compact('supplier', 'user'));
+    }
+
+    public function suspendSupplier($id)
+{
+    $supplier = Supplier::where('user_id', $id)->firstOrFail();
+    $supplier->status = 'suspended';
+    $supplier->save();
+
+    return redirect()->back()->with('success', 'Supplier suspended successfully.');
+}
+
+public function deactivateSupplier($id)
+{
+    $supplier = Supplier::where('user_id', $id)->firstOrFail();
+    $supplier->status = 'deactivated';
+    $supplier->save();
+
+    return redirect()->back()->with('success', 'Supplier deactivated successfully.');
+}
+
+public function chatWithSupplier($id)
+{
+    $supplier = Supplier::where('user_id', $id)->firstOrFail();
+    return view('admin.chat-with-supplier', compact('supplier'));
 }
 
 

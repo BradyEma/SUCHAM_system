@@ -8,22 +8,23 @@ class Supplier extends Authenticatable
 {
       protected $guard = 'supplier';
 
-    protected $primaryKey = 'user_id'; // 👈 Important
-    public $incrementing = false; // 👈 user_id is not auto-incrementing
-    protected $keyType = 'int'; // 👈 Because user_id is an integer
+    protected $primaryKey = 'user_id'; 
+    public $incrementing = false; 
+    protected $keyType = 'int'; 
     public $timestamps = true;
 
    protected $fillable = [
-        'user_id',
-        'business_name',
-        'business_type',
-        'location',
-        'telNo',
-        'Tax_ID',
-        'TIN',
-        'document_path',
-        'is_approved',
-    ];
+    'user_id',
+    'business_name',
+    'business_type',
+    'location',
+    'telNo',
+    'Tax_ID',
+    'TIN',
+    'document_path',
+    'status',
+];
+
     public function user()
     {
         return $this->belongsTo(User::class);

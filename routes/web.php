@@ -16,8 +16,10 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
     Route::view('/supplier/dashboard', 'dashboard.supplier-dashboard')->name('supplier.dashboard');
     // other protected supplier routes
 });
+  
+Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
 
-  Route::patch('/admin/suppliers/{id}/approve', [AdminController::class, 'approveSupplier'])->name('admin.suppliers.approve');
+ 
   
 Route::middleware(['auth'])->group(function () {
     // Dashboards
@@ -46,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
   
-
+  
 
 
     // User profile routes
@@ -61,6 +63,12 @@ Route::middleware(['auth'])->group(function () {
     
 
 });
+
+ Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
+  Route::patch('/admin/suppliers/{id}/suspend', [AdminController::class, 'suspendSupplier'])->name('admin.suppliers.suspend');
+  Route::patch('/admin/suppliers/{id}/deactivate', [AdminController::class, 'deactivateSupplier'])->name('admin.suppliers.deactivate');
+
+Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
