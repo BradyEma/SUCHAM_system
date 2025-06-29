@@ -79,14 +79,25 @@
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
          
-
-@if ($supplier && $supplier->status === 'approved')
-    <div class="bg-green-100 text-green-800 p-4 mb-4 border-l-4 border-green-500">
-        You’ve been approved! You may now continue with business.
+@if (!$supplier)
+    <div class="bg-blue-100 text-blue-800 p-4 mb-4 border-l-4 border-blue-500">
+        ⚠️ Please fill in your Business details in <a href="{{ route('supplier.profile') }}" class="underline font-medium">Profile</a> to continue.
     </div>
+@elseif ($supplier && $supplier->status === 'active')
+    <div id="approval-notification" class="bg-green-100 text-green-800 p-4 mb-4 border-l-4 border-green-500 flex justify-between items-center">
+    <div>
+        You've been approved! You may now continue with business.
+    </div>
+    <button onclick="document.getElementById('approval-notification').remove()" 
+            class="text-green-700 hover:text-green-900 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+</div>
 @elseif ($supplier && $supplier->status === 'pending')
     <div class="bg-yellow-100 text-yellow-800 p-4 mb-4 border-l-4 border-yellow-500">
-        Waiting for admin approval to commence business.
+        Thanks for submiting. Waiting for admin approval to commence business.
     </div>
 @elseif ($supplier && $supplier->status === 'suspended')
    <div class="bg-orange-100 text-orange-800 p-4 mb-4 border-l-4 border-orange-500 flex items-center justify-between">
@@ -96,8 +107,11 @@
     </a>
 </div>
 @elseif ($supplier && $supplier->status === 'deactivated')
-    <div class="bg-red-100 text-red-800 p-4 mb-4 border-l-4 border-red-500">
-        Your account is deactivated.
+    <div class="bg-red-100 text-red-800 p-4 mb-4 border-l-4 border-red-500 flex items-center justify-between">
+        <span>Your account is currently deactivated.</span>
+        <a href="#" class="ml-4 px-4 py-2 bg-orange-600 text-white font-medium rounded hover:bg-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 active:bg-orange-700">
+        HELP
+    </a>
     </div>
 @endif
 

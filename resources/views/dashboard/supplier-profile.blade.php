@@ -180,6 +180,8 @@
                 <option value="Sugar Cane Supplier">Sugar Cane Supplier</option>
                 <option value="Honey Supplier">Honey Supplier</option>
                 <option value="Sugar Cane & Honey Supplier" selected>Sugar Cane & Honey Supplier</option>
+                <option value="Molasses">Molasses</option>
+                <option value="Other">Sugar Beets</option>
                 <option value="Other">Other</option>
             </select>
         </div>

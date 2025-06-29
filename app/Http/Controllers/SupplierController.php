@@ -51,7 +51,7 @@ class SupplierController extends Controller
                 'business_name' => $request->business_name,
                 'business_type' => $request->business_type,
                 'telNo' => $request->telNo,
-                'tax_id' => $request->tax_id,
+                'Tax_ID' => $request->tax_id,
                 'TIN' => $request->tin,
                 'location' => $request->location,
                 'document_path' => $request->hasFile('document')
