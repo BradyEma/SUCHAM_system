@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\WholesalerController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -61,7 +62,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/supplier/profile-form', [SupplierController::class, 'storeProfile'])->name('supplier.profile.store');
     Route::post('/supplier/profile/update', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
     
-
+    //wholesaler
+    Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
+     Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
+    Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
