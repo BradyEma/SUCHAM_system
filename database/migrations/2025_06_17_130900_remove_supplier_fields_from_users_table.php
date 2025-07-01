@@ -9,12 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn(['business_name', 'tin_or_nin', 'raw_material', 'verification_file', 'status', 'location']);
+   public function up()
+{
+    Schema::table('users', function (Blueprint $table) {
+        // Only drop columns that exist
+        $columnsToDrop = ['business_name', 'tin_or_nin', 'raw_material', 
+                        'verification_file', 'status', 'location'];
+                        
+        foreach ($columnsToDrop as $column) {
+            if (Schema::hasColumn('users', $column)) {
+                $table->dropColumn($column);
+            }
+        }
     });
-    }
+}
 
     /**
      * Reverse the migrations.

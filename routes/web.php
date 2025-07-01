@@ -6,10 +6,11 @@ use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ChatController;
+use App\Livewire\Admin\Messages\Messages;
+use App\Livewire\Admin\Messages\ListConversation;
 
 Route::get('/', fn () => view('welcome'));
-
-
 
 Route::middleware(['auth'])->group(function () {
     // Dashboards
@@ -17,15 +18,23 @@ Route::middleware(['auth'])->group(function () {
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
     Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
-    Route::view('/admin/dashboard', 'dashboard.admin')->name('admin.dashboard');
+    Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
     Route::view('/dashboard', 'dashboard')->middleware(['verified'])->name('dashboard');
     
+    // Chat routes
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{conversationId}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/start', [ChatController::class, 'startConversation'])->name('chat.start');
+    Route::post('/chat/{conversationId}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/search/users', [ChatController::class, 'searchUsers'])->name('chat.search.users');
     
+    // Livewire chat page
+    Route::get('/chat-livewire', [ChatController::class, 'livewire'])->name('chat.livewire');
+    Route::get('/chat-test', [ChatController::class, 'test'])->name('chat.test');
 
     // Role selection
     Route::get('/choose-role', [RoleSelectionController::class, 'index'])->name('choose.role');
     Route::post('/choose-role', [RoleSelectionController::class, 'store'])->name('choose.role.store');
-
 
     // Supplier pages
     Route::get('/supplier/profile', fn () => view('dashboard.supplier-profile'))->name('supplier.profile');
@@ -33,9 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/supplier/profile/update-password', [SupplierProfileController::class, 'updatePassword'])->name('supplier.password.update');
     Route::get('/supplier/products', fn () => view('dashboard.supplier-products'))->name('supplier.products');
     Route::get('/supplier/settings', fn () => view('dashboard.supplier-settings'))->name('supplier.settings');
-
-    Route::get('/admin/dashboard', fn () => view('dashboard.admin-dashboard'))->name('admin.dashboard');
-
 
     // User profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

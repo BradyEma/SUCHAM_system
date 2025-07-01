@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +14,100 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Create admin user
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Create supplier users
+        User::create([
+            'name' => 'John Supplier',
+            'email' => 'john.supplier@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'supplier',
+        ]);
+
+        User::create([
+            'name' => 'Sarah Supplier',
+            'email' => 'sarah.supplier@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'supplier',
+        ]);
+
+        User::create([
+            'name' => 'Mike Supplier',
+            'email' => 'mike.supplier@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'supplier',
+        ]);
+
+        // Create retailer users
+        User::create([
+            'name' => 'Lisa Retailer',
+            'email' => 'lisa.retailer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'retailer',
+        ]);
+
+        User::create([
+            'name' => 'David Retailer',
+            'email' => 'david.retailer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'retailer',
+        ]);
+
+        // Create wholesaler users
+        User::create([
+            'name' => 'Emma Wholesaler',
+            'email' => 'emma.wholesaler@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'wholesaler',
+        ]);
+
+        User::create([
+            'name' => 'Tom Wholesaler',
+            'email' => 'tom.wholesaler@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'wholesaler',
+        ]);
+
+        // Create customer users
+        User::create([
+            'name' => 'Anna Customer',
+            'email' => 'anna.customer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+        ]);
+
+        User::create([
+            'name' => 'James Customer',
+            'email' => 'james.customer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+        ]);
+
+        User::create([
+            'name' => 'Maria Customer',
+            'email' => 'maria.customer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+        ]);
+
+        User::create([
+            'name' => 'Robert Customer',
+            'email' => 'robert.customer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+        ]);
+
+        User::create([
+            'name' => 'Jennifer Customer',
+            'email' => 'jennifer.customer@sucham.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
         ]);
     }
 }

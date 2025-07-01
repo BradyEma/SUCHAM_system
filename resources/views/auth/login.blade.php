@@ -64,10 +64,13 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-green-800"></i>
                         </div>
-                        <input id="email" name="email" type="email" required autofocus
-                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400" 
+                        <input id="email" name="email" type="email" required autofocus value="{{ old('email') }}"
+                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 @error('email') border-red-500 @enderror" 
                                placeholder="your@email.com">
                     </div>
+                    @error('email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -78,12 +81,15 @@
                             <i class="fas fa-lock text-green-800"></i>
                         </div>
                         <input id="password" name="password" type="password" required
-                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400" 
+                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 @error('password') border-red-500 @enderror" 
                                >
                         <span class="password-toggle" onclick="togglePassword('password')">
                             <i class="far fa-eye text-green-800"></i>
                         </span>
                     </div>
+                    @error('password')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Remember me & Forgot password -->
