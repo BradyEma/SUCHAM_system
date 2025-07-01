@@ -53,8 +53,13 @@ class User extends Authenticatable
           return $this->hasOne(Supplier::class);
     }
     public function wholesaler()
-{
+    {
     return $this->hasOne(\App\Models\Wholesaler::class, 'user_id');
+     }
+   
+     public function retailer()
+{
+    return $this->hasOne(\App\Models\Retailer::class);
 }
 
 }

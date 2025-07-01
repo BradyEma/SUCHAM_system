@@ -61,7 +61,7 @@
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-leaf text-accent-400 text-xl"></i>
+                        <i class="fas fa-leaf text-yellow-500 text-xl"></i>
                         <span class="text-xl font-bold">GoldenFields</span>
                         <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
                     </div>
@@ -103,7 +103,7 @@
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
             <i class="fas fa-comment-dots w-5 text-center"></i>
             <span>Chat</span>
-            <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
         </a>
         
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
