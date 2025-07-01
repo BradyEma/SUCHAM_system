@@ -30,12 +30,14 @@
 
     <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-2xl border-t-4 border-yellow-500 transform hover:shadow-lg transition duration-300">
         <!-- Logo and Header -->
-        <div class="flex flex-col items-center mb-8">
-            <div class="w-24 h-24 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center shadow-md mb-4">
-                <i class="fas fa-leaf text-white text-4xl"></i>
+        <div class="bg-gradient-to-r from-primary-700 to-primary-800 p-8 text-center">
+            <div class="flex justify-center mb-4">
+                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md border-4 border-yellow-400">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full">
+                </div>
             </div>
-            <h1 class="text-3xl font-bold text-green-800 mb-2">Join GoldenFields</h1>
-            <p class="text-gray-600 text-center">Create your account to access our sugar supply chain network</p>
+            
+            <p class="text-primary-200">Login to your GoldenFields account</p>
         </div>
 
         <form method="POST" action="{{ route('register') }}" onsubmit="return validateForm()">

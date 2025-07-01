@@ -6,20 +6,29 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Supplier extends Authenticatable
 {
-    protected $guard = 'supplier';
+      protected $guard = 'supplier';
 
-    protected $fillable = [
-        'name',
-        'business_name',
-        'email',
-        'raw_material',
-        'tin_or_nin',
-        'location',
-        'verification_file',
-        'password',
-        'status',
-        'role'
-    ];
+    protected $primaryKey = 'user_id'; 
+    public $incrementing = false; 
+    protected $keyType = 'int'; 
+    public $timestamps = true;
+
+   protected $fillable = [
+    'user_id',
+    'business_name',
+    'business_type',
+    'location',
+    'telNo',
+    'Tax_ID',
+    'TIN',
+    'document_path',
+    'status',
+];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected $hidden = ['password'];
 }

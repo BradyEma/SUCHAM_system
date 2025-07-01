@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login | GoldenFields</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -39,7 +40,7 @@
         <div class="bg-gradient-to-r from-primary-700 to-primary-800 p-8 text-center">
             <div class="flex justify-center mb-4">
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md border-4 border-yellow-400">
-                    <img src="{{ asset('sucham.jpg') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full">
                 </div>
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>

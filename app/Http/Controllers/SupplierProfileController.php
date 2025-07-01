@@ -3,30 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class SupplierProfileController extends Controller
 {
-    public function updatePassword(Request $request)
+    public function update(Request $request)
     {
-        $supplier = Auth::guard('supplier')->user();
-
-        // Validate the input
         $request->validate([
-            'current_password'      => ['required'],
-            'new_password'          => ['required', 'min:8', 'confirmed'],
+            'business_nameug' => 'required|string|max:255',
+            'business_type' => 'required|string|max:255',
+            'location' => 'required|string',
+            'tax_id' => 'required|string|max:255',
+            'tin' => 'required|string|max:255',
+            'document' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        // Check if current password matches
-        if (!Hash::check($request->current_password, $supplier->password)) {
-            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
-        }
+        $supplier = Supplier::updateOrCreate(
+            ['user_id' => Auth::id()],
+            [
+                'business_name' => $request->business_name,
+                'business_type' => $request->business_type,
+                'location' => $request->location,
+                'Tax_ID' => $request->tax_id,
+                'TIN' => $request->tin,
+                'document_path' => $request->hasFile('document') 
+                    ? $request->file('document')->store('documents', 'public') 
+                    : null,
+            ]
+        );
 
-        // Update the password
-        $supplier->password = Hash::make($request->new_password);
-        $supplier->save();
-
-        return back()->with('status', 'Password updated successfully.');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 }
