@@ -10,6 +10,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\Admin\InventoryController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -20,6 +21,9 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
 });
   
 Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
+
+//inventory
+
 
  
   
@@ -77,6 +81,17 @@ Route::middleware(['auth'])->group(function () {
   Route::patch('/admin/suppliers/{id}/deactivate', [AdminController::class, 'deactivateSupplier'])->name('admin.suppliers.deactivate');
 
 Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
+    Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show'); // ✅ Fixed
+});
+
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');

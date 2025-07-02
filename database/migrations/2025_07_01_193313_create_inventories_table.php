@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventories', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+        $table->string('product_name');
+        
+        $table->integer('quantity')->default(0);
+        $table->string('unit')->default('kg'); // Or pcs, litres etc.
+        $table->decimal('price', 10, 2)->nullable();
+        $table->timestamps();
+    });
     }
 
     /**

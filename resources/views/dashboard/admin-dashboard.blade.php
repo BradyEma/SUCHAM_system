@@ -85,7 +85,7 @@
            
         </a>
         
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+        <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
             <i class="fas fa-boxes w-5 text-center"></i>
             <span>Inventory</span>
         </a>

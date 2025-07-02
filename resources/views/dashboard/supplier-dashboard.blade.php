@@ -59,9 +59,12 @@
                     <span>Orders</span>
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">3 new</span>
                 </a>
+
+               
+
                 <a href="{{ route('supplier.products') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-boxes w-5 text-center"></i>
-                    <span>Products</span>
+                    <span>Inventory</span>
                 </a>
                
                 <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
