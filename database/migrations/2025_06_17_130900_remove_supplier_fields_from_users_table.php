@@ -11,10 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn(['business_name', 'tin_or_nin', 'raw_material', 'verification_file', 'status', 'location']);
-    });
+        if (Schema::hasTable('users')) {
+            if (Schema::hasColumn('users', 'business_name')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn('business_name');
+                });
+            }
+            if (Schema::hasColumn('users', 'tin_or_nin')) {
+                Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn('tin_or_nin');
+                });
+            }
+            // Repeat for raw_material, verification_file, status, location...
+        }
     }
+
 
     /**
      * Reverse the migrations.
