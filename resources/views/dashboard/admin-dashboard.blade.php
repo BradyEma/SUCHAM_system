@@ -63,18 +63,12 @@
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-leaf text-yellow-500 text-xl"></i>
                         <span class="text-xl font-bold">GoldenFields</span>
-                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
+                        <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
                     </div>
                 </div>
                 
                 <!-- User Profile -->
-                <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" class="h-10 w-10 rounded-full border-2 border-yellow-400">
-                    <div>
-                        <p class="font-medium">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-primary-200">Super Admin</p>
-                    </div>
-                </div>
+               
                 
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
@@ -184,7 +178,7 @@
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h2 class="text-3xl font-bold text-white-800">Welcome, {{ Auth::user()->name }}!</h2>
+                            <h2 class="text-3xl font-bold text-white-800">Welcome Admin, {{ Auth::user()->name }}!</h2>
                             <p class="opacity-90">Here's what's happening with your agro business today.</p>
                         </div>
                         <button class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">

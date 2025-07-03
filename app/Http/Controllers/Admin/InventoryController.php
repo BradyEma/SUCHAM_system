@@ -9,23 +9,24 @@ use App\Models\Supplier;
 
 class InventoryController extends Controller
 {
-   public function index()
+   public function index(Request $request)
 {
-    // Use paginate instead of all()
-    $items = Inventory::paginate(10); // change 10 to how many items per page you want
-    $totalItems = Inventory::count(); // count from DB directly
+    $query = Inventory::query();
 
-    $lowStockItems = Inventory::where('quantity', '<', 10)->count();
+    if ($request->has('search') && $request->search !== null) {
+        $query->where('product_name', 'like', '%' . $request->search . '%');
+    }
 
-    $totalValue = Inventory::sum(\DB::raw('quantity * unit_price')); // avoid loading all items in memory
+    $items = $query->latest()->paginate(10);
 
-    return view('admin.inventory.index', [
-        'items' => $items,
-        'totalItems' => $totalItems,
-        'lowStockItems' => $lowStockItems,
-        'totalValue' => $totalValue,
-    ]);
+    // Summary counts based on the filtered query (if you want summary of all or filtered, adjust accordingly)
+    $totalItems = $query->count(); 
+    $lowStockItems = $query->where('quantity', '<', 10)->count();
+    $totalValue = Inventory::sum(\DB::raw('quantity * unit_price'));
+
+    return view('admin.inventory.index', compact('items', 'totalItems', 'lowStockItems', 'totalValue'));
 }
+
    public function show($id)
 {
     $item = Inventory::findOrFail($id);
@@ -76,24 +77,43 @@ class InventoryController extends Controller
 
 
     public function edit($id)
-    {
-        $item = Inventory::findOrFail($id);
-        return view('admin.inventory.edit', compact('item'));
+{
+    $inventory = Inventory::findOrFail($id);
+    $suppliers = Supplier::with('user')->get();
+    return view('admin.inventory.edit', compact('inventory', 'suppliers'));
+}
+
+
+   public function update(Request $request, $id)
+{
+    $request->validate([
+        'product_name' => 'required',
+        'quantity' => 'required|integer|min:0',
+        'product_image' => 'nullable|image|max:2048',
+    ]);
+
+    $inventory = Inventory::findOrFail($id);
+
+    $inventory->fill($request->except('product_image'));
+
+    if ($request->hasFile('product_image')) {
+        $path = $request->file('product_image')->store('product_images', 'public');
+        $inventory->product_image = $path;
     }
 
-    public function update(Request $request, $id)
-    {
-        $item = Inventory::findOrFail($id);
-        $item->update($request->all());
+    $inventory->save();
 
-        return redirect()->route('admin.inventory.index')->with('success', 'Item updated!');
-    }
+    return redirect()->route('admin.inventory.index')->with('success', 'Inventory updated successfully!');
+}
+
 
     public function destroy($id)
     {
         Inventory::destroy($id);
         return redirect()->route('admin.inventory.index')->with('success', 'Item deleted!');
     }
+
+    
 
     
 }
