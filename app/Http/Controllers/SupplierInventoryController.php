@@ -23,10 +23,12 @@ class SupplierInventoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'supplier_id' => 'required',
-            'product_name' => 'required|string',
+        
+         'product_name' => 'required|string',
+         'product_id' => 'required|string',
             'quantity' => 'required|integer|min:0',
             'unit' => 'required|string',
+            'price' => 'required|numeric|min:200'
         ]);
 
         SupplierInventory::create($request->all());

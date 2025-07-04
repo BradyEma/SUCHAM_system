@@ -24,6 +24,9 @@
     <label class="block font-medium">Product Name:</label>
     <input type="text" name="product_name" value="{{ $supplier_inventory->product_name }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
+    <label class="block font-medium">SKU:</label>
+    <input type="number" name="SKU" value="{{ $supplier_inventory->SKU }}" required class="w-full border px-4 py-2 rounded border-green-300">
+
     <label class="block font-medium">Quantity:</label>
     <input type="number" name="quantity" value="{{ $supplier_inventory->quantity }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
