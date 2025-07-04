@@ -25,6 +25,9 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
   
 Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
 
+Route::get('/supplier/inventory', function () {
+    return view('supplier_inventory.index');
+})->name('supplier.inventory');
  
   
 Route::middleware(['auth'])->group(function () {
