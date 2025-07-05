@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,10 +83,16 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
+            @if(session('success'))
+    <div class="mb-4 p-4 rounded bg-green-100 border border-green-300 text-green-800">
+        {{ session('success') }}
+    </div>
+@endif
+
          
 @if (!$supplier)
     <div class="bg-blue-100 text-blue-800 p-4 mb-4 border-l-4 border-blue-500">
-        ⚠️ Please fill in your Business details in <a href="{{ route('supplier.profile') }}" class="underline font-medium">Profile</a> to continue.
+        ⚠️ Please fill in your Business and Vendor Validation details in <a href="{{ route('supplier.profile') }}" class="underline font-medium">Profile</a> to continue.
     </div>
 @elseif ($supplier && $supplier->status === 'active')
     <div id="approval-notification" class="bg-green-100 text-green-800 p-4 mb-4 border-l-4 border-green-500 flex justify-between items-center">

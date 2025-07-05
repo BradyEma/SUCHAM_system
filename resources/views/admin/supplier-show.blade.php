@@ -118,7 +118,7 @@
                             Registration Date
                         </p>
                         <p class="text-gray-900 font-medium pl-5">
-                            {{ $user->created_at->format('M d, Y') }}
+                             {{ $user->created_at ? $user->created_at->format('M d, Y') : 'Not Available' }}
                         </p>
                 </div>
 
@@ -250,6 +250,44 @@
                     </div>
                 </div>
             </div>
+
+            @if (isset($vendorValidation) && $vendorValidation)
+    <div class="p-4 bg-white shadow rounded mt-6">
+        <h2 class="text-xl font-bold mb-4">Vendor Validation Submission</h2>
+
+        <ul class="list-disc pl-6 text-gray-800 space-y-1">
+            <li><strong>BRN:</strong> {{ $vendorValidation->brn }}</li>
+            <li><strong>Annual Revenue:</strong> {{ $vendorValidation->annual_revenue }} UGX</li>
+            <li><strong>Net Profit Margin:</strong> {{ $vendorValidation->net_profit_margin }}%</li>
+            <li><strong>Years of Operation:</strong> {{ $vendorValidation->years_of_operation }}</li>
+            <li><strong>Customer Rating:</strong> {{ $vendorValidation->customer_rating }}</li>
+            <li><strong>Tax Clearance:</strong> {{ $vendorValidation->tax_clearance }}</li>
+            <li><strong>Background Check:</strong> {{ $vendorValidation->background_check }}</li>
+        </ul>
+
+        @if($vendorValidation->pdf_path)
+            <div class="mt-4">
+                <a href="{{ asset('storage/' . $vendorValidation->pdf_path) }}" target="_blank"
+                   class="text-blue-600 underline">Download Submitted PDF</a>
+            </div>
+        @endif
+
+        @if($vendorValidation->validation_result)
+            <div class="bg-white border border-gray-200 shadow-sm rounded-lg p-4 mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Vendor Validation Result</h3>
+                <pre class="bg-gray-100 p-3 rounded text-sm text-gray-800 overflow-auto whitespace-pre-wrap">
+                    {{ $vendorValidation->validation_result }}
+                </pre>
+            </div>
+        @endif
+
+    </div>
+@else
+    <p class="text-gray-500 italic mt-4">No validation submitted by supplier yet.</p>
+@endif
+
+
+
 
             <!-- Action Buttons -->
             <div class="bg-white rounded-xl shadow-md overflow-hidden border border-green-100 p-6 mb-8">

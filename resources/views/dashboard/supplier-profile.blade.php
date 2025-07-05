@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,23 +167,24 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         <div class="md:col-span-2">
-            <label for="business_name" class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+            <label for="business_name" class="block text-sm font-medium text-gray-700 mb-1">Business Name*</label>
             <input type="text" name="business_name" id="business_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
         </div>
 
         <div>
-        <label for="telNo">Telephone Number</label>
+        <label for="telNo">Telephone Number*</label>
          <input type="tel" id="telNo" name="telNo" placeholder="+256701234567" class="border rounded px-3 py-2" required>
          </div>
 
         <div>
-            <label for="business_type" class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
+            <label for="business_type" class="block text-sm font-medium text-gray-700 mb-1">Business Type*</label>
             <select name="business_type" id="business_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
                 <option value="Sugar Cane Supplier">Sugar Cane Supplier</option>
                 <option value="Honey Supplier">Honey Supplier</option>
                 <option value="Sugar Cane & Honey Supplier" selected>Sugar Cane & Honey Supplier</option>
                 <option value="Molasses">Molasses</option>
                 <option value="Other">Sugar Beets</option>
+                <option value="Other">Packaging Materials</option>
                 <option value="Other">Other</option>
             </select>
         </div>
@@ -197,7 +200,7 @@
         </div>
 
         <div class="md:col-span-2">
-            <label for="tin" class="block text-sm font-medium text-gray-700 mb-1">TIN</label>
+            <label for="tin" class="block text-sm font-medium text-gray-700 mb-1">TIN*</label>
             <input type="text" name="tin" id="tin" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
         </div>
 
@@ -213,6 +216,138 @@
         </div>
     </div>
 </form>
+
+<!-- Vendor Validation Section -->
+@if(session('success'))
+    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-green-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+<form method="POST" action="{{ route('vendor.validation.submit') }}" class="bg-white shadow-md rounded-lg p-6">
+    @csrf
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Business Registration Number -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">BRN (Business Registration Number)</label>
+            <input type="text" name="brn" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="Enter your BRN">
+        </div>
+
+        <!-- Annual Revenue -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Annual Revenue (UGX)</label>
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500">UGX</span>
+                </div>
+                <input type="number" name="annual_revenue" class="block w-full pl-16 p-3 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500" required placeholder="0">
+            </div>
+        </div>
+
+        <!-- Net Profit Margin -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Net Profit Margin (%)</label>
+            <div class="relative rounded-md shadow-sm">
+                <input type="number" step="0.1" name="net_profit_margin" class="block w-full p-3 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500" required placeholder="0.0">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Years of Operation -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Years of Operation</label>
+            <input type="number" name="years_of_operation" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="Number of years">
+        </div>
+
+        <!-- Customer Rating -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Customer Rating (0-5)</label>
+            <input type="number" step="0.1" max="5" name="customer_rating" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="0.0 to 5.0">
+        </div>
+
+        <!-- Tax Clearance -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Tax Clearance</label>
+            <select name="tax_clearance" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <!-- Background Check -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Background Check</label>
+            <select name="background_check" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Clear">Clear</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+            </select>
+        </div>
+
+        <!-- Financial Stability -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Financial Stability</label>
+            <select name="financial_stability" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select level</option>
+                <option value="Strong">Strong</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Weak">Weak</option>
+            </select>
+        </div>
+
+        <!-- Reputation -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Reputation</label>
+            <select name="reputation" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select rating</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Average">Average</option>
+                <option value="Poor">Poor</option>
+            </select>
+        </div>
+
+        <!-- Regulatory Compliance -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Regulatory Compliance</label>
+            <select name="regulatory_compliance" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Compliant">Compliant</option>
+                <option value="Non-compliant">Non-compliant</option>
+            </select>
+        </div>
+    </div>
+
+   <div class="md:col-span-2 text-right mt-4">
+            <button type="submit" class="bg-green-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded">
+                Submit for validation
+            </button>
+        </div>
+</form>
+
 
 
                         <!-- Password Change -->

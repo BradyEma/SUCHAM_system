@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\VendorValidationController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -22,7 +23,8 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
   
 Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
 
-//inventory
+Route::post('/vendor/validate', [VendorValidationController::class, 'submit'])->name('vendor.validation.submit');
+
 
 
  

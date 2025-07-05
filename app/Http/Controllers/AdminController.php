@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\VendorValidation;
 
 class AdminController extends Controller
 {
@@ -23,13 +24,17 @@ class AdminController extends Controller
     return redirect()->back()->with('success', 'Supplier has been activated.');
 }
 
-  public function showSupplier($id)
-    {
-        $supplier = Supplier::where('user_id', $id)->firstOrFail();
-        $user = $supplier->user;
+public function showSupplier($id)
+{
+    $user = User::findOrFail($id);
+    $supplier = Supplier::where('user_id', $user->id)->first();
 
-        return view('admin.supplier-show', compact('supplier', 'user'));
-    }
+    $vendorValidation = VendorValidation::where('supplier_id', $user->id)->latest()->first();
+    $validation = $vendorValidation;
+
+    return view('admin.supplier-show', compact('user', 'supplier', 'vendorValidation', 'validation'));
+}
+
 
     public function suspendSupplier($id)
 {
