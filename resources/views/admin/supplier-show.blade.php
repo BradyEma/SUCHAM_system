@@ -272,14 +272,75 @@
             </div>
         @endif
 
-        @if($vendorValidation->validation_result)
-            <div class="bg-white border border-gray-200 shadow-sm rounded-lg p-4 mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Vendor Validation Result</h3>
-                <pre class="bg-gray-100 p-3 rounded text-sm text-gray-800 overflow-auto whitespace-pre-wrap">
-                    {{ $vendorValidation->validation_result }}
-                </pre>
+     @php
+    $response = null;
+
+    if ($validation && $validation->validation_result) {
+        // Remove any prefix like "Failed: " or "Success: "
+        $raw = $validation->validation_result;
+
+        // Try removing common prefixes
+        $jsonString = preg_replace('/^(Success|Failed):\s*/', '', $raw);
+
+        $response = json_decode($jsonString, true);
+
+        // Uncomment if you still want to debug:
+        // dump('Raw:', $raw);
+        // dump('Cleaned JSON:', $jsonString);
+        // dump('Decoded Response:', $response);
+    }
+@endphp
+
+
+
+
+
+       @if ($response)
+    <div class="bg-white border border-gray-200 rounded-lg shadow p-4 mt-6">
+        <div class="flex items-center mb-3">
+            @if ($response['success'])
+                <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M5 13l4 4L19 7"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-green-800">Validation Passed</h3>
+            @else
+                <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <h3 class="text-lg font-semibold text-red-800">Validation Failed</h3>
+            @endif
+        </div>
+
+        <p class="text-sm text-gray-700 mb-2">
+            <strong>Message:</strong> {{ $response['message'] ?? 'N/A' }}
+        </p>
+
+        <p class="text-sm text-gray-700 mb-2">
+            <strong>Status:</strong>
+            @if ($response['success'])
+                <span class="inline-flex items-center px-2 py-1 rounded text-green-700 bg-green-100 text-xs font-semibold">Success</span>
+            @else
+                <span class="inline-flex items-center px-2 py-1 rounded text-red-700 bg-red-100 text-xs font-semibold">Failed</span>
+            @endif
+        </p>
+
+        @if (!empty($response['failedCriteria']))
+            <div class="text-sm text-gray-800 mt-2">
+                <p class="font-semibold text-red-600 mb-1">Failed Criteria:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    @foreach ($response['failedCriteria'] as $item)
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
+    </div>
+@endif
+
 
     </div>
 @else
