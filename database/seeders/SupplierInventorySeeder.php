@@ -3,36 +3,52 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\SupplierInventory;
 use App\Models\Product;
-use App\Models\Supplier;
-
+use App\Models\SupplierInventory;
 
 class SupplierInventorySeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Example: get a supplier and its products
-        $supplier = Supplier::first(); // Or find() with specific ID
+        // Fetch existing products by SKU
+        $product1 = Product::where('product_id', 'SKU-001')->first();
+        $product2 = Product::where('product_id', 'SKU-002')->first();
+        $product3 = Product::where('product_id', 'SKU-005')->first();
 
-        // Create products if not exist
-        $products = [
-            ['name' => 'Sugarcane', 'unit' => 'kg', 'quantity' => 1000],
-            ['name' => 'Packing Bags', 'unit' => 'pieces', 'quantity' => 500],
-            ['name' => 'Molasses', 'unit' => 'litres', 'quantity' => 300],
-            ['name' => 'Sugar Beets', 'unit' => 'kg', 'quantity' => 800],
-        ];
+    
 
-        foreach ($products as $item) {
-            $product = Product::firstOrCreate(['name' => $item['name']]);
-
-            SupplierInventory::create([
-                'supplier_id'   => $supplier->id,
-                'product_id'    => $product->id,
-                'product_name'  => $product->name,
-                'quantity'      => $item['quantity'],
-                'unit'          => $item['unit'],
-            ]);
-        }
+        // Create supplier inventories
+        SupplierInventory::insert([
+            [
+                'product' => $product1->product_name,
+                'product_id' => $product1->id,
+                'unit_price' => 500.00,
+                'measurement' => 'kg',
+                'status' => 'In Stock',
+                'actions' => 'N/A',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'product' => $product2->product_name,
+                'product_id' => $product2->id,
+                'unit_price' => 700.00,
+                'measurement' => 'liters',
+                'status' => 'Low Stock',
+                'actions' => 'Order Soon',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'product' => $product3->product_name,
+                'product_id' => $product3->id,
+                'unit_price' => 1200.00,
+                'measurement' => 'kg',
+                'status' => 'Out of Stock',
+                'actions' => 'Restock',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        ]);
     }
 }

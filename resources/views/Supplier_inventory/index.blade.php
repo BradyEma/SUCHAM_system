@@ -43,6 +43,40 @@
             background-color: #fee2e2;
             color: #991b1b;
         }
+        .actions-dropdown {
+            display: none;
+            position: absolute;
+            right: 10px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            z-index: 10;
+        }
+        .actions-container:hover .actions-dropdown {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .table-header {
+                display: none;
+            }
+            .table-row {
+                display: flex;
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .table-cell {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+            }
+            .table-cell:before {
+                content: attr(data-label);
+                font-weight: 600;
+                margin-right: 1rem;
+                color: #4b5563;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -100,16 +134,13 @@
                 </div>
             </div>
 
-            <!-- Filters and Search -->
-            
-
             <!-- Products Summary -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-500">Total Products</h2>
-                            <p class="text-3xl font-bold text-green-700">24</p>
+                            <p class="text-3xl font-bold text-green-700">0</p>
                         </div>
                         <div class="p-3 rounded-full bg-green-100 text-green-700">
                             <i class="fas fa-box-open text-xl"></i>
@@ -120,7 +151,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-500">In Stock</h2>
-                            <p class="text-3xl font-bold text-green-700">18</p>
+                            <p class="text-3xl font-bold text-green-700">0</p>
                         </div>
                         <div class="p-3 rounded-full bg-blue-100 text-blue-700">
                             <i class="fas fa-check-circle text-xl"></i>
@@ -131,7 +162,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-500">Low Stock</h2>
-                            <p class="text-3xl font-bold text-yellow-700">4</p>
+                            <p class="text-3xl font-bold text-yellow-700">0</p>
                         </div>
                         <div class="p-3 rounded-full bg-yellow-100 text-yellow-700">
                             <i class="fas fa-exclamation-triangle text-xl"></i>
@@ -144,174 +175,28 @@
             <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
+                        <thead class="bg-gray-50 table-header">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Product 1 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('sugarcane.jpg') }}" alt="Sugar Cane">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Premium Sugar Cane</div>
-                                            <div class="text-sm text-gray-500">SKU: SC-001</div>
-                                        </div>
+                            <!-- Empty state -->
+                            <tr>
+                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                    <div class="flex flex-col items-center justify-center py-12">
+                                        <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
+                                        <h3 class="text-lg font-medium text-gray-700">No products found</h3>
+                                        <p class="text-gray-500 mt-1">Add your first product to get started</p>
+                                        <button class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
+                                            <i class="fas fa-plus mr-2"></i> Add Product
+                                        </button>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Sugar Cane</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">12,500 kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">UGX 1,200/kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full badge-in-stock">
-                                        In Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button class="text-yellow-600 hover:text-yellow-900 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-900 mr-3">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <!-- Product 2 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('honey.jpg') }}" alt="Pure Honey">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Pure Golden Honey</div>
-                                            <div class="text-sm text-gray-500">SKU: HN-002</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Honey</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">850 jars</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">UGX 15,000/jar</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full badge-in-stock">
-                                        In Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button class="text-yellow-600 hover:text-yellow-900 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-900 mr-3">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <!-- Product 3 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('molasses.jpg') }}" alt="Molasses">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Blackstrap Molasses</div>
-                                            <div class="text-sm text-gray-500">SKU: ML-003</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">By-products</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">320 kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">UGX 8,500/kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full badge-low-stock">
-                                        Low Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button class="text-yellow-600 hover:text-yellow-900 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-900 mr-3">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <!-- Product 4 -->
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('sugar-beets.jpg') }}" alt="Sugar Beets">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Organic Sugar Beets</div>
-                                            <div class="text-sm text-gray-500">SKU: SB-004</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">Sugar Beets</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">0 kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">UGX 3,200/kg</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full badge-out-of-stock">
-                                        Out of Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button class="text-yellow-600 hover:text-yellow-900 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-green-600 hover:text-green-900 mr-3">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-900">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -330,7 +215,7 @@
                     <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                         <div>
                             <p class="text-sm text-gray-700">
-                                Showing <span class="font-medium">1</span> to <span class="font-medium">4</span> of <span class="font-medium">24</span> products
+                                Showing <span class="font-medium">0</span> to <span class="font-medium">0</span> of <span class="font-medium">0</span> products
                             </p>
                         </div>
                         <div>
@@ -365,5 +250,40 @@
             </div>
         </main>
     </div>
+
+    <script>
+        // This script would handle the actions dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // For mobile view, we'll add click handlers to show actions
+            const actionButtons = document.querySelectorAll('.actions-btn');
+            
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const dropdown = this.nextElementSibling;
+                    const allDropdowns = document.querySelectorAll('.actions-dropdown');
+                    
+                    // Close all other dropdowns
+                    allDropdowns.forEach(d => {
+                        if (d !== dropdown) d.style.display = 'none';
+                    });
+                    
+                    // Toggle current dropdown
+                    if (dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                    } else {
+                        dropdown.style.display = 'block';
+                    }
+                });
+            });
+            
+            // Close dropdowns when clicking elsewhere
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.actions-dropdown').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+            });
+        });
+    </script>
 </body>
 </html>

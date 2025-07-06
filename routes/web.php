@@ -11,6 +11,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SupplierInventoryController;
+use App\Models\SupplierInventory;
+
 
 Route::resource('supplier_inventory', SupplierInventoryController::class);
 
@@ -26,7 +28,8 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
 Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
 
 Route::get('/supplier/inventory', function () {
-    return view('supplier_inventory.index');
+    $inventories = SupplierInventory::with('product')->get();
+    return view('supplier_inventory.index', compact('inventories'));
 })->name('supplier.inventory');
  
   
