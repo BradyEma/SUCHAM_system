@@ -251,6 +251,70 @@
         </table>
     </div>
 </section>
+
+<table class="w-full">
+    <thead>
+        <tr>
+            <th>Vendor Name</th>
+            <th>Validation Status</th>
+            <th>Details</th>
+            <th>More Info</th>
+        </tr>
+    </thead>
+    <tbody>
+      @foreach ($suppliers as $supplier)
+    @php
+        $supplierUserId = $supplier->user_id;
+        $validation = $validations[$supplierUserId] ?? null;
+        $response = $validation && $validation->validation_result ? json_decode($validation->validation_result, true) : null;
+
+        // Handle double-encoded JSON (optional but safe)
+        if (is_string($response)) {
+            $response = json_decode($response, true);
+        }
+    @endphp
+
+    <tr>
+        <td>{{ $supplier->user->name }}</td>
+
+        <td>
+            @if ($response)
+                @if ($response['success'])
+                    <span class="text-green-600 font-bold">Passed</span>
+                @else
+                    <span class="text-red-600 font-bold">Failed</span>
+                @endif
+            @else
+                <span class="text-gray-500 italic">Not Submitted</span>
+            @endif
+        </td>
+
+       <td>
+    @if ($response && !$response['success'])
+        <ul class="text-sm text-red-500 list-disc list-inside">
+            @foreach ($response['failedCriteria'] as $reason)
+                <li>{{ $reason }}</li>
+            @endforeach
+        </ul>
+    @elseif ($response && $response['success'])
+        <span class="text-green-700 text-sm">
+            Visit scheduled for:
+            <strong>
+                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending' }}
+            </strong>
+        </span>
+    @endif
+</td>
+
+        <td>
+            <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-blue-600 underline">View</a>
+        </td>
+    </tr>
+@endforeach
+
+    </tbody>
+</table>
+
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Total Orders -->

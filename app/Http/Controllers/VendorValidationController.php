@@ -26,54 +26,59 @@ class VendorValidationController extends Controller
         'regulatory_compliance' => 'required|string',
     ]);
 
-    // Step 1: Save data in DB without the response
     $validation = new VendorValidation();
     $validation->supplier_id = Auth::id();
-    $validation->fill($validated); // only works if $fillable is set
-    $validation->pdf_path = ''; // temp value
+    $validation->fill($validated);
+    $validation->pdf_path = ''; // placeholder
     $validation->save();
 
-    
-    // Step 2: Generate PDF and update pdf_path
-$pdf = Pdf::loadView('pdf.vendor-validation', $validated);
-$pdfName = 'vendor_validation_' . $validation->id . '.pdf';
-$relativePath = 'vendor_validations/' . $pdfName;
-$absolutePath = storage_path('app/public/' . $relativePath);
+    // Generate PDF
+    $pdf = Pdf::loadView('pdf.vendor-validation', $validated);
+    $pdfName = 'vendor_validation_' . $validation->id . '.pdf';
+    $relativePath = 'vendor_validations/' . $pdfName;
+    $absolutePath = storage_path('app/public/' . $relativePath);
 
-// Ensure the directory exists
-if (!file_exists(dirname($absolutePath))) {
-    mkdir(dirname($absolutePath), 0775, true);
+    if (!file_exists(dirname($absolutePath))) {
+        mkdir(dirname($absolutePath), 0775, true);
+    }
+
+    $pdf->save($absolutePath);
+    $validation->pdf_path = $relativePath;
+    $validation->save();
+
+    // Send to Java server
+    $response = Http::attach(
+        'file',
+        file_get_contents($absolutePath),
+        $pdfName
+    )->post('http://localhost:8080/api/vendors/upload');
+
+    // Handle response
+    if ($response->successful()) {
+        
+        $responseData = json_decode($response->body(), true);
+
+if (is_string($responseData)) {
+    $responseData = json_decode($responseData, true); // handles double-encoding
 }
 
-$pdf->save($absolutePath);
-$validation->pdf_path = $relativePath;
+// Set the result
+$validation->validation_result = json_encode($responseData);
+
+// ✅ Add visit_date manually if validation passed
+if ($responseData['success']) {
+    $validation->visit_date = now()->addDays(3);
+}
+
 $validation->save();
 
+        return redirect()->route('supplier.dashboard')->with('success', 'Vendor validation details submitted successfully.');
+    } else {
+        $validation->validation_result = 'Failed: ' . $response->body();
+        $validation->save();
 
-    // Step 3: Send to Java server
-   // Step 2: Generate PDF (Already done)
-$pdfName = 'vendor_validation_' . $validation->id . '.pdf';
-$pdfPath = storage_path('app/public/vendor_validations/' . $pdfName);
-
-// Step 3: Send to Java server
-$response = Http::attach(
-    'file',
-    file_get_contents($pdfPath),
-    $pdfName
-)->post('http://localhost:8080/api/vendors/upload');
-
-
-    if ($response->successful()) {
-    $validation->validation_result = $response->body();
-    $validation->save();
-
-    return redirect()->route('supplier.dashboard')->with('success', 'Vendor validation details submitted successfully.');
-} else {
-    $validation->validation_result = 'Failed: ' . $response->body();
-    $validation->save();
-
-    return redirect()->route('supplier.dashboard')->with('success', 'Vendor validation details submitted. Awaiting review.');
+        return redirect()->route('supplier.dashboard')->with('success', 'Vendor validation details submitted. Awaiting review.');
+    }
 }
 
-}
 }

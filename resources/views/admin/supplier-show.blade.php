@@ -327,6 +327,23 @@
                 <span class="inline-flex items-center px-2 py-1 rounded text-red-700 bg-red-100 text-xs font-semibold">Failed</span>
             @endif
         </p>
+        <p class="text-sm text-gray-700 mb-2">
+            <strong>Visit Date:</strong>
+            @if ($response && !$response['success'])
+        <ul class="text-sm text-red-500 list-disc list-inside">
+            @foreach ($response['failedCriteria'] as $reason)
+                <li>{{ $reason }}</li>
+            @endforeach
+        </ul>
+    @elseif ($response && $response['success'])
+        <span class="text-green-700 text-sm">
+            Visit scheduled for:
+            <strong>
+                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending' }}
+            </strong>
+        </span>
+    @endif
+        </p>
 
         @if (!empty($response['failedCriteria']))
             <div class="text-sm text-gray-800 mt-2">

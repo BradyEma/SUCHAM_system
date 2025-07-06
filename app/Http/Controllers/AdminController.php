@@ -11,9 +11,13 @@ class AdminController extends Controller
 {
    public function dashboard()
 {
-    $suppliers = Supplier::with('user')->get(); // with('user') is optional
-    return view('dashboard.admin-dashboard', compact('suppliers'));
+   $suppliers = Supplier::with('user')->get();
+$validations = VendorValidation::all()->keyBy('supplier_id'); // supplier_id == user_id
+
+
+    return view('dashboard.admin-dashboard', compact('suppliers', 'validations'));
 }
+
 
    public function activateSupplier($id)
 {
