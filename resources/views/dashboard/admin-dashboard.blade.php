@@ -252,68 +252,111 @@
     </div>
 </section>
 
-<table class="w-full">
-    <thead>
-        <tr>
-            <th>Vendor Name</th>
-            <th>Validation Status</th>
-            <th>Details</th>
-            <th>More Info</th>
-        </tr>
-    </thead>
-    <tbody>
-      @foreach ($suppliers as $supplier)
-    @php
-        $supplierUserId = $supplier->user_id;
-        $validation = $validations[$supplierUserId] ?? null;
-        $response = $validation && $validation->validation_result ? json_decode($validation->validation_result, true) : null;
+<div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 mb-10">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-primary-500">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Vendor Name
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Validation Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Details
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach ($suppliers as $supplier)
+                @php
+                    $supplierUserId = $supplier->user_id;
+                    $validation = $validations[$supplierUserId] ?? null;
+                    $response = $validation && $validation->validation_result ? json_decode($validation->validation_result, true) : null;
 
-        // Handle double-encoded JSON (optional but safe)
-        if (is_string($response)) {
-            $response = json_decode($response, true);
-        }
-    @endphp
+                    if (is_string($response)) {
+                        $response = json_decode($response, true);
+                    }
+                @endphp
 
-    <tr>
-        <td>{{ $supplier->user->name }}</td>
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                <span class="text-primary-600 font-medium">{{ strtoupper(substr($supplier->user->name, 0, 1)) }}</span>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">{{ $supplier->user->name }}</div>
+                                <div class="text-sm text-gray-500">{{ $supplier->user->email }}</div>
+                            </div>
+                        </div>
+                    </td>
 
-        <td>
-            @if ($response)
-                @if ($response['success'])
-                    <span class="text-green-600 font-bold">Passed</span>
-                @else
-                    <span class="text-red-600 font-bold">Failed</span>
-                @endif
-            @else
-                <span class="text-gray-500 italic">Not Submitted</span>
-            @endif
-        </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @if ($response)
+                            @if ($response['success'])
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i> Approved
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    <i class="fas fa-times-circle mr-1"></i> Rejected
+                                </span>
+                            @endif
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                <i class="fas fa-clock mr-1"></i> Pending
+                            </span>
+                        @endif
+                    </td>
 
-       <td>
-    @if ($response && !$response['success'])
-        <ul class="text-sm text-red-500 list-disc list-inside">
-            @foreach ($response['failedCriteria'] as $reason)
-                <li>{{ $reason }}</li>
-            @endforeach
-        </ul>
-    @elseif ($response && $response['success'])
-        <span class="text-green-700 text-sm">
-            Visit scheduled for:
-            <strong>
-                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending' }}
-            </strong>
-        </span>
-    @endif
-</td>
+                    <td class="px-6 py-4">
+                        @if ($response && !$response['success'])
+                        <div class="text-sm text-gray-700">
+                            <div class="font-medium text-red-600 mb-1">Rejection Reasons:</div>
+                            <ul class="list-disc pl-5 space-y-1">
+                                @foreach ($response['failedCriteria'] as $reason)
+                                    <li>{{ $reason }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @elseif ($response && $response['success'])
+                        <div class="text-sm text-gray-700">
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-calendar-check mr-2"></i>
+                                <span>Visit scheduled:</span>
+                            </div>
+                            <div class="mt-1 font-medium">
+                                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending date confirmation' }}
+                            </div>
+                        </div>
+                        @else
+                        <div class="text-sm text-gray-500 italic">
+                            No validation data submitted yet
+                        </div>
+                        @endif
+                    </td>
 
-        <td>
-            <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-blue-600 underline">View</a>
-        </td>
-    </tr>
-@endforeach
-
-    </tbody>
-</table>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-primary-600 hover:text-primary-900 mr-3">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    
+</div>
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
