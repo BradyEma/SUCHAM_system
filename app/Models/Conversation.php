@@ -40,4 +40,28 @@ class Conversation extends Model
             ->where('is_read', false)
             ->count();
     }
+
+public function getContactsProperty()
+{
+    $currentUser = auth()->user();
+
+    return User::where('id', '!=', $currentUser->id)
+        ->get()
+        ->filter(fn($user) => $currentUser->canChatWith($user));
+}
+
+public function selectContact($contactId)
+{
+    $contact = User::findOrFail($contactId);
+
+    if (!auth()->user()->canChatWith($contact)) {
+        abort(403, 'Not allowed to chat with this user.');
+    }
+
+    $this->selectedContact = $contact;
+    // Load messages, etc.
+}
+
+
+
 }

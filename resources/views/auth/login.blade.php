@@ -26,7 +26,8 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-700 to-primary-900 flex items-center justify-center p-4 relative overflow-hidden">
+<body class="h-full overflow-y-auto flex items-center justify-center bg-gradient-to-br from-primary-700 to-primary-900 p-4 relative">
+
     <!-- Background pattern -->
     <div class="absolute inset-0 bg-pattern z-0"></div>
     <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-green-700 rounded-full opacity-10 mix-blend-overlay"></div>

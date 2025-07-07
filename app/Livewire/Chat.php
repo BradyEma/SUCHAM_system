@@ -33,10 +33,12 @@ class Chat extends Component
     public function loadContacts()
     {
         $user = Auth::user();
-        
         // Get all users except the current user
         $allUsers = User::where('id', '!=', $user->id)->get();
-        
+        // Filter users by chat permission
+        $filteredUsers = $allUsers->filter(function($contactUser) use ($user) {
+            return $user->canChatWith($contactUser);
+        });
         // Get existing conversations
         $conversations = Conversation::where('sender_id', $user->id)
             ->orWhere('receiver_id', $user->id)
@@ -44,24 +46,19 @@ class Chat extends Component
                 $query->latest()->limit(1);
             }])
             ->get();
-
-        $this->contacts = $allUsers->map(function($contactUser) use ($user, $conversations) {
-            // Find existing conversation with this user
+        $this->contacts = $filteredUsers->map(function($contactUser) use ($user, $conversations) {
             $conversation = $conversations->first(function($conv) use ($contactUser, $user) {
                 return ($conv->sender_id == $user->id && $conv->receiver_id == $contactUser->id) ||
                        ($conv->sender_id == $contactUser->id && $conv->receiver_id == $user->id);
             });
-            
             $latestMessage = null;
             $unreadCount = 0;
             $lastActivity = $contactUser->created_at;
-            
             if ($conversation) {
                 $latestMessage = $conversation->getLatestMessage();
                 $unreadCount = $conversation->getUnreadCount($user->id);
                 $lastActivity = $conversation->updated_at;
             }
-            
             return [
                 'id' => $contactUser->id,
                 'name' => $contactUser->name,

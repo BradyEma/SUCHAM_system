@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,16 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'supplier',
         ]);
+
+         Product::create([
+        'name' => 'Light Brown Sugar',
+        'image' => 'brown-sugar.jpg',
+    ]);
+
+    Product::create([
+        'name' => 'White Granulated Sugar',
+        'image' => 'white-sugar.jpg',
+    ]);
 
         User::create([
             'name' => 'Sarah Supplier',

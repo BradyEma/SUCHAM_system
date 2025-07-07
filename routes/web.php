@@ -15,7 +15,7 @@ Route::get('/', fn () => view('welcome'));
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
-
+use App\Http\Controllers\CustomerController;
 
 Route::get('/', fn () => view('welcome'));
 
@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
-    Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
+    Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
     Route::view('/dashboard', 'dashboard')->middleware(['verified'])->name('dashboard');
     
@@ -80,6 +80,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
+    
+    //customer
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -87,6 +91,11 @@ Route::middleware(['auth'])->group(function () {
   Route::patch('/admin/suppliers/{id}/deactivate', [AdminController::class, 'deactivateSupplier'])->name('admin.suppliers.deactivate');
 
 Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
+
+Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
+Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
+
+
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
