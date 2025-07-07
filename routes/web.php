@@ -12,6 +12,9 @@ use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SupplierInventoryController;
 use App\Models\SupplierInventory;
+use App\Http\Controllers\RetailerInventoryController;
+
+Route::resource('retailer_inventory', RetailerInventoryController::class);
 
 
 Route::resource('supplier_inventory', SupplierInventoryController::class);
