@@ -66,8 +66,7 @@ Route::middleware(['auth'])->group(function () {
 
     //suppliers-profile form
     Route::get('/supplier/profile-form', [SupplierController::class, 'showProfileForm'])->name('supplier.profile.form');
-    Route::post('/supplier/profile-form', [SupplierController::class, 'storeProfile'])->name('supplier.profile.store');
-    Route::post('/supplier/profile/update', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
+    Route::post('/supplier/profile', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
     
     //wholesaler
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');

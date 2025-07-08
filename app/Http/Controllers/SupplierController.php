@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
 
 class SupplierController extends Controller
@@ -31,36 +30,5 @@ class SupplierController extends Controller
         }
 
         return view('dashboard.supplier-dashboard', compact('alert', 'supplier'));
-    }
-
-    public function storeProfile(Request $request)
-    {
-        $request->validate([
-            'business_name' => 'required|string',
-            'business_type' => 'nullable|string',
-            'telNo' => 'nullable|string',
-            'tax_id' => 'nullable|string',
-            'tin' => 'nullable|string',
-            'location' => 'nullable|string',
-            'document' => 'nullable|file|mimes:pdf|max:2048',
-        ]);
-
-        Supplier::updateOrCreate(
-            ['user_id' => Auth::id()],
-            [
-                'business_name' => $request->business_name,
-                'business_type' => $request->business_type,
-                'telNo' => $request->telNo,
-                'Tax_ID' => $request->tax_id,
-                'TIN' => $request->tin,
-                'location' => $request->location,
-                'document_path' => $request->hasFile('document')
-                    ? $request->file('document')->store('documents', 'public')
-                    : null,
-                'status' => 'pending', // updated
-            ]
-        );
-
-        return redirect()->route('supplier.dashboard')->with('success', '');
     }
 }

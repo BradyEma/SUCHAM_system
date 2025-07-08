@@ -76,11 +76,44 @@
             <div class="flex justify-between items-start mb-8">
                 <div>
                     <h1 class="text-3xl font-bold text-green-800">Supplier Profile</h1>
+                    @if(session('info'))
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-2 rounded">
+                            {{ session('info') }}
+                        </div>
+                    @endif
+
                     @if(session('error'))
                       <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
                           {{ session('error') }}
                       </div>
                     @endif
+                    <!-- Vendor Validation Section -->
+@if(session('success'))
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-yellow-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-yellow-800">{{ session('success') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
 
                 </div>
             </div>
@@ -157,7 +190,7 @@
                                              
 
                         <!-- Business Information -->
-                       <form method="POST" action="{{ route('supplier.profile.store') }}" enctype="multipart/form-data">
+                       <form action="{{ route('supplier.profile.update') }}" method="POST" enctype="multipart/form-data">
 
 
                             @csrf
@@ -219,13 +252,13 @@
 
 <!-- Vendor Validation Section -->
 @if(session('success'))
-    <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded">
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded">
         <div class="flex items-center">
             <div class="flex-shrink-0">
-                <i class="fas fa-check-circle text-green-500"></i>
+                <i class="fas fa-check-circle text-yellow-500"></i>
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                <p class="text-sm font-medium text-yellow-800">{{ session('success') }}</p>
             </div>
         </div>
     </div>

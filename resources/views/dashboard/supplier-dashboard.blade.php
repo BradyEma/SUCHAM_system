@@ -83,11 +83,7 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
-            @if(session('success'))
-    <div class="mb-4 p-4 rounded bg-green-100 border border-green-300 text-green-800">
-        {{ session('success') }}
-    </div>
-@endif
+          
 
          
 @if (!$supplier)

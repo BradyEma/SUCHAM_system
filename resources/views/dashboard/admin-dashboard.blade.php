@@ -266,7 +266,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                         Details
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                    <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
                         Actions
                     </th>
                 </tr>
@@ -341,13 +341,11 @@
                         @endif
                     </td>
 
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td class="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-primary-600 hover:text-primary-900 mr-3">
                             <i class="fas fa-eye mr-1"></i> View
                         </a>
-                        <a href="#" class="text-gray-600 hover:text-gray-900">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </a>
+                        
                     </td>
                 </tr>
                 @endforeach
