@@ -6,13 +6,18 @@ use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ChatController;
+use App\Livewire\Admin\Messages\Messages;
+use App\Livewire\Admin\Messages\ListConversation;
+
+Route::get('/', fn () => view('welcome'));
+
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
-
 use App\Http\Controllers\Admin\CustomerSegmentController;
 use Illuminate\Support\Facades\Artisan;
-
+use App\Http\Controllers\CustomerController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -32,16 +37,24 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
-    Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
-    Route::view('/admin/dashboard', 'dashboard.admin')->name('admin.dashboard');
+    Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
+    Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
     Route::view('/dashboard', 'dashboard')->middleware(['verified'])->name('dashboard');
     
+    // Chat routes
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{conversationId}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/start', [ChatController::class, 'startConversation'])->name('chat.start');
+    Route::post('/chat/{conversationId}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/search/users', [ChatController::class, 'searchUsers'])->name('chat.search.users');
     
+    // Livewire chat page
+    Route::get('/chat-livewire', [ChatController::class, 'livewire'])->name('chat.livewire');
+    Route::get('/chat-test', [ChatController::class, 'test'])->name('chat.test');
 
     // Role selection
     Route::get('/choose-role', [RoleSelectionController::class, 'index'])->name('choose.role');
     Route::post('/choose-role', [RoleSelectionController::class, 'store'])->name('choose.role.store');
-
 
     // Supplier pages
     Route::get('/supplier/profile', fn () => view('dashboard.supplier-profile'))->name('supplier.profile');
@@ -70,6 +83,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
+    
+    //customer
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -77,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
   Route::patch('/admin/suppliers/{id}/deactivate', [AdminController::class, 'deactivateSupplier'])->name('admin.suppliers.deactivate');
 
 Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
+
 
 // ML
     Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -96,6 +114,11 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
         ->middleware(['auth', 'role:admin'])
         ->name('admin.send.promo');
+
+Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
+Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
+
+
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
