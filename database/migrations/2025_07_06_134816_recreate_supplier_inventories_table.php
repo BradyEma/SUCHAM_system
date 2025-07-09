@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('product');         // PRODUCT
             $table->unsignedBigInteger('product_id'); // FK to products.id
       // PRODUCT_ID
+            $table->unsignedInteger('quantity'); // QUANTITY
             $table->decimal('unit_price', 10, 2); // UNIT_PRICE
             $table->string('measurement');     // MEASUREMENT
             $table->string('status');          // STATUS

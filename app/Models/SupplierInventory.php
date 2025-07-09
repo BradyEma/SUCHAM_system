@@ -11,6 +11,7 @@ class SupplierInventory extends Model
     protected $fillable = [
         'product',
         'product_id',
+        'quantity',
         'unit_price',
         'measurement',
         'status',

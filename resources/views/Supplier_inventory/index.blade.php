@@ -93,7 +93,7 @@
                 </div>
             </div>
             <nav class="space-y-1">
-                <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-tachometer-alt w-5 text-center"></i>
                     <span>Dashboard</span>
                 </a>
@@ -129,7 +129,11 @@
                         <i class="fas fa-file-export mr-2"></i> Export
                     </button>
                     <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
-                        <i class="fas fa-plus mr-2"></i> Add Product
+                         <!-- Add Product Button (now links to create form) -->
+         <a href="{{ route('supplier_inventory.create') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
+        <i class="fas fa-plus mr-2"></i> Add Product
+        </a>
+    
                     </button>
                 </div>
             </div>
@@ -174,28 +178,53 @@
             <!-- Products Table -->
             <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50 table-header">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
+            <table class="min-w-full divide-y divide-gray-200"> <!-- ← Add this line -->
+                 <tbody class="bg-white divide-y divide-gray-200">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>product_id</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Measurements</th>
+                <th>Status</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+    @forelse ($products as $product)
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product_id }}</td>
+           <td class="px-6 py-4 whitespace-nowrap">{{ $product->quantity }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->unit_price }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->measurement }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->status }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-right">{{ $product->actions}}</td>
+                   
+                </form>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                <div class="flex flex-col items-center justify-center py-12">
+                    <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
+                    
+                   
+                </div>
+            </td>
+        </tr>
+    @endforelse
+</tbody>
+
+                   
                         <tbody class="bg-white divide-y divide-gray-200">
                             <!-- Empty state -->
                             <tr>
                                 <td colspan="6" class="px-6 py-4 text-center text-gray-500">
                                     <div class="flex flex-col items-center justify-center py-12">
                                         <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
-                                        <h3 class="text-lg font-medium text-gray-700">No products found</h3>
-                                        <p class="text-gray-500 mt-1">Add your first product to get started</p>
-                                        <button class="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
-                                            <i class="fas fa-plus mr-2"></i> Add Product
-                                        </button>
+                                        
                                     </div>
                                 </td>
                             </tr>

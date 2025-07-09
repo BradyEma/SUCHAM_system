@@ -18,12 +18,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // Call custom seeder(s)
-        $this->call([
-    ProductSeeder::class,
-    SupplierInventorySeeder::class,
-    RetailerInventorySeeder::class,
-
-]);
+     
     }
 }

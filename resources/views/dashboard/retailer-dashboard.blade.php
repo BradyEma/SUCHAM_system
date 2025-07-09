@@ -60,7 +60,7 @@
                 <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
                     <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Retailer" class="h-10 w-10 rounded-full border-2 border-secondary-400">
                     <div>
-                        <p class="font-medium">Sarah Johnson</p>
+                        <p class="font-medium">Preizy</p>
                         <p class="text-xs text-primary-200">Premium Retailer</p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                         </a>
                         
                         <!-- Inventory -->
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('retailer_inventory.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-boxes mr-3"></i>
                             Inventory
                             <span class="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full ml-auto">5</span>

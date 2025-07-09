@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\RetailerInventory;
@@ -8,7 +9,11 @@ class RetailerInventoryController extends Controller
 {
     public function index()
     {
-        $products = RetailerInventory::orderBy('created_at', 'desc')->paginate(10);
+        $retailerId = auth()->id();
+
+        $products = RetailerInventory::where('retailer_id', $retailerId)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
 
         return view('retailer_inventory.index', compact('products'));
     }
@@ -28,9 +33,12 @@ class RetailerInventoryController extends Controller
             'measurements' => 'required|string',
         ]);
 
+        // Add retailer_id and status
+        $validated['retailer_id'] = auth()->id();
         $validated['status'] = $validated['stock'] <= 10 ? 'low_stock' : 'in_stock';
 
         RetailerInventory::create($validated);
+
         return redirect()->route('retailer_inventory.index')->with('success', 'Product added successfully');
     }
 
@@ -52,12 +60,14 @@ class RetailerInventoryController extends Controller
         $validated['status'] = $validated['stock'] <= 10 ? 'low_stock' : 'in_stock';
 
         $retailer_inventory->update($validated);
+
         return redirect()->route('retailer_inventory.index')->with('success', 'Product updated successfully');
     }
 
     public function destroy(RetailerInventory $retailer_inventory)
     {
         $retailer_inventory->delete();
+
         return redirect()->route('retailer_inventory.index')->with('success', 'Product deleted');
     }
 }
