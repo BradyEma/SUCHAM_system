@@ -10,6 +10,9 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 
+use App\Http\Controllers\Admin\CustomerSegmentController;
+
+
 
 Route::get('/', fn () => view('welcome'));
 
@@ -73,6 +76,20 @@ Route::middleware(['auth'])->group(function () {
   Route::patch('/admin/suppliers/{id}/deactivate', [AdminController::class, 'deactivateSupplier'])->name('admin.suppliers.deactivate');
 
 Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
+
+// ML
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
+    });
+//extra ML
+    Route::post('/admin/refresh-segments', function () {
+        Artisan::call('ml:run-customer-segmentation');
+        return redirect()->back()->with('success', 'Segments refreshed!');
+    })->middleware(['auth', 'role:admin'])->name('admin.refresh.segments');
+//promo email button
+    Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('admin.send.promo');
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
