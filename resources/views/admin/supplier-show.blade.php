@@ -68,7 +68,7 @@
                 <!-- Basic Info Card -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden border border-green-100">
                     <div class="bg-green-50 px-6 py-4 border-b border-green-100">
-                        <h2 class="text-lg font-semibold text-green-800">Business Information</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">Business Information</h2>
                     </div>
                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-green-100">
     <div class="bg-green-50 px-6 py-4 border-b border-green-100">
@@ -216,20 +216,14 @@
                         @endswitch
                     </p>
                 </div>
+
+               
             </div>
+        
         </div>
-    </div>
-</div>
 
-                </div>
-
-                <!-- Documents Card -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-green-100">
-                    <div class="bg-green-50 px-6 py-4 border-b border-green-100">
-                        <h2 class="text-lg font-semibold text-green-800">Business Documents</h2>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center justify-between bg-green-50 rounded-lg p-4">
+         <!--business certificate-->
+                <div class="flex items-center justify-between bg-green-50 rounded-lg p-4 mt-4">
                             <div class="flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -247,122 +241,157 @@
                                 View
                             </a>
                         </div>
+    </div>
+</div>
+
+                </div>
+
+                <!-- Documents Card -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-green-100">
+                    <div class="bg-green-50 px-6 py-4 border-b border-green-100">
+                        <h2 class="text-lg font-semibold text-gray-800">Vendor-Validation Submission</h2>
+                    </div>
+                    <div class="p-6 max-w-3xl mx-auto">
+    @if (isset($vendorValidation) && $vendorValidation)
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-8 border border-gray-100">
+            
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100 rounded-lg p-4">
+                        <h3 class="text-sm font-medium text-green-800 mb-2">Business Registration</h3>
+                        <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->brn }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Annual Revenue</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->annual_revenue }} UGX</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Net Profit Margin</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->net_profit_margin }}%</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Years of Operation</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->years_of_operation }}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Customer Rating</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->customer_rating }}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Tax Clearance</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->tax_clearance }}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-50 to-green-50/30 border border-green-100  rounded-lg p-4">
+                            <h3 class="text-sm font-medium text-green-800 mb-2">Background Check</h3>
+                            <p class="text-lg font-semibold text-gray-800">{{ $vendorValidation->background_check }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                @if($vendorValidation->pdf_path)
+                    <div class="mt-6">
+                        <a href="{{ asset('storage/' . $vendorValidation->pdf_path) }}" target="_blank"
+                           class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            Download Submitted PDF
+                        </a>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        @php
+            $response = null;
+            if ($validation && $validation->validation_result) {
+                $raw = $validation->validation_result;
+                $jsonString = preg_replace('/^(Success|Failed):\s*/', '', $raw);
+                $response = json_decode($jsonString, true);
+            }
+        @endphp
+
+        @if ($response)
+            <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 border @if($response['success']) border-green-100 @else border-red-100 @endif">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        @if ($response['success'])
+                            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                        @else
+                            <div class="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
+                                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium @if($response['success']) text-green-800 @else text-red-800 @endif">
+                            @if($response['success']) Validation Passed @else Validation Failed @endif
+                        </h3>
+                        <div class="mt-2 space-y-3">
+                            <div>
+                                <p class="text-sm text-gray-600"><strong>Message:</strong> {{ $response['message'] ?? 'N/A' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">
+                                    <strong>Status:</strong>
+                                    @if ($response['success'])
+                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Success</span>
+                                    @else
+                                        <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Failed</span>
+                                    @endif
+                                </p>
+                            </div>
+                            <div>
+                                @if ($response && !$response['success'])
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Reasons for failure:</p>
+                                    <ul class="text-sm text-red-600 list-disc list-inside space-y-1">
+                                        @foreach ($response['failedCriteria'] as $reason)
+                                            <li>{{ $reason }}</li>
+                                        @endforeach
+                                    </ul>
+                                @elseif ($response && $response['success'])
+                                    <p class="text-sm text-gray-600">
+                                        <strong>Visit scheduled for:</strong>
+                                        <span class="text-green-700 ml-1">
+                                            {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending' }}
+                                        </span>
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            @if (isset($vendorValidation) && $vendorValidation)
-    <div class="p-4 bg-white shadow rounded mt-6">
-        <h2 class="text-xl font-bold mb-4">Vendor Validation Submission</h2>
-
-        <ul class="list-disc pl-6 text-gray-800 space-y-1">
-            <li><strong>BRN:</strong> {{ $vendorValidation->brn }}</li>
-            <li><strong>Annual Revenue:</strong> {{ $vendorValidation->annual_revenue }} UGX</li>
-            <li><strong>Net Profit Margin:</strong> {{ $vendorValidation->net_profit_margin }}%</li>
-            <li><strong>Years of Operation:</strong> {{ $vendorValidation->years_of_operation }}</li>
-            <li><strong>Customer Rating:</strong> {{ $vendorValidation->customer_rating }}</li>
-            <li><strong>Tax Clearance:</strong> {{ $vendorValidation->tax_clearance }}</li>
-            <li><strong>Background Check:</strong> {{ $vendorValidation->background_check }}</li>
-        </ul>
-
-        @if($vendorValidation->pdf_path)
-            <div class="mt-4">
-                <a href="{{ asset('storage/' . $vendorValidation->pdf_path) }}" target="_blank"
-                   class="text-blue-600 underline">Download Submitted PDF</a>
-            </div>
         @endif
-
-     @php
-    $response = null;
-
-    if ($validation && $validation->validation_result) {
-        // Remove any prefix like "Failed: " or "Success: "
-        $raw = $validation->validation_result;
-
-        // Try removing common prefixes
-        $jsonString = preg_replace('/^(Success|Failed):\s*/', '', $raw);
-
-        $response = json_decode($jsonString, true);
-
-        // Uncomment if you still want to debug:
-        // dump('Raw:', $raw);
-        // dump('Cleaned JSON:', $jsonString);
-        // dump('Decoded Response:', $response);
-    }
-@endphp
-
-
-
-
-
-       @if ($response)
-    <div class="bg-white border border-gray-200 rounded-lg shadow p-4 mt-6">
-        <div class="flex items-center mb-3">
-            @if ($response['success'])
-                <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M5 13l4 4L19 7"/>
-                </svg>
-                <h3 class="text-lg font-semibold text-green-800">Validation Passed</h3>
-            @else
-                <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-                <h3 class="text-lg font-semibold text-red-800">Validation Failed</h3>
-            @endif
+    @else
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3 class="mt-2 text-lg font-medium text-gray-900">No validation submitted</h3>
+            <p class="mt-1 text-sm text-gray-500">The supplier hasn't submitted any validation information yet.</p>
+        </div>
+    @endif
+</div>
+            </div>
         </div>
 
-        <p class="text-sm text-gray-700 mb-2">
-            <strong>Message:</strong> {{ $response['message'] ?? 'N/A' }}
-        </p>
-
-        <p class="text-sm text-gray-700 mb-2">
-            <strong>Status:</strong>
-            @if ($response['success'])
-                <span class="inline-flex items-center px-2 py-1 rounded text-green-700 bg-green-100 text-xs font-semibold">Success</span>
-            @else
-                <span class="inline-flex items-center px-2 py-1 rounded text-red-700 bg-red-100 text-xs font-semibold">Failed</span>
-            @endif
-        </p>
-        <p class="text-sm text-gray-700 mb-2">
-            <strong>Visit Date:</strong>
-            @if ($response && !$response['success'])
-        <ul class="text-sm text-red-500 list-disc list-inside">
-            @foreach ($response['failedCriteria'] as $reason)
-                <li>{{ $reason }}</li>
-            @endforeach
-        </ul>
-    @elseif ($response && $response['success'])
-        <span class="text-green-700 text-sm">
-            Visit scheduled for:
-            <strong>
-                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending' }}
-            </strong>
-        </span>
-    @endif
-        </p>
-
-        @if (!empty($response['failedCriteria']))
-            <div class="text-sm text-gray-800 mt-2">
-                <p class="font-semibold text-red-600 mb-1">Failed Criteria:</p>
-                <ul class="list-disc list-inside space-y-1">
-                    @foreach ($response['failedCriteria'] as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
-@endif
-
-
-    </div>
-@else
-    <p class="text-gray-500 italic mt-4">No validation submitted by supplier yet.</p>
-@endif
+           
 
 
 
