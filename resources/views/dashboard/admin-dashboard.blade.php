@@ -351,6 +351,19 @@
                             <canvas id="demandChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
+                    {{-- forecast button --}}
+                    @if (session('success'))
+                        <div class="p-3 mb-4 bg-green-100 text-green-800 rounded">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.run.demand') }}">
+                        @csrf
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
+                            🔁 Run Demand Forecast Now
+                        </button>
+                    </form>
                 </div>
 
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 
 use App\Http\Controllers\Admin\CustomerSegmentController;
+use Illuminate\Support\Facades\Artisan;
 
 
 
@@ -86,6 +87,11 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Artisan::call('ml:run-customer-segmentation');
         return redirect()->back()->with('success', 'Segments refreshed!');
     })->middleware(['auth', 'role:admin'])->name('admin.refresh.segments');
+// ML demand prediction forecasting
+    Route::post('/admin/run-demand-prediction', function () {
+        Artisan::call('ml:run-demand-prediction');
+        return redirect()->back()->with('success', 'Demand forecast updated successfully.');
+    })->middleware(['auth', 'role:admin'])->name('admin.run.demand');
 //promo email button
     Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
         ->middleware(['auth', 'role:admin'])
