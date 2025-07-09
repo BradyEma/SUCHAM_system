@@ -314,32 +314,40 @@
                         @endif
                     </td>
 
-                    <td class="px-6 py-4">
-                        @if ($response && !$response['success'])
-                        <div class="text-sm text-gray-700">
-                            <div class="font-medium text-red-600 mb-1">Rejection Reasons:</div>
-                            <ul class="list-disc pl-5 space-y-1">
-                                @foreach ($response['failedCriteria'] as $reason)
-                                    <li>{{ $reason }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @elseif ($response && $response['success'])
-                        <div class="text-sm text-gray-700">
-                            <div class="flex items-center text-green-600">
-                                <i class="fas fa-calendar-check mr-2"></i>
-                                <span>Visit scheduled:</span>
-                            </div>
-                            <div class="mt-1 font-medium">
-                                {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending date confirmation' }}
-                            </div>
-                        </div>
-                        @else
-                        <div class="text-sm text-gray-500 italic">
-                            No validation data submitted yet
-                        </div>
-                        @endif
-                    </td>
+   <td class="px-6 py-4">
+   
+    @if ($validation)
+        @if (is_array($response) && isset($response['success']) && $response['success'] === true)
+            <div class="text-sm text-gray-700">
+                <div class="flex items-center text-green-600">
+                    <i class="fas fa-calendar-check mr-2"></i>
+                    <span>Visit scheduled:</span>
+                </div>
+                <div class="mt-1 font-medium">
+                    {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending date confirmation' }}
+                </div>
+            </div>
+        @elseif (is_array($response) && isset($response['success']) && $response['success'] === false)
+            <div class="text-sm font-medium text-red-600">
+                Insufficient requirements
+            </div>
+        @else
+            {{-- Edge case: Validation exists, but response is null or malformed --}}
+            <div class="text-sm font-medium text-red-600">
+                Insufficient requirements
+            </div>
+        @endif
+    @else
+        <div class="text-sm text-gray-500 italic">
+            No validation data submitted yet.
+        </div>
+    @endif
+</td>
+
+
+
+
+
 
                     <td class="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-primary-600 hover:text-primary-900 mr-3">
