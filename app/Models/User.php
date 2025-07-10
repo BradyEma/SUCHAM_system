@@ -59,7 +59,7 @@ class User extends Authenticatable
    
      public function retailer()
 {
-    return $this->hasOne(\App\Models\Retailer::class);
+    return $this->hasOne(Retailer::class);
 }
 
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Inventory;
@@ -22,7 +22,7 @@ class InventoryController extends Controller
     // Summary counts based on the filtered query (if you want summary of all or filtered, adjust accordingly)
     $totalItems = $query->count(); 
     $lowStockItems = $query->where('quantity', '<', 10)->count();
-    $totalValue = Inventory::sum(\DB::raw('quantity * unit_price'));
+    $totalValue = Inventory::sum(DB::raw('quantity * unit_price'));
 
     return view('admin.inventory.index', compact('items', 'totalItems', 'lowStockItems', 'totalValue'));
 }

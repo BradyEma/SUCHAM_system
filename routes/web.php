@@ -12,6 +12,7 @@ use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\VendorValidationController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -73,8 +74,28 @@ Route::middleware(['auth'])->group(function () {
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
 
+    //etailer profile
+    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile');
+Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
+
     //retailer
-    Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
+Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
+
+Route::prefix('retailer')->name('retailer.')->middleware(['auth'])->group(function () {
+    Route::get('/inventory', [RetailerInventoryController::class, 'index'])->name('inventory.index');
+    Route::get('/inventory/create', [RetailerInventoryController::class, 'create'])->name('inventory.create');
+    Route::post('/inventory', [RetailerInventoryController::class, 'store'])->name('inventory.store');
+
+     Route::get('/inventory/{id}/edit', [RetailerInventoryController::class, 'edit'])->name('inventory.edit');
+    Route::put('/inventory/{id}', [RetailerInventoryController::class, 'update'])->name('inventory.update');
+    Route::delete('/inventory/{id}', [RetailerInventoryController::class, 'destroy'])->name('inventory.destroy');
+    Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show');
+    Route::get('/retailer/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('retailer.inventory.show');
+    Route::resource('inventory', \App\Http\Controllers\Retailer\RetailerInventoryController::class);
+});
+
+
+
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -90,7 +111,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
     Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-    Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show'); // ✅ Fixed
+    Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show');
 });
 
 
