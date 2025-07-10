@@ -75,8 +75,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
 
     //etailer profile
-    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile');
+    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile'); // ✅ keep this
 Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
+Route::post('/retailer/profile-picture', [RetailerController::class, 'uploadProfilePicture'])->name('retailer.uploadProfilePicture');
+
+
 
     //retailer
 Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
@@ -113,6 +116,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
     Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show');
 });
+
 
 
 // Auth routes

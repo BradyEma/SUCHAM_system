@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retailer Profile | GoldenFields</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -42,65 +43,88 @@
     </script>
 </head>
 <body class="bg-gray-50 font-sans">
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen">
         <!-- Retailer Sidebar -->
-        <div class="hidden md:flex md:flex-shrink-0">
-            <div class="flex flex-col w-64 bg-primary-800 text-white">
+        <div class="hidden md:flex md:flex-shrink-0 h-full">
+            <div class="flex flex-col w-64 bg-primary-800 text-white h-full">
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-leaf text-secondary-400 text-xl"></i>
+                        <i class="fas fa-leaf text-yellow-400 text-xl"></i>
                         <span class="text-xl font-bold">GoldenFields</span>
-                        <span class="bg-secondary-500 text-white text-xs px-2 py-1 rounded-full ml-2">RETAILER</span>
+                        <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-2">RETAILER</span>
                     </div>
                 </div>
                 
                 <!-- Retailer Profile Summary -->
                 <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Retailer" class="h-10 w-10 rounded-full border-2 border-secondary-400">
+                    <img 
+                        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+                        alt="{{ $user->name }}" 
+                        class="h-10 w-10 rounded-full border-2 border-yellow-400"
+                    >
                     <div>
-                        <p class="font-medium">Retailer Name</p>
+                        <p class="font-medium">{{ $user->name }}</p>
                         <p class="text-xs text-primary-200">Verified Account</p>
                     </div>
                 </div>
-                
+
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
                     <nav class="px-2 space-y-1">
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <!-- Dashboard -->
+                        <a href="{{ route('retailer.dashboard') }}" class=" text-primary-200 group flex items-center px-4 py-3 text-sm font-medium rounded-md hover:bg-primary-700 hover:text-white">
                             <i class="fas fa-tachometer-alt mr-3"></i>
                             Dashboard
                         </a>
-                        <a href="#" class="bg-primary-700 text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
-                            <i class="fas fa-user-circle mr-3"></i>
-                            My Profile
-                        </a>
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        
+                        <!-- Inventory -->
+                        <a href="{{ route('retailer.inventory.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-boxes mr-3"></i>
-                            My Products
+                            Inventory
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">5</span>
                         </a>
+                        
+                        <!-- Orders -->
                         <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
-                            Orders
+                            My Orders
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
                         </a>
+                        
                         <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
-                            <i class="fas fa-chart-line mr-3"></i>
-                            Sales Analytics
+                                <i class="fas fa-bell mr-3"></i>
+                                Messages
+                        </a>
+                        
+                        <!-- Support -->
+                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                            <i class="fas fa-headset mr-3"></i>
+                            Support Center
+                        </a>
+                        
+                        <a href="{{ route('retailer.profile') }}" class="bg-primary-700 text-white hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                            <i class="fas fa-headset mr-3 text-yellow-400"></i>
+                            Profile
                         </a>
                     </nav>
                 </div>
                 
                 <!-- Logout -->
                 <div class="p-4 border-t border-primary-700">
-                    <button class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-secondary-600 hover:bg-secondary-700">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </button>
-                </div>
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit"
+            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-500 hover:bg-secondary-700">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </button>
+    </form>
+</div>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="flex flex-col flex-1 overflow-hidden">
+        <div class="flex flex-col flex-1 overflow-auto">
             <!-- Top Navigation -->
             <header class="bg-white border-b border-gray-200">
                 <div class="flex items-center justify-between px-6 py-4">
@@ -123,7 +147,94 @@
             </header>
 
             <!-- Main Content Area -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 p-6">
+                @if (!$profileIsComplete)
+                <div id="profileAlert" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md relative mb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-semibold">Complete Your Business Profile</p>
+                            <p class="text-sm">To personalize your experience, please fill in your business details in the profile section.</p>
+                        </div>
+                        <button onclick="document.getElementById('profileAlert').remove()" class="text-yellow-800 hover:text-yellow-600 ml-4">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                @endif
+
+                <div class="bg-white shadow-lg rounded-xl overflow-hidden p-8 mb-8 border border-gray-100">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">Account Information</h2>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Active</span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-8 items-start">
+                        <!-- Profile Picture Section -->
+                        <div class="flex flex-col items-center">
+                            <div class="relative mb-4">
+                                @if($user->profile_picture)
+                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Profile Picture" 
+                                         class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
+                                @else
+                                    <img src="{{ asset('images/default-avatar.png') }}" alt="Default Profile Picture" 
+                                         class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md">
+                                @endif
+                                <div class="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <form action="{{ route('retailer.uploadProfilePicture') }}" method="POST" enctype="multipart/form-data" class="w-full">
+                                @csrf
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Update Profile Photo</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="file" name="profile_picture" 
+                                           class="block w-full text-sm text-gray-600 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none">
+                                    <button type="submit" 
+                                            class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-200 transition-colors">
+                                        Upload
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- User Details Section -->
+                        <div class="flex-1 bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Personal Details</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Full Name</p>
+                                    <p class="text-gray-800 font-medium">{{ $user->name }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Email Address</p>
+                                    <p class="text-gray-800 font-medium">{{ $user->email }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Account Type</p>
+                                    <p class="text-gray-800 font-medium">GoldenFields Retailer</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500">Member Since</p>
+                                    <p class="text-gray-800 font-medium">{{ $user->created_at->format('F d, Y') }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <a href="#" class="text-green-600 hover:text-green-800 text-sm font-medium flex items-center">
+                                    Edit Account Details
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Profile Header -->
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
                     <div>

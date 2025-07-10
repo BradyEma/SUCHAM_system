@@ -65,7 +65,8 @@ public function index(Request $request)
         'totalProducts',
         'lowStockCount',
         'outOfStockCount',
-        'totalAmount'
+        'totalAmount',
+        'user'
     ));
 }
 

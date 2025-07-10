@@ -5,23 +5,57 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Retailer;
+use App\Models\RetailerInventory;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class RetailerController extends Controller
 {
     public function dashboard()
-    {
-        $user = Auth::user();
-        $retailer = $user->retailer; // Assuming you have a `retailer()` relationship in your User model
+{
+    $user = auth()->user();
+    $retailer = $user->retailer;
 
-        return view('dashboard.retailer-dashboard', compact('user', 'retailer'));
+    if (!$retailer) {
+        $retailer = Retailer::create([
+            'user_id' => $user->id,
+            'status' => 'incomplete',
+        ]);
     }
-    public function showProfileForm()
-    {
-    $retailer = Retailer::where('user_id', auth()->id())->first();
 
-    return view('dashboard.retailer-profile', compact('retailer'));
-     }
+    // Check if required fields are filled
+    $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
+
+    return view('dashboard.retailer-dashboard', compact('user', 'retailer', 'profileIsComplete'));
+}
+
+
+
+
+
+  public function showProfileForm()
+{
+    $user = auth()->user(); // ← Add this
+
+    $retailer = $user->retailer;
+
+    if (!$retailer) {
+        $retailer = \App\Models\Retailer::create([
+            'user_id' => $user->id,
+            'status' => 'incomplete',
+        ]);
+    }
+
+    $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
+
+    
+    return view('dashboard.retailer-profile', compact('user', 'retailer', 'profileIsComplete'));
+}
+
+
+
+
 
      public function storeProfile(Request $request)
 {
@@ -50,5 +84,26 @@ class RetailerController extends Controller
 
     return redirect()->route('retailer.dashboard')->with('success', 'Retailer profile updated successfully!');
 }
+
+public function uploadProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|max:2048',
+        ]);
+
+        $user = auth()->user();
+
+        // Delete old picture if exists
+        if ($user->profile_picture && Storage::exists($user->profile_picture)) {
+            Storage::delete($user->profile_picture);
+        }
+
+        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        $user->profile_picture = $path;
+        $user->save();
+
+        return back()->with('success', 'Profile picture updated.');
+    }
+
 }
 

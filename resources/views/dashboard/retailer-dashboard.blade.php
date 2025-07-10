@@ -58,13 +58,17 @@
                 </div>
                 
                 <!-- Retailer Profile -->
-                <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Retailer" class="h-10 w-10 rounded-full border-2 border-secondary-400">
-                    <div>
-                        <p class="font-medium">Sarah Johnson</p>
-                        <p class="text-xs text-primary-200">Premium Retailer</p>
-                    </div>
-                </div>
+               <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
+    <img 
+        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+        alt="{{ $user->name }}" 
+        class="h-10 w-10 rounded-full border-2 border-yellow-400"
+    >
+    <div>
+        <p class="font-medium">{{ $user->name }}</p>
+        <p class="text-xs text-primary-200">Verified Account</p>
+    </div>
+</div>
                 
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
@@ -111,11 +115,16 @@
                 </div>
                 
                 <!-- Logout -->
-                <div class="p-4 border-t border-primary-700">
-                    <button class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-500 hover:bg-secondary-700">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </button>
-                </div>
+               <div class="p-4 border-t border-primary-700">
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit"
+            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-500 hover:bg-secondary-700">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </button>
+    </form>
+</div>
+
             </div>
         </div>
 
@@ -164,8 +173,12 @@
                         </div>
                         <div class="relative">
                             <button class="flex items-center space-x-2 focus:outline-none" id="user-menu-button">
-                                <span class="text-sm font-medium text-gray-700 hidden md:inline">Sarah Johnson</span>
-                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User avatar">
+                                
+                               <img 
+        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+        alt="{{ $user->name }}" 
+        class="h-10 w-10 rounded-full border-2 border-yellow-400"
+    >
                             </button>
                         </div>
                     </div>
@@ -174,6 +187,30 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+             @if(!$profileIsComplete)
+    <div id="profileAlert" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 rounded-lg shadow-sm flex items-start justify-between">
+        <div class="flex items-start">
+            <div class="flex-shrink-0 pt-0.5">
+                <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-base font-medium text-yellow-800">
+                    <strong>Action Required:</strong> Please complete your business profile in 
+                    <a href="{{ route('retailer.profile') }}" class="underline font-medium"><strong>Profile</strong></a> to personalize your experience.
+                </p>
+            </div>
+        </div>
+        <button type="button" onclick="document.getElementById('profileAlert').remove()" class="ml-4 -my-1.5 -mr-1.5 rounded-md p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <span class="sr-only">Dismiss</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+@endif
+
               @if(session('success'))
     <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-6 rounded-lg shadow-sm">
         <div class="flex items-center">
@@ -192,21 +229,25 @@
 @endif
 
 @if($retailer && $retailer->status == 'pending')
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-lg shadow-sm">
+    <div id="successAlert" class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-lg shadow-sm">
         <div class="flex items-center">
             <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                 </svg>
             </div>
             <div class="ml-3">
-                <p class="text-sm font-medium text-yellow-800">
-                    Your profile is pending approval. Please wait for admin review.
+                <p class="text-sm font-medium text-green-800">
+                    Profile updated successfully. Thanks for your collaboration.
                 </p>
             </div>
             <div class="ml-auto pl-3">
                 <div class="-mx-1.5 -my-1.5">
-                    <button type="button" class="inline-flex bg-yellow-50 rounded-md p-1.5 text-yellow-500 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <button 
+                        type="button" 
+                        onclick="document.getElementById('successAlert').remove()" 
+                        class="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    >
                         <span class="sr-only">Dismiss</span>
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -218,11 +259,12 @@
     </div>
 @endif
 
+
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h2 class="text-2xl font-bold mb-2">Welcome back, Sarah!</h2>
+                            <h2 class="text-2xl font-bold mb-2">Welcome back, {{ $user->name }}!</h2>
                             <p class="opacity-90">Here's your retail performance overview and quick actions.</p>
                         </div>
                         <button class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
