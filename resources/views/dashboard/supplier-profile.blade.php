@@ -60,7 +60,7 @@
                     <span>Products</span>
                 </a>
                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
                 </a>
@@ -123,17 +123,30 @@
                 <div class="profile-card bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                     <div class="flex flex-col items-center">
                         <div class="relative mb-4">
-                            <img class="h-32 w-32 rounded-full object-cover border-4 border-yellow-400" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Supplier photo">
-                            <button class="absolute bottom-0 right-0 bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600">
-                                <i class="fas fa-camera"></i>
-                            </button>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-800">Sweet Harvest Ltd</h2>
-                        <p class="text-gray-600 mb-4">Sugar Cane & Honey Supplier</p>
+   <img 
+    class="h-32 w-32 rounded-full object-cover border-4 border-yellow-400" 
+    src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('default-profile.png') }}" 
+    alt="Supplier photo"
+>
+    
+    <!-- Upload button -->
+    <form action="{{ route('supplier.profile.picture.update') }}" method="POST" enctype="multipart/form-data" class="absolute bottom-0 right-0">
+    @csrf
+    <label for="profile_picture" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 cursor-pointer">
+        <i class="fas fa-camera"></i>
+    </label>
+    <input type="file" id="profile_picture" name="profile_picture" class="hidden" onchange="this.form.submit()">
+</form>
+</div>
+
+                        <h2 class="text-xl font-bold text-gray-800">{{ $supplier->business_name ?? 'Not Provided' }}</h2>
+                        <p class="text-gray-600 mb-4">{{ $supplier->business_type ?? 'Not Provided' }}</p>
                         <div class="flex space-x-4 mb-6">
-                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
-                                <i class="fas fa-envelope mr-2"></i>Message
-                            </button>
+                            <a href="{{ route('chat.livewire') }}">
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                                    <i class="fas fa-envelope mr-2"></i>Message
+                                </button>
+                            </a>
                             <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg">
                                 <i class="fas fa-phone mr-2"></i>Call
                             </button>
@@ -158,17 +171,21 @@
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <i class="fas fa-phone text-gray-500 mr-3 mt-1"></i>
-                                <div>
-                                    <p class="text-sm text-gray-500">Phone</p>
-                                    <p class="font-medium">+256 *** **** **</p>
-                                </div>
-                            </div>
+    <i class="fas fa-phone text-gray-500 mr-3 mt-1"></i>
+    <div>
+        
+
+        <p class="text-sm text-gray-500">Phone</p>
+        <p class="font-medium">{{ $supplier->telNo ?? 'Not Provided' }}</p>
+
+    </div>
+</div>
+
                             <div class="flex items-start">
                                 <i class="fas fa-map-marker-alt text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Location</p>
-                                    <p class="font-medium">Kampala, Uganda</p>
+                                    <p class="font-medium">{{ $supplier->location ?? 'Not Provided' }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
@@ -385,27 +402,31 @@
 
                         <!-- Password Change -->
                         <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Change Password</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                                    <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                                    <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                                    <input type="password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                                </div>
-                                <div class="flex justify-end pt-4">
-                                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg" type="submit">
-                                        Update Password
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+    <h3 class="text-lg font-medium text-gray-800 mb-4">Change Password</h3>
+    <form method="POST" action="{{ route('supplier.password.update') }}">
+        @csrf
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                <input name="current_password" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <input name="new_password" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input name="new_password_confirmation" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div class="flex justify-end pt-4">
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg" type="submit">
+                    Update Password
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 
                         <!-- Notification Preferences -->
                         <div>
@@ -451,9 +472,26 @@
                         <h3 class="font-medium text-gray-800">Delete Account</h3>
                         <p class="text-sm text-gray-600">Once you delete your account, there is no going back. Please be certain.</p>
                     </div>
-                    <button class="mt-3 md:mt-0 bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200">
-                        Delete Account
-                    </button>
+                    <!-- Delete Account Form -->
+<form method="POST" action="{{ route('supplier.account.delete') }}" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+    @csrf
+    @method('DELETE')
+
+    <div class="mb-3">
+        @if ($errors->has('password'))
+    <p class="text-red-500 text-sm mb-2">{{ $errors->first('password') }}</p>
+@endif
+
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Enter your password to confirm</label>
+        <input type="password" name="password" id="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400">
+    </div>
+
+    <button type="submit" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200">
+        Delete Account
+    </button>
+</form>
+
+
                 </div>
 
                 <div class="mt-6 pt-6 border-t border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between">

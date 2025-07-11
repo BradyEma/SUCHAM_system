@@ -283,15 +283,19 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($suppliers as $supplier)
-                @php
-                    $supplierUserId = $supplier->user_id;
-                    $validation = $validations[$supplierUserId] ?? null;
-                    $response = $validation && $validation->validation_result ? json_decode($validation->validation_result, true) : null;
+               @php
+    $supplierUserId = $supplier->user_id;
+    $validation = $validations[$supplierUserId] ?? null;
+    $response = $validation && $validation->validation_result 
+        ? json_decode($validation->validation_result, true) 
+        : null;
 
-                    if (is_string($response)) {
-                        $response = json_decode($response, true);
-                    }
-                @endphp
+    if (is_string($response)) {
+        $response = json_decode($response, true); // double-decoding safeguard
+    }
+@endphp
+
+
 
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -324,27 +328,28 @@
                         @endif
                     </td>
 
-   <td class="px-6 py-4">
+   
+
+<td class="px-6 py-4">
+   
+
    
     @if ($validation)
         @if (is_array($response) && isset($response['success']) && $response['success'] === true)
-            <div class="text-sm text-gray-700">
-                <div class="flex items-center text-green-600">
-                    <i class="fas fa-calendar-check mr-2"></i>
-                    <span>Visit scheduled:</span>
-                </div>
-                <div class="mt-1 font-medium">
+            <div class="text-sm text-green-600">
+                <i class="fas fa-calendar-check mr-2"></i>
+                Visit scheduled:
+                <span class="font-medium">
                     {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending date confirmation' }}
-                </div>
+                </span>
             </div>
         @elseif (is_array($response) && isset($response['success']) && $response['success'] === false)
             <div class="text-sm font-medium text-red-600">
                 Insufficient requirements
             </div>
         @else
-            {{-- Edge case: Validation exists, but response is null or malformed --}}
             <div class="text-sm font-medium text-red-600">
-                Insufficient requirements
+                Malformed or missing validation response
             </div>
         @endif
     @else
@@ -353,6 +358,7 @@
         </div>
     @endif
 </td>
+
 
 
 

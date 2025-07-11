@@ -12,6 +12,8 @@ use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\Retailer\RetailerInventoryController;
+use App\Http\Controllers\VendorValidationController;
+
 
 Route::get('/', fn () => view('welcome'));
 
@@ -112,6 +114,16 @@ Route::middleware(['auth'])->group(function () {
     //suppliers-profile form
     Route::get('/supplier/profile-form', [SupplierController::class, 'showProfileForm'])->name('supplier.profile.form');
     Route::post('/supplier/profile', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
+    Route::get('/supplier/profile', [SupplierProfileController::class, 'showProfile'])->name('supplier.profile');
+    Route::post('/supplier/profile-picture', [SupplierProfileController::class, 'updateProfilePicture'])->name('supplier.profile.picture.update');
+    Route::post('/supplier/update-password', [SupplierProfileController::class, 'updatePassword'])
+    ->name('supplier.password.update')
+    ->middleware('auth');
+    Route::delete('/supplier/delete-account', [SupplierProfileController::class, 'deleteAccount'])
+    ->name('supplier.account.delete')
+    ->middleware('auth');
+   
+
     
     //wholesaler
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');

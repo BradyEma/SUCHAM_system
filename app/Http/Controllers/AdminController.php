@@ -7,30 +7,36 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\DemandPrediction;
 use App\Models\VendorValidation;
-
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     
-   public function dashboard()
-    {
-       $suppliers = Supplier::with('user')->get();
-$validations = VendorValidation::all()->keyBy('supplier_id'); // supplier_id == user_id
+   public function dashboard() 
+{
+    $suppliers = Supplier::with('user')->get();
 
+    // Fetch the latest validation per supplier
+    $validations = VendorValidation::select('vendor_validations.*')
+        ->join(DB::raw('(SELECT MAX(id) as max_id FROM vendor_validations GROUP BY supplier_id) as latest'), function($join) {
+            $join->on('vendor_validations.id', '=', 'latest.max_id');
+        })
+        ->get()
+        ->keyBy('supplier_id'); // Keyed by supplier_id for easy lookup
 
-        // previous return view('dashboard.admin-dashboard', compact('suppliers', 'validations'));
-        //everything below is new
-        // Fetch demand predictions for the next 6 months
-        $predictions = DemandPrediction::orderBy('predicted_for')->take(6)->get();
+    $predictions = DemandPrediction::orderBy('predicted_for')->take(6)->get();
 
-        $forecastLabels = $predictions->pluck('predicted_for')->map(function ($date) {
-            return \Carbon\Carbon::parse($date)->format('M Y');
-        });
+    $forecastLabels = $predictions->pluck('predicted_for')->map(function ($date) {
+        return \Carbon\Carbon::parse($date)->format('M Y');
+    });
 
-        $forecastData = $predictions->pluck('quantity');
+    $forecastData = $predictions->pluck('quantity');
 
-        return view('dashboard.admin-dashboard', compact('forecastLabels', 'forecastData', 'suppliers'));
-    }
+    return view('dashboard.admin-dashboard', compact(
+        'forecastLabels', 'forecastData', 'suppliers', 'validations'
+    ));
+}
+
 
 
     public function activateSupplier($id)
