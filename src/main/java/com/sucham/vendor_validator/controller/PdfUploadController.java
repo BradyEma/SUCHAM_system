@@ -111,7 +111,7 @@ public class PdfUploadController {
 
         try {
             long revenue = Long.parseLong(data.getOrDefault("annual revenue", "0"));
-            if (revenue < 1000_000) errors.add("Annual revenue below required threshold (1M UGX).");
+            if (revenue < 10_000_000) errors.add("Annual revenue below required threshold (10M UGX).");
 
             double profitMargin = Double.parseDouble(data.getOrDefault("net profit margin", "0").replace("%", ""));
             if (profitMargin < 5.0) errors.add("Profit margin must be at least 5%.");
