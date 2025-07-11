@@ -74,48 +74,53 @@
                 
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
-       <nav class="flex-1 p-4 space-y-2">
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-            <i class="fas fa-tachometer-alt w-5 text-center"></i>
-            <span>Activity</span>
-           
-        </a>
-        
-        <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-boxes w-5 text-center"></i>
-            <span>Inventory</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-clipboard-list w-5 text-center"></i>
-            <span>Order Management</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-shopping-cart w-5 text-center"></i>
-            <span>Procurement</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-comment-dots w-5 text-center"></i>
-            <span>Chat</span>
-            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-truck w-5 text-center"></i>
-            <span>Logistics</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-cog w-5 text-center"></i>
-            <span>Settings</span>
-        </a>
-    </nav>
-</div>
-                    
-                  
-                
+
+                    <nav class="flex-1 p-4 space-y-2">
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span>Activity</span>
+                        
+                        </a>
+                        
+                        <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-boxes w-5 text-center"></i>
+                            <span>Inventory</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-clipboard-list w-5 text-center"></i>
+                            <span>Order Management</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-shopping-cart w-5 text-center"></i>
+                            <span>Procurement</span>
+                        </a>
+                        
+                       <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-comment-dots w-5 text-center"></i>
+                            <span>Chat</span>
+                            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Logistics</span>
+                        </a>
+
+                        {{-- Customer Segments for machine learning --}}
+                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-chart-pie w-5 text-center"></i>
+                            <span>View Customer Segments</span>
+                        </a>
+
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-cog w-5 text-center"></i>
+                            <span>Settings</span>
+                        </a>
+                    </nav>
+                </div>
+                      
                
             </div>
         </div>
@@ -444,37 +449,63 @@
                 </div>
 
                 <!-- Charts Row -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Orders Chart -->
+                <div class="w-full mb-6">
+                    <!-- Forecasted Sugar Demand -->
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Order Trends</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>Last 7 days</option>
-                                <option selected>Last 30 days</option>
-                                <option>Last 90 days</option>
-                            </select>
+                            <h3 class="text-lg font-medium text-gray-900">📈 Forecasted Sugar Demand</h3>
                         </div>
-                        <div class="h-64">
-                            <canvas id="ordersChart"></canvas>
+                        <div class="relative w-full" style="height: 400px;">
+                            <canvas id="demandChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
-                    
-                    <!-- Revenue Chart -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Revenue Breakdown</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>By Product</option>
-                                <option selected>By Region</option>
-                                <option>By Supplier</option>
-                            </select>
+                    {{-- forecast button --}}
+                    @if (session('success'))
+                        <div class="p-3 mb-4 bg-green-100 text-green-800 rounded">
+                            {{ session('success') }}
                         </div>
-                        <div class="h-64">
-                            <canvas id="revenueChart"></canvas>
-                        </div>
-                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.run.demand') }}">
+                        @csrf
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
+                            🔁 Run Demand Forecast Now
+                        </button>
+                    </form>
                 </div>
+
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const demandCtx = document.getElementById('demandChart').getContext('2d');
+
+                    new Chart(demandCtx, {
+                        type: 'line',
+                        data: {
+                            labels: {!! json_encode($forecastLabels) !!},
+                            datasets: [{
+                                label: 'Predicted Quantity (KG)',
+                                data: {!! json_encode($forecastData) !!},
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false, // important for full container usage
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true },
+                                title: {
+                                    display: true,
+                                    text: 'Projected Sugar Demand by Month'
+                                }
+                            }
+                        }
+                    });
+                </script>
+
 
                 <!-- Recent Activity & Quick Actions -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

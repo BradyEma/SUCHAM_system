@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,7 +38,7 @@ public function store(Request $request)
     if (!Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
         return back()->withErrors([
             'email' => 'Invalid credentials.',
-        ]);
+        ])->withInput($request->only('email'));
     }
 
     $request->session()->regenerate();

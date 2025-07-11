@@ -9,20 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-      Schema::table('suppliers', function (Blueprint $table) {
-        $table->string('role')->default('supplier');
+         Schema::table('users', function (Blueprint $table) {
+        $table->timestamp('last_seen')->nullable();
     });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
-         Schema::table('suppliers', function (Blueprint $table) {
-        $table->dropColumn('role');
+         Schema::table('users', function (Blueprint $table) {
+        $table->dropColumn('last_seen');
     });
+
     }
 };

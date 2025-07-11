@@ -6,13 +6,19 @@ use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ChatController;
+use App\Livewire\Admin\Messages\Messages;
+use App\Livewire\Admin\Messages\ListConversation;
+use App\Http\Controllers\Admin\InventoryController;
+
+Route::get('/', fn () => view('welcome'));
+
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
-use App\Http\Controllers\RetailerController;
-use App\Http\Controllers\Admin\InventoryController;
-use App\Http\Controllers\VendorValidationController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;
+use App\Http\Controllers\Admin\CustomerSegmentController;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\CustomerController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -36,16 +42,24 @@ Route::middleware(['auth'])->group(function () {
 
     Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
-    Route::view('/customer/dashboard', 'dashboard.customer-dashboard')->name('customer.dashboard');
-    Route::view('/admin/dashboard', 'dashboard.admin')->name('admin.dashboard');
+    Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
+    Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
     Route::view('/dashboard', 'dashboard')->middleware(['verified'])->name('dashboard');
     
+    // Chat routes
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{conversationId}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/start', [ChatController::class, 'startConversation'])->name('chat.start');
+    Route::post('/chat/{conversationId}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/chat/search/users', [ChatController::class, 'searchUsers'])->name('chat.search.users');
     
+    // Livewire chat page
+    Route::get('/chat-livewire', [ChatController::class, 'livewire'])->name('chat.livewire');
+    Route::get('/chat-test', [ChatController::class, 'test'])->name('chat.test');
 
     // Role selection
     Route::get('/choose-role', [RoleSelectionController::class, 'index'])->name('choose.role');
     Route::post('/choose-role', [RoleSelectionController::class, 'store'])->name('choose.role.store');
-
 
     // Supplier pages
     Route::get('/supplier/profile', fn () => view('dashboard.supplier-profile'))->name('supplier.profile');
@@ -73,31 +87,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
+    
+    //customer
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
 
-    //etailer profile
-    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile'); // ✅ keep this
-Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
-Route::post('/retailer/profile-picture', [RetailerController::class, 'uploadProfilePicture'])->name('retailer.uploadProfilePicture');
-
-
-
-    //retailer
-Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
-
-Route::prefix('retailer')->name('retailer.')->middleware(['auth'])->group(function () {
-    Route::get('/inventory', [RetailerInventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/inventory/create', [RetailerInventoryController::class, 'create'])->name('inventory.create');
-    Route::post('/inventory', [RetailerInventoryController::class, 'store'])->name('inventory.store');
-
-     Route::get('/inventory/{id}/edit', [RetailerInventoryController::class, 'edit'])->name('inventory.edit');
-    Route::put('/inventory/{id}', [RetailerInventoryController::class, 'update'])->name('inventory.update');
-    Route::delete('/inventory/{id}', [RetailerInventoryController::class, 'destroy'])->name('inventory.destroy');
-    Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show');
-    Route::get('/retailer/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('retailer.inventory.show');
-    Route::resource('inventory', \App\Http\Controllers\Retailer\RetailerInventoryController::class);
-});
-
-
+    //admin
+    Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
 
 });
 
@@ -107,15 +103,28 @@ Route::prefix('retailer')->name('retailer.')->middleware(['auth'])->group(functi
 
 Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSupplier'])->name('admin.chat.supplier');
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
-    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
-    Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store');
-    Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit');
-    Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update');
-    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy');
-    Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('inventory.show');
-});
+
+// ML
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
+    });
+//extra ML
+    Route::post('/admin/refresh-segments', function () {
+        Artisan::call('ml:run-customer-segmentation');
+        return redirect()->back()->with('success', 'Segments refreshed!');
+    })->middleware(['auth', 'role:admin'])->name('admin.refresh.segments');
+// ML demand prediction forecasting
+    Route::post('/admin/run-demand-prediction', function () {
+        Artisan::call('ml:run-demand-prediction');
+        return redirect()->back()->with('success', 'Demand forecast updated successfully.');
+    })->middleware(['auth', 'role:admin'])->name('admin.run.demand');
+//promo email button
+    Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
+        ->middleware(['auth', 'role:admin'])
+        ->name('admin.send.promo');
+
+Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
+Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
 
 
 
