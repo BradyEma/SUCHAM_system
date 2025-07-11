@@ -11,24 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Drop the table if it already exists
         Schema::dropIfExists('supplier_inventories');
 
-        // Create the new supplier_inventories table
         Schema::create('supplier_inventories', function (Blueprint $table) {
-            $table->id(); // Auto-incrementing primary key
-            $table->string('product');         // PRODUCT
-            $table->unsignedBigInteger('product_id'); // FK to products.id
-      // PRODUCT_ID
-            $table->unsignedInteger('quantity'); // QUANTITY
-            $table->decimal('unit_price', 10, 2); // UNIT_PRICE
-            $table->string('measurement');     // MEASUREMENT
-            $table->string('status');          // STATUS
-            $table->string('actions')->nullable(); // ACTIONS (optional field)
-            $table->timestamps(); // created_at and updated_at
-
-              $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-        });
+                  $table->integer('product_id')->autoIncrement(); // This is the new primary key
+                  $table->string('product_name');
+                  $table->unsignedInteger('quantity');
+                  $table->decimal('unit_price', 10, 2);
+                  $table->string('unit_of_measurement');
+                  $table->timestamps();
+});
     }
 
     /**
@@ -36,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drops the table if you rollback
         Schema::dropIfExists('supplier_inventories');
     }
 };

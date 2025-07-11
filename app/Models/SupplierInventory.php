@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,12 +9,17 @@ class SupplierInventory extends Model
 {
     protected $table = 'supplier_inventories';
 
+    // Tell Eloquent the primary key is product_id and it's auto-incrementing integer
+    protected $primaryKey = 'product_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'product',
+        'product_name',
         'product_id',
         'quantity',
         'unit_price',
-        'measurement',
+        'unit_of_measurement',
         'status',
         'actions',
     ];
@@ -25,6 +31,6 @@ class SupplierInventory extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

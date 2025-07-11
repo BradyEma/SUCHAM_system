@@ -222,7 +222,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Total Products</h3>
-                            <div class="text-2xl font-bold text-green-800">1,248</div>
+                            <div class="text-2xl font-bold text-green-800">0</div>
                         </div>
                         <div class="bg-green-100 p-2 rounded-lg">
                             <i class="fas fa-boxes text-green-600"></i>
@@ -234,7 +234,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">In Stock</h3>
-                            <div class="text-2xl font-bold text-blue-800">1,042</div>
+                            <div class="text-2xl font-bold text-blue-800">0</div>
                         </div>
                         <div class="bg-blue-100 p-2 rounded-lg">
                             <i class="fas fa-check-circle text-blue-600"></i>
@@ -246,7 +246,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Low Stock</h3>
-                            <div class="text-2xl font-bold text-amber-800">153</div>
+                            <div class="text-2xl font-bold text-amber-800">0</div>
                         </div>
                         <div class="bg-amber-100 p-2 rounded-lg">
                             <i class="fas fa-exclamation-triangle text-amber-600"></i>
@@ -258,7 +258,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Out of Stock</h3>
-                            <div class="text-2xl font-bold text-red-800">53</div>
+                            <div class="text-2xl font-bold text-red-800">0</div>
                         </div>
                         <div class="bg-red-100 p-2 rounded-lg">
                             <i class="fas fa-times-circle text-red-600"></i>
@@ -275,17 +275,23 @@
                         <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
                     </div>
                     
-                    <div class="flex space-x-3">
-                        <button class="btn-primary flex items-center">
-                            <i class="fas fa-plus mr-2"></i> Add Product
-                        </button>
-                        <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                            <i class="fas fa-filter mr-2"></i> Filter
-                        </button>
-                        <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-                            <i class="fas fa-download mr-2"></i> Export
-                        </button>
-                    </div>
+                   <div class="flex space-x-3">
+    <a href="{{ route('retailer_inventory.create') }}">
+        <button class="btn-primary flex items-center">
+            <i class="fas fa-plus mr-2"></i> Add Product
+        </button>
+    </a>
+
+    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+        <i class="fas fa-filter mr-2"></i> Filter
+    </button>
+
+    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+       <a href="{{ route('retailer_inventory.export') }}">
+    <i class="fas fa-download mr-2"></i> Export
+    </button>
+</div>
+
                 </div>
             </div>
             
@@ -305,93 +311,6 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Sample Product 1 -->
-                            <tr class="table-row">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-apple-alt text-green-600"></i>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Organic Apples</div>
-                                            <div class="text-sm text-gray-500">Fruits</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GF-APL-001</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">125</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">$2.99</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1 lb</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="badge badge-success">
-                                        <i class="fas fa-check-circle mr-1"></i> In Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                            
-                            <!-- Sample Product 2 -->
-                            <tr class="table-row">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-wheat text-amber-600"></i>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Whole Wheat Flour</div>
-                                            <div class="text-sm text-gray-500">Baking</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GF-WHT-042</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">12</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">$4.49</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5 lb</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="badge badge-warning">
-                                        <i class="fas fa-exclamation-triangle mr-1"></i> Low Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                            
-                            <!-- Sample Product 3 -->
-                            <tr class="table-row">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-wine-bottle text-red-600"></i>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">Organic Olive Oil</div>
-                                            <div class="text-sm text-gray-500">Oils</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GF-OIL-007</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">0</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">$9.99</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">16 oz</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="badge badge-danger">
-                                        <i class="fas fa-times-circle mr-1"></i> Out of Stock
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
-                                    <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
-                                </td>
-                            </tr>
-                            
                             <!-- Your dynamic content will go here -->
                             @forelse ($products as $product)
                                 <tr class="table-row">

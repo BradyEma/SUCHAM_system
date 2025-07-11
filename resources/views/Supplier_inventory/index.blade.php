@@ -31,10 +31,11 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        .badge-in-stock {
-            background-color: #f0fdf4;
-            color: #166534;
-        }
+        .product-table {
+    width: 100%;
+    table-layout: fixed; /* This is crucial for even column spacing */
+}
+        
         .badge-low-stock {
             background-color: #fef3c7;
             color: #92400e;
@@ -181,23 +182,23 @@
             <table class="min-w-full divide-y divide-gray-200"> <!-- ← Add this line -->
                  <tbody class="bg-white divide-y divide-gray-200">
             <thead>
-            <tr>
-                <th>Product</th>
+            <tr class="bg-green-50 text-green-800 text-lg">
+                <th>product_name</th>
                 <th>product_id</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Measurements</th>
-                <th>Status</th>
-                <th class="text-right">Actions</th>
+                <th>quantity</th>
+                <th>unit_price</th>
+                <th>unit_of_measurement</th>
+                <th>status</th>
+                <th class="text-right">actions</th>
             </tr>
         </thead>
     @forelse ($products as $product)
-        <tr>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product }}</td>
+        <tr class="bg-gray-50 text-black-800 text-lg">
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product_name }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $product->product_id }}</td>
            <td class="px-6 py-4 whitespace-nowrap">{{ $product->quantity }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $product->unit_price }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->measurement }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $product->unit_of_measurement }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $product->status }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-right">{{ $product->actions}}</td>
                    

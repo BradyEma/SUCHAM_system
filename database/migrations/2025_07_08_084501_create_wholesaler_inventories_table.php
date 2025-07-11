@@ -12,21 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('wholesaler_inventories', function (Blueprint $table) {
-    $table->id();
+            $table->id();
 
-    // Foreign key from products table
-    $table->string('product_id'); // Will reference product_id from products
-    $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
+            // No foreign key constraint on product_id
+            $table->string('product_id');
+            $table->string('product_name');
+            $table->integer('quantity')->default(0);
+            $table->enum('units', ['kg', 'litres', 'bags']);
+            $table->decimal('unit_price', 10, 2);
+            $table->enum('status', ['in_stock', 'out_of_stock'])->default('in_stock');
 
-    $table->string('product_name');
-    $table->integer('quantity')->default(0);
-    $table->enum('units', ['kg', 'litres', 'bags']);
-    $table->decimal('unit_price', 10, 2);
-    $table->enum('status', ['in_stock', 'out_of_stock'])->default('in_stock');
-
-    $table->timestamps();
-});
-
+            $table->timestamps();
+        });
     }
 
     /**

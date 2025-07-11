@@ -15,6 +15,9 @@ use App\Models\SupplierInventory;
 use App\Http\Controllers\RetailerInventoryController;
 use App\Http\Controllers\WholesalerInventoryController;
 
+
+Route::get('/retailer_inventory/export', [RetailerInventoryController::class, 'export'])->name('retailer_inventory.export');
+
 Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
 
 Route::resource('retailer_inventory', RetailerInventoryController::class);

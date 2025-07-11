@@ -26,16 +26,22 @@ public function index()
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product' => 'required|string',
+            'product_name' => 'required|string',
             'product_id' => 'required|string|unique:supplier_inventories,product_id',
             'quantity' => 'required|integer|min:0',
             'unit_price' => 'required|numeric',
-            'measurement' => 'required|string',
-            'status' => 'required|string|in:in_stock,low_stock',
-            'actions' => 'nullable|string',
+            'unit_of_measurement' => 'required|string',
+           
         ]);
 
-        SupplierInventory::create($validated);
+            SupplierInventory::create([
+            'product_name' => $validated['product_name'],
+            'product_id' => $validated['product_id'],
+            'quantity' => $validated['quantity'],
+            'unit_price' => $validated['unit_price'],
+            'unit_of_measurement' => $validated['unit_of_measurement'],
+        ]);
+        
 
         return redirect()->route('supplier_inventory.index')->with('success', 'Inventory added.');
     }
