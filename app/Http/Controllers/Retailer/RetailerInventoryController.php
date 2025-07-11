@@ -107,6 +107,15 @@ public function index(Request $request)
     return redirect()->route('retailer.inventory.index')->with('success', 'Product added to inventory.');
 }
 
+public function destroy($id)
+{
+    $inventory = RetailerInventory::findOrFail($id);
+    $inventory->delete();
+
+    return redirect()->route('retailer.inventory.index')->with('success', 'Item deleted successfully.');
+}
+
+
 public function show($id)
 {
     $retailerId = Auth::user()->retailer->id;

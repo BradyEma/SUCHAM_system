@@ -10,6 +10,8 @@ use App\Http\Controllers\ChatController;
 use App\Livewire\Admin\Messages\Messages;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 Route::get('/', fn () => view('welcome'));
 
@@ -33,14 +35,39 @@ Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->n
 Route::post('/vendor/validate', [VendorValidationController::class, 'submit'])->name('vendor.validation.submit');
 
 
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
+});
 
+Route::prefix('retailer')
+    ->middleware(['auth'])
+    ->name('retailer.')
+    ->group(function () {
+        Route::get('/dashboard', [RetailerDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/inventory', [RetailerInventoryController::class, 'index'])->name('inventory.index');
+        Route::get('/inventory/create', [RetailerInventoryController::class, 'create'])->name('inventory.create');
+        Route::post('/inventory', [RetailerInventoryController::class, 'store'])->name('inventory.store');
+        Route::get('/inventory/{id}/edit', [RetailerInventoryController::class, 'edit'])->name('inventory.edit');
+        Route::put('/inventory/{id}', [RetailerInventoryController::class, 'update'])->name('inventory.update');
+        Route::delete('/inventory/{id}', [RetailerInventoryController::class, 'destroy'])->name('inventory.destroy');
+        Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show'); // 👈 add this
+    });
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('/retailer/upload-profile-picture', [RetailerController::class, 'uploadProfilePicture'])
+        ->name('retailer.uploadProfilePicture');
+});
  
   
 Route::middleware(['auth'])->group(function () {
     // Dashboards
     Route::get('/supplier/dashboard', [SupplierController::class, 'showDashboard'])->name('supplier.dashboard');
 
-    Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
+    //Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
+    Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
     Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
@@ -70,8 +97,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-  
-  
+   //retailer
+   Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
+
+   Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile')->middleware('auth');
+
 
 
     // User profile routes

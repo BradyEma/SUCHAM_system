@@ -101,6 +101,11 @@
             <i class="fas fa-truck w-5 text-center"></i>
             <span>Logistics</span>
         </a>
+
+         <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-chart-pie w-5 text-center"></i>
+                    <span>Customer Segments</span>
+         </a>
         
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
             <i class="fas fa-cog w-5 text-center"></i>

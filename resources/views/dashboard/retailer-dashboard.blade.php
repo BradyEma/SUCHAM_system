@@ -93,10 +93,11 @@
                             <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
                         </a>
                         
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
-                                <i class="fas fa-bell mr-3"></i>
-                                Messages
-                        </a>
+                       <a href="{{ route('chat.livewire') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+    <i class="fas fa-comment-dots mr-3"></i>
+    <span>Messages</span>
+    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+</a>
                         
                         <!-- Support -->
                         <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
@@ -125,11 +126,7 @@
     </form>
 </div>
 
-<a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-    <i class="fas fa-comment-dots w-5 text-center"></i>
-    <span>Chat</span>
-    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
-</a>
+
 
             </div>
         </div>
@@ -282,7 +279,7 @@
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Monthly Sales -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-secondary-500">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Monthly Sales</p>
@@ -301,7 +298,7 @@
                     </div>
                     
                     <!-- Inventory Items -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-secondary-500">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Inventory Items</p>
@@ -320,7 +317,7 @@
                     </div>
                     
                     <!-- Pending Orders -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-secondary-500">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Pending Orders</p>
@@ -339,7 +336,7 @@
                     </div>
                     
                     <!-- Customer Rating -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-secondary-500">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Customer Rating</p>
