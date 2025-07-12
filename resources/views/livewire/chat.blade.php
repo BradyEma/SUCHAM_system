@@ -1,8 +1,8 @@
 <div class="flex h-screen bg-gray-50">
     <!-- Sidebar - Chat List -->
-    <aside class="w-1/3 md:w-1/4 bg-white border-r border-gray-200 flex flex-col shadow-sm">
+    <aside class="w-1/3 md:w-1/4 bg-green-800 border-r border-gray-200 flex flex-col shadow-sm">
         <!-- User profile header -->
-        <div class="p-4 flex items-center border-b border-gray-200 bg-white">
+        <div class="p-4 flex items-center border-b border-gray-200 bg-green-800">
             <div class="relative">
                 @if(auth()->user()->profile_picture)
                     <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
@@ -22,7 +22,7 @@
         </div>
         
         <!-- Search bar -->
-        <div class="p-3 border-b border-gray-200">
+        <div class="p-3 border-b border-gray-200 bg-green-800">
             <div class="relative">
                 <input type="text" placeholder="Search contacts..." 
                        class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-200 focus:bg-white">
@@ -35,8 +35,9 @@
             <div class="absolute top-0 left-0 right-0 bottom-12 overflow-y-auto">
                 @foreach($contacts as $contact)
                     <div wire:click="selectContact({{ $contact['id'] }})" 
-                         class="flex items-center p-3 hover:bg-green-600 transition duration-150 cursor-pointer 
-                                {{ $contact['conversation_id'] == $conversationId ? 'bg-green-500' : '' }}">
+                         class="flex items-center p-3 bg-green-800 hover:bg-green-600 transition duration-150 cursor-pointer 
+                               {{ $contact['conversation_id'] == $conversationId ? 'bg-green-700' : 'bg-green-800 hover:bg-green-600' }}
+">
                         <!-- User avatar with status indicator -->
                         <div class="relative flex-shrink-0">
                             @if(!empty($contact['profile_picture']))
@@ -84,8 +85,8 @@
                 {{ route('retailer.dashboard') }}
             @elseif(\Illuminate\Support\Facades\Auth::user()->role === 'wholesaler')
                 {{ route('wholesaler.dashboard') }}
-            @else
-                {{ route('home') }}
+            @elseif(\Illuminate\Support\Facades\Auth::user()->role === 'customer')
+                {{ route('customer.dashboard') }}
             @endif
         " 
         class="flex items-center justify-center w-full p-2 text-white hover:text-green-600 transition-colors duration-150"
@@ -118,6 +119,7 @@
                         {{ $otherUser->isOnline() ? 'Online' : ($otherUser->last_activity ? 'Last seen ' . $otherUser->last_activity->diffForHumans() : 'Last seen: Unknown') }}
                     </div>
                 </div>
+                
                 <div class="ml-auto flex space-x-2">
                     <button class="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100">
                         <i class="fas fa-phone-alt"></i>

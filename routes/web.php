@@ -134,7 +134,9 @@ Route::middleware(['auth'])->group(function () {
     //customer
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
-
+    Route::get('/customer/orders', [CustomerController::class, 'orders'])->name('customer.orders');
+    Route::get('/customer/products', [CustomerController::class, 'products'])->name('customer.products');
+    
     //admin
     Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
      Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
