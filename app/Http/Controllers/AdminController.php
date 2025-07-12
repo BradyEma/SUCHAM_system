@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\DemandPrediction;
 use App\Models\VendorValidation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -84,6 +85,32 @@ public function showSupplier($id)
         $supplier = Supplier::where('user_id', $id)->firstOrFail();
         return view('admin.chat-with-supplier', compact('supplier'));
     }
+
+    public function profile()
+{
+    $admin = auth()->user(); // Get the logged-in admin user
+
+    return view('dashboard.admin-profile', compact('admin'));
+}
+
+public function uploadProfilePicture(Request $request)
+{
+    $request->validate([
+        'profile_picture' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $user = auth()->user();
+
+    // Store the image
+    $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+
+    // Save path to DB (make sure your `users` table has a `profile_picture` column)
+    $user->profile_picture = $path;
+    $user->save();
+
+    return redirect()->route('admin.profile')->with('success', 'Profile picture updated!');
+}
+  
 
 
 }

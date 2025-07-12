@@ -114,18 +114,12 @@
                             <span>Customer Segments</span>
                         </a>
 
-                       <div class="p-4 border-t border-primary-700">
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit"
-            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-500 hover:bg-secondary-700">
-            <i class="fas fa-sign-out-alt mr-2"></i> Logout
-        </button>
-    </form>
-</div>
-                    </nav>
-                </div>
-                      
+                        <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Profile</span>
+                        </a>
+
+                       
                
             </div>
         </div>
@@ -175,8 +169,8 @@
                         </div>
                         <div class="relative">
                             <button class="flex items-center space-x-2 focus:outline-none" id="user-menu-button">
-                                <span class="text-sm font-medium text-gray-700 hidden md:inline">Admin User</span>
-                                <img class="h-8 w-8 rounded-full" src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User avatar">
+                                <span class="text-sm font-medium text-gray-700 hidden md:inline">Admin</span>
+<img class="h-8 w-8 rounded-full -ml-4" src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User avatar">
                             </button>
                         </div>
                     </div>

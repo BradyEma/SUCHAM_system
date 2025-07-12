@@ -15,6 +15,7 @@ use App\Http\Controllers\Retailer\RetailerInventoryController;
 use App\Http\Controllers\VendorValidationController;
 
 
+
 Route::get('/', fn () => view('welcome'));
 
 use App\Http\Controllers\SupplierController;
@@ -136,7 +137,9 @@ Route::middleware(['auth'])->group(function () {
 
     //admin
     Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
-
+     Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
+      Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
