@@ -45,6 +45,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
 });
 
+Route::get('/wishlist/count', function () {
+    return response()->json([
+        'count' => \App\Models\Wishlist::where('user_id', auth()->id())->count()
+    ]);
+})->middleware('auth');
+
+
 Route::prefix('retailer')
     ->middleware(['auth'])
     ->name('retailer.')
@@ -146,8 +153,8 @@ Route::middleware(['auth'])->group(function () {
 
     //wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-Route::post('/wishlist/add/{productId}', [WishlistController::class, 'store'])->name('wishlist.add');
-Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');

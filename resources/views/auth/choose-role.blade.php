@@ -113,8 +113,8 @@
                                     <i class="fas fa-user-tie text-xl"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-800 mb-1">Industrial Customer</h3>
-                                    <p class="text-gray-600 text-sm">Food manufacturers and processors</p>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">Customer</h3>
+                                    <p class="text-gray-600 text-sm">Food manufacturers, processors and daily customers</p>
                                 </div>
                             </div>
                         </div>

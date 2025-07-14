@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <title>Customer Dashboard | GoldenFields</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="goldenfields.ico" type="image/x-icon">
@@ -93,7 +95,7 @@
                 <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
                 <span class="text-white">My Wishlist</span>
                 <span x-show="wishlist.length > 0"
-                      class="absolute top-1 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+                      class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
                       x-text="wishlist.length"></span>
             </a>
             <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
@@ -112,9 +114,11 @@
                     <span class="text-white">Profile</span>
             </a>
             <form method="POST" action="{{ route('logout') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 cursor-pointer">
-                    @csrf
-                    <i class="fas fa-sign-out-alt w-5 text-center text-primary-200"></i>
-                    <span class="text-white">Logout</span>
+                   @csrf
+        <button type="submit"
+            class="w-full flex items-center justify-center px-4 py-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-600 hover:bg-secondary-700">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </button>
             </form>
         </nav>
     </aside>
@@ -245,32 +249,89 @@
             wishlist: [],
             showModal: false,
             modalProduct: null,
+
+            // Define products here (static as per your request)
             products: [
-                { name: 'Granulated White Sugar', img: 'whitesugar.jpg', price: '25,000' },
-                { name: 'Light Brown Sugar', img: 'brownsugar.jpg', price: '28,000' },
-                { name: 'Dark Brown Sugar', img: 'darkbrownsugar.png', price: '30,000' },
-                { name: 'Molasses', img: 'molasses.jpg', price: '35,000' },
-                { name: 'Cube Sugar', img: 'sugarcubes.png', price: '32,000' },
-                { name: 'Bagasse', img: 'bagase.png', price: '15,000' }
+                {
+                    name: "Brown Sugar",
+                    price: 5000,
+                    img: "/product_images/brownsugar.jpg"
+ // static image path
+                },
+                {
+                    name: "White Sugar",
+                    price: 5500,
+                    img: "/product_images/whitesugar.jpg"
+                },
+                {
+                    name: "Raw Sugar",
+                    price: 3500,
+                    img: "/product_images/raw-sugar.jpg"
+                },
+                {
+                    name: "Sugar Cubes",
+                    price: 6000,
+                    img: "/product_images/sugarcubes.png"
+                },
+                {
+                    name: "Molasses",
+                    price: 2000,
+                    img: "/product_images/molasses.jpg"
+                },
+                {
+                    name: "Bagase",
+                    price: 2500,
+                    img: "/product_images/bagase.png"
+                }
             ],
-            initWishlist() {
-                // You can load existing wishlist items from server if needed
-            },
+
             openModal(product) {
                 this.modalProduct = product;
                 this.showModal = true;
             },
+
+            initWishlist() {
+                // Optional: You can load wishlist items from server if needed
+                // For badge count only
+                fetch('/wishlist/count')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.wishlist = Array(data.count).fill({}); // dummy array for count
+                    });
+            },
+
             addToWishlist(product) {
-                if (this.wishlist.some(p => p.name === product.name)) {
-                    alert("Already in wishlist.");
-                    return;
-                }
-                this.wishlist.push(product);
-                this.showModal = false;
-                alert("Product added to wishlist!");
-            }
+    fetch('/wishlist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            product_name: product.name,
+            product_image: product.img,
+            price: product.price
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        this.wishlist.push(product);
+        this.showModal = false;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to add to wishlist.");
+    });
+}
+
         }
     }
 </script>
+
+
 </body>
 </html>
