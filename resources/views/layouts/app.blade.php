@@ -60,7 +60,37 @@
     <div class="container mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center space-x-2">
         <i class="fas fa-leaf text-accent-400 text-xl"></i>
-        <span class="text-2xl font-bold">GoldenFields</span>
+        <span class="text-2xl font-bold">
+            @php
+                $backUrl = url()->previous();
+
+                // If the previous URL is the current page, fallback to dashboard
+                if ($backUrl === url()->current()) {
+                    switch (auth()->user()->role) {
+                        case 'admin':
+                            $backUrl = route('admin.dashboard');
+                            break;
+                        case 'supplier':
+                            $backUrl = route('supplier.dashboard');
+                            break;
+                        case 'wholesaler':
+                            $backUrl = route('wholesaler.dashboard');
+                            break;
+                        case 'retailer':
+                            $backUrl = route('retailer.dashboard');
+                            break;
+                        case 'customer':
+                            $backUrl = route('customer.dashboard');
+                            break;
+                        default:
+                            $backUrl = '/';
+                    }
+                }
+            @endphp
+        <a href="{{ $backUrl }}">
+            GoldenFields
+        </a>
+        </span>
       </div>
       <nav class="space-x-4">
         <a href="{{ route('support.index') }}" class="nav-item px-3 py-2 rounded transition-all duration-200 hover:bg-primary-700">
