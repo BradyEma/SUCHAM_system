@@ -69,6 +69,10 @@
                     <span>Chat</span>
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
                 </a>
+                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <span>Support Center</span>
+                </a>
                 <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-user w-5 text-center"></i>
                     <span>Profile</span>
@@ -98,6 +102,9 @@
 @elseif ($supplier && $supplier->status === 'pending')
     <div class="bg-yellow-100 text-yellow-800 p-4 mb-4 border-l-4 border-yellow-500">
         Thanks for submiting. Waiting for admin approval to commence business.
+        <a href="{{ route('support.index') }}" class="ml-4 px-4 py-2 bg-yellow-600 text-white font-medium rounded hover:bg-yellow-500 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 active:bg-yellow-700">
+            contact support
+        </a>
     </div>
 @elseif ($supplier && $supplier->status === 'suspended')
    <div class="bg-orange-100 text-orange-800 p-4 mb-4 border-l-4 border-orange-500 flex items-center justify-between">

@@ -117,6 +117,11 @@
                             <i class="fas fa-chart-pie w-5 text-center"></i>
                             <span>View Customer Segments</span>
                         </a>
+                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-question-circle w-5 text-center"></i>
+                            <span>Support Center</span>
+                        </a>
+
 
                         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-cog w-5 text-center"></i>
@@ -199,67 +204,67 @@
                 </div>
 
                 <section class="mb-8">
-    <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
-        <h2 class="text-xl font-semibold text-white">Supplier Management</h2>
-    </div>
-    
-    <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
-        <table class="min-w-full divide-y divide-green-200">
-            <thead class="bg-green-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Profile</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-green-100">
-                @foreach ($suppliers as $supplier)
-                <tr class="hover:bg-green-50 transition-colors duration-150">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $supplier->user->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->user->email }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->business_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->location }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                       <a href="{{ asset('storage/' . $supplier->document_path) }}" target="_blank" class="text-green-600 hover:text-green-800 font-medium flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-    </svg>
-    View PDF
-</a>
+                    <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
+                        <h2 class="text-xl font-semibold text-white">Supplier Management</h2>
+                    </div>
+                    
+                    <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
+                        <table class="min-w-full divide-y divide-green-200">
+                            <thead class="bg-green-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Profile</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-green-100">
+                                @foreach ($suppliers as $supplier)
+                                <tr class="hover:bg-green-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $supplier->user->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->user->email }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->business_name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->location }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <a href="{{ asset('storage/' . $supplier->document_path) }}" target="_blank" class="text-green-600 hover:text-green-800 font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            View PDF
+                        </a>
 
 
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                       @if ($supplier->status === 'active')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-@elseif ($supplier->status === 'pending')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-@elseif ($supplier->status === 'suspended')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Suspended</span>
-@elseif ($supplier->status === 'deactivated')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Deactivated</span>
-@else
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Unknown</span>
-@endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            @if ($supplier->status === 'active')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        @elseif ($supplier->status === 'pending')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        @elseif ($supplier->status === 'suspended')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Suspended</span>
+                        @elseif ($supplier->status === 'deactivated')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Deactivated</span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Unknown</span>
+                        @endif
 
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                     <a href="{{ route('admin.suppliers.show', ['id' => $supplier->user_id]) }}" class="inline-flex items-center justify-center group">
-    <span class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-blacke font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform group-hover:-translate-y-0.5">
-        View
-    </span>
-                  </td>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('admin.suppliers.show', ['id' => $supplier->user_id]) }}" class="inline-flex items-center justify-center group">
+                        <span class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-blacke font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform group-hover:-translate-y-0.5">
+                            View
+                        </span>
+                                    </td>
 
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</section>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Total Orders -->

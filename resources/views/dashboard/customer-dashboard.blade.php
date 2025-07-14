@@ -29,6 +29,10 @@
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">{{ $unreadCount }}</span>
                 @endif
             </a>
+            <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                <i class="fas fa-question-circle w-5 text-center"></i>
+                <span>Support Center</span>
+            </a>
         </nav>
     </aside>
 

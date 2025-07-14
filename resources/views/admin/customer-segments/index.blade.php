@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoldenFields Agro - Admin Dashboard</title>
+    <title>GoldenFields Agro - Customer segments</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -103,7 +103,10 @@
                     <i class="fas fa-chart-pie w-5 text-center"></i>
                     <span>View Customer Segments</span>
                 </a>
-
+                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <span>Support Center</span>
+                </a>
                 <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-cog w-5 text-center"></i>
                     <span>Settings</span>

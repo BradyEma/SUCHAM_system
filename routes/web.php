@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ChatController;
 use App\Livewire\Admin\Messages\Messages;
 use App\Livewire\Admin\Messages\ListConversation;
+use App\Http\Controllers\SupportTicketController;
 
 Route::get('/', fn () => view('welcome'));
 
@@ -117,7 +118,30 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
 
 Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
 Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
+//support center
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+    Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
 
+    // Admin-only
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->middleware('can:isAdmin')->name('support.reply');
+
+    // UI improved placeholder
+    Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
+    
+    Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])
+        ->name('support.updateStatus');
+
+});
+// reexamine this section
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+//     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+//     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
+//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->name('support.reply');
+// });
 
 
 // Auth routes

@@ -13,11 +13,9 @@
         <div class="flex-1 overflow-y-auto">
             @foreach($contacts as $contact)
             
-                <div wire:click="selectContact({{ $contact['id'] }})" class="flex items-center p-3 hover:scale-105 transition duration-150 cursor-pointer {{ $contact['conversation_id'] == $conversationId ? 'bg-green-900' : '' }}" 
-                     
-                     
+                <div wire:click="selectContact({{ $contact['id'] }})" class="flex items-center p-3 hover:scale-105 transition duration-150 cursor-pointer {{ $contact['conversation_id'] == $conversationId ? 'bg-green-900' : '' }}" >
+                         
                     <!-- Yellow round avatar with contact initial -->
-                    
                     
                     <div class="ml-3 flex-1 min-w-0">
                         <div class="flex justify-between">

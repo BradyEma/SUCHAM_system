@@ -53,29 +53,38 @@ class User extends Authenticatable
           return $this->hasOne(Supplier::class);
     }
     public function wholesaler()
-{
-    return $this->hasOne(\App\Models\Wholesaler::class, 'user_id');
-}
-
-public function isOnline()
-{
-    return $this->last_seen && $this->last_seen->gt(now()->subMinutes(5));
-}
-
-public function canChatWith(User $otherUser): bool
-{
-    if ($this->role === 'admin') {
-        return true; // admin can talk to anyone
+    {
+        return $this->hasOne(\App\Models\Wholesaler::class, 'user_id');
     }
 
-    $allowedChat = [
-        'supplier'   => ['admin'],
-        'wholesaler' => ['admin', 'retailer'],
-        'retailer'   => ['admin', 'wholesaler', 'customer'],
-        'customer'   => ['admin', 'retailer'],
-    ];
+    public function isOnline()
+    {
+        return $this->last_seen && $this->last_seen->gt(now()->subMinutes(5));
+    }
 
-    return in_array($otherUser->role, $allowedChat[$this->role] ?? []);
-}
+    public function canChatWith(User $otherUser): bool
+    {
+        if ($this->role === 'admin') {
+            return true; // admin can talk to anyone
+        }
+
+        $allowedChat = [
+            'supplier'   => ['admin'],
+            'wholesaler' => ['admin', 'retailer'],
+            'retailer'   => ['admin', 'wholesaler', 'customer'],
+            'customer'   => ['admin', 'retailer'],
+        ];
+
+        return in_array($otherUser->role, $allowedChat[$this->role] ?? []);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // Customize as needed
+    }
+    public function hasRole($roles)
+    {
+        return in_array($this->role, (array) $roles);
+    }
 
 }
