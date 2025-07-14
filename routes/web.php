@@ -11,10 +11,17 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SupplierInventoryController;
-use App\Models\SupplierInventory;
 use App\Http\Controllers\RetailerInventoryController;
 use App\Http\Controllers\WholesalerInventoryController;
+use App\Http\Controllers\ProcurementRequestController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\GoodsReceivedController;
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('procurement-requests', ProcurementRequestController::class);
+    Route::resource('purchase-orders', PurchaseOrderController::class);
+    Route::resource('goods-received', GoodsReceivedController::class);
+});
 
 Route::get('/retailer_inventory/export', [RetailerInventoryController::class, 'export'])->name('retailer_inventory.export');
 
