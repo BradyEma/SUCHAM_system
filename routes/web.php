@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\Retailer\RetailerInventoryController;
 use App\Http\Controllers\VendorValidationController;
+use App\Http\Controllers\WishlistController;
 
 
 
@@ -142,6 +143,11 @@ Route::middleware(['auth'])->group(function () {
      Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
       Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
+
+    //wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::post('/wishlist/add/{productId}', [WishlistController::class, 'store'])->name('wishlist.add');
+Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -170,8 +176,7 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         ->middleware(['auth', 'role:admin'])
         ->name('admin.send.promo');
 
-Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
-Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
+
 
 
 

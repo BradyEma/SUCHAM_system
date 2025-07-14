@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
-    public function dashboard()
+   public function dashboard() 
 {
     $user = Auth::user();
+
+    $wishlistCount = Wishlist::where('user_id', auth()->id())->count();
 
     // Get customer's active conversations
     $conversations = Conversation::where('sender_id', $user->id)
@@ -40,12 +42,11 @@ class CustomerController extends Controller
         return $conversation->updated_at->isAfter(now()->subDays(7));
     })->count();
 
-    // Mock stats (you can later fetch real data from orders, etc.)
     $stats = [
         'active_orders' => 0,
         'total_spent' => 0,
         'messages' => $unreadCount,
-        'wishlist_items' => 0,
+        'wishlist_items' => $wishlistCount,
     ];
 
     return view('dashboard.customer-dashboard', compact(
@@ -54,10 +55,11 @@ class CustomerController extends Controller
         'conversations',
         'unreadCount',
         'recentActivity',
-        'stats'
-        
+        'stats',
+        'wishlistCount'
     ));
 }
+
 
 
     public function profile()
