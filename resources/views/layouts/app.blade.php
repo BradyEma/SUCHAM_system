@@ -80,11 +80,46 @@
   <main class="flex-1 px-6 py-6 max-w-4xl mx-auto w-full space-y-6">
     {{-- Content Section (cards, tickets, etc.) --}}
     @yield('content')
+    <div class="flex justify-between mt-6">
+        {{-- new try --}}
+        @php
+            $backUrl = url()->previous();
 
-    <a href="javascript:history.back()"
-       class="inline-block mt-6 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded transition-all duration-200">
-      ← Back
-    </a>
+            // If the previous URL is the current page, fallback to dashboard
+            if ($backUrl === url()->current()) {
+                switch (auth()->user()->role) {
+                    case 'admin':
+                        $backUrl = route('admin.dashboard');
+                        break;
+                    case 'supplier':
+                        $backUrl = route('supplier.dashboard');
+                        break;
+                    case 'wholesaler':
+                        $backUrl = route('wholesaler.dashboard');
+                        break;
+                    case 'retailer':
+                        $backUrl = route('retailer.dashboard');
+                        break;
+                    case 'customer':
+                        $backUrl = route('customer.dashboard');
+                        break;
+                    default:
+                        $backUrl = '/';
+                }
+            }
+        @endphp
+
+        <a href="{{ $backUrl }}"
+        class="inline-block mt-6 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded transition-all duration-200">
+            Home
+        </a>
+        <!-- Back Button -->
+        <a href="javascript:history.back()"
+        class="inline-block mt-6 px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded transition-all duration-200">
+        ← Back
+        </a>
+
+    </div>
   </main>
 </body>
 </html>
