@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Supplier;
+use App\Models\Wholesaler;
+use App\Models\Retailer;
 
 class User extends Authenticatable
 {
@@ -19,12 +20,11 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role',
-];
-
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -37,7 +37,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -48,15 +48,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relationships
     public function supplier()
-      {
-          return $this->hasOne(Supplier::class);
-    }
-    public function wholesaler()
     {
-        return $this->hasOne(\App\Models\Wholesaler::class, 'user_id');
+        return $this->hasOne(Supplier::class);
     }
 
+    public function wholesaler()
+    {
+        return $this->hasOne(Wholesaler::class, 'user_id');
+    }
+
+    public function retailer()
+    {
+        return $this->hasOne(Retailer::class);
+    }
+
+    // Utility Methods
     public function isOnline()
     {
         return $this->last_seen && $this->last_seen->gt(now()->subMinutes(5));
@@ -80,11 +89,11 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role === 'admin'; // Customize as needed
+        return $this->role === 'admin';
     }
+
     public function hasRole($roles)
     {
         return in_array($this->role, (array) $roles);
     }
-
 }

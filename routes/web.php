@@ -10,6 +10,12 @@ use App\Http\Controllers\ChatController;
 use App\Livewire\Admin\Messages\Messages;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
+use App\Http\Controllers\VendorValidationController;
+
+
 
 Route::get('/', fn () => view('welcome'));
 
@@ -30,13 +36,42 @@ Route::middleware(['auth', 'supplier.complete'])->group(function () {
   
 Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->name('admin.suppliers.show');
 
+Route::post('/vendor/validate', [VendorValidationController::class, 'submit'])->name('vendor.validation.submit');
+
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
+    Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
+});
+
+Route::prefix('retailer')
+    ->middleware(['auth'])
+    ->name('retailer.')
+    ->group(function () {
+        Route::get('/dashboard', [RetailerDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/inventory', [RetailerInventoryController::class, 'index'])->name('inventory.index');
+        Route::get('/inventory/create', [RetailerInventoryController::class, 'create'])->name('inventory.create');
+        Route::post('/inventory', [RetailerInventoryController::class, 'store'])->name('inventory.store');
+        Route::get('/inventory/{id}/edit', [RetailerInventoryController::class, 'edit'])->name('inventory.edit');
+        Route::put('/inventory/{id}', [RetailerInventoryController::class, 'update'])->name('inventory.update');
+        Route::delete('/inventory/{id}', [RetailerInventoryController::class, 'destroy'])->name('inventory.destroy');
+        Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show'); // 👈 add this
+    });
+
+
+Route::middleware('auth')->group(function () {
+    Route::post('/retailer/upload-profile-picture', [RetailerController::class, 'uploadProfilePicture'])
+        ->name('retailer.uploadProfilePicture');
+});
  
   
 Route::middleware(['auth'])->group(function () {
     // Dashboards
     Route::get('/supplier/dashboard', [SupplierController::class, 'showDashboard'])->name('supplier.dashboard');
 
-    Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
+    //Route::view('/retailer/dashboard', 'dashboard.retailer-dashboard')->name('retailer.dashboard');
+    Route::get('/retailer/dashboard', [RetailerController::class, 'dashboard'])->name('retailer.dashboard');
     Route::view('/wholesaler/dashboard', 'dashboard.wholesaler-dashboard')->name('wholesaler.dashboard');
     Route::get('/customer/dashboard', [CustomerController::class, 'dashboard'])->name('customer.dashboard');
     Route::view('/admin/dashboard', 'dashboard.admin-dashboard')->name('admin.dashboard');
@@ -66,8 +101,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-  
-  
+   //retailer
+   Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
+
+   Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile')->middleware('auth');
+
 
 
     // User profile routes
@@ -77,8 +115,17 @@ Route::middleware(['auth'])->group(function () {
 
     //suppliers-profile form
     Route::get('/supplier/profile-form', [SupplierController::class, 'showProfileForm'])->name('supplier.profile.form');
-    Route::post('/supplier/profile-form', [SupplierController::class, 'storeProfile'])->name('supplier.profile.store');
-    Route::post('/supplier/profile/update', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
+    Route::post('/supplier/profile', [SupplierProfileController::class, 'update'])->name('supplier.profile.update');
+    Route::get('/supplier/profile', [SupplierProfileController::class, 'showProfile'])->name('supplier.profile');
+    Route::post('/supplier/profile-picture', [SupplierProfileController::class, 'updateProfilePicture'])->name('supplier.profile.picture.update');
+    Route::post('/supplier/update-password', [SupplierProfileController::class, 'updatePassword'])
+    ->name('supplier.password.update')
+    ->middleware('auth');
+    Route::delete('/supplier/delete-account', [SupplierProfileController::class, 'deleteAccount'])
+    ->name('supplier.account.delete')
+    ->middleware('auth');
+   
+
     
     //wholesaler
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
@@ -88,6 +135,14 @@ Route::middleware(['auth'])->group(function () {
     //customer
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
+    Route::get('/customer/orders', [CustomerController::class, 'orders'])->name('customer.orders');
+    Route::get('/customer/products', [CustomerController::class, 'products'])->name('customer.products');
+    
+    //admin
+    Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+     Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
+      Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -130,7 +185,7 @@ Route::middleware(['auth'])->group(function () {
     // UI improved placeholder
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
-    
+
     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])
         ->name('support.updateStatus');
 

@@ -60,16 +60,20 @@ class Chat extends Component
                 $lastActivity = $conversation->updated_at;
             }
             return [
-                'id' => $contactUser->id,
-                'name' => $contactUser->name,
-                'email' => $contactUser->email,
-                'role' => $contactUser->role,
-                'conversation_id' => $conversation ? $conversation->id : null,
-                'latest_message' => $latestMessage,
-                'unread_count' => $unreadCount,
-                'last_activity' => $lastActivity,
-                'has_conversation' => $conversation ? true : false
-            ];
+    'id' => $contactUser->id,
+    'name' => $contactUser->name,
+    'email' => $contactUser->email,
+    'role' => $contactUser->role,
+    'profile_picture' => $contactUser->profile_picture, // 
+    'conversation_id' => $conversation ? $conversation->id : null,
+    'latest_message' => $latestMessage,
+    'unread_count' => $unreadCount,
+    'last_activity' => $lastActivity,
+    'has_conversation' => $conversation ? true : false,
+    'is_online' => $contactUser->last_seen && $contactUser->last_seen->gt(now()->subMinutes(5))
+];
+
+
         })
         ->sortByDesc('last_activity')
         ->values()

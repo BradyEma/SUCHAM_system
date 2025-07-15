@@ -100,4 +100,30 @@ public function getWishlist()
 
         return redirect()->route('customer.profile')->with('success', 'Profile updated successfully!');
     }
+    public function products()
+{
+    // Replace this with your actual logic
+    return view('dashboard.customer-products');
+}
+public function wishlist()
+{
+    return view('dashboard.customer-wishlist');
+}
+
+public function orders()
+{
+    $user = Auth::user();
+
+    // Count unread messages for the current user
+    $unreadCount = Message::whereHas('conversation', function ($query) use ($user) {
+        $query->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+    })
+    ->where('sender_id', '!=', $user->id)
+    ->where('is_read', false)
+    ->count();
+
+    return view('dashboard.customer-orders', compact('unreadCount'));
+}
+
+
 }
