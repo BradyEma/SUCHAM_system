@@ -87,8 +87,12 @@
                 <span class="text-white">Dashboard</span>
             </a>
             <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item active hover:bg-primary-700">
-                <i class="fas fa-clipboard-list w-5 text-center text-black"></i>
+                <i class="fas fa-heart w-5 text-center text-black"></i>
                 <span class="text-black">My Wishlist</span>
+            </a>
+            <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
+                    <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
+                    <span class="text-white">My Cart</span>
             </a>
             <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                 <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>

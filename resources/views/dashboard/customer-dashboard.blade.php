@@ -92,11 +92,15 @@
             </a>
 
             <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
-                <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
+                <i class="fas fa-heart w-5 text-center text-primary-200"></i>
                 <span class="text-white">My Wishlist</span>
                 <span x-show="wishlist.length > 0"
                       class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
                       x-text="wishlist.length"></span>
+            </a>
+             <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
+                    <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
+                    <span class="text-white">My Cart</span>
             </a>
             <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                     <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
@@ -132,30 +136,35 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-            <template x-for="product in products" :key="product.name">
-                <div class="product-card relative flex flex-col rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition-shadow duration-300">
-                    <div class="relative w-full h-48 overflow-hidden rounded-xl mb-4">
-                        <img :src="product.img" :alt="product.name"
-                             class="w-full h-full object-cover product-image transition-transform duration-300">
-                        <button @click.prevent="openModal(product)"
-                                class="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-primary-100 text-primary-700 rounded-full w-8 h-8 flex items-center justify-center shadow transition z-10">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-800 mb-1" x-text="product.name"></h3>
-                    <p class="text-primary-600 font-semibold mb-3" x-text="'UGX ' + product.price"></p>
-                    <div class="flex justify-between mt-auto">
-                        <button class="bg-primary-600 hover:bg-primary-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
-                            Add to Cart
-                        </button>
-                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
-                            Order Now
-                        </button>
-                    </div>
+        <div x-data="cartComponent()">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        <template x-for="product in products" :key="product.name">
+            <div class="product-card relative flex flex-col rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition-shadow duration-300">
+                <div class="relative w-full h-48 overflow-hidden rounded-xl mb-4">
+                    <img :src="product.img" :alt="product.name"
+                         class="w-full h-full object-cover product-image transition-transform duration-300">
+                    <button @click.prevent="openModal(product)"
+                            class="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-primary-100 text-primary-700 rounded-full w-8 h-8 flex items-center justify-center shadow transition z-10">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-            </template>
-        </div>
+                <h3 class="text-lg font-bold text-gray-800 mb-1" x-text="product.name"></h3>
+                <p class="text-primary-600 font-semibold mb-3" x-text="'UGX ' + product.price"></p>
+                <div class="flex justify-between mt-auto">
+                    <button
+                      @click.prevent="addToCart(product)"
+                      class="bg-primary-600 hover:bg-primary-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
+                        Add to Cart
+                    </button>
+
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
+                        Order Now
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
 
         <!-- Modal -->
         <div x-show="showModal" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display: none;">
@@ -250,13 +259,11 @@
             showModal: false,
             modalProduct: null,
 
-            // Define products here (static as per your request)
             products: [
                 {
                     name: "Brown Sugar",
                     price: 5000,
                     img: "/product_images/brownsugar.jpg"
- // static image path
                 },
                 {
                     name: "White Sugar",
@@ -291,46 +298,105 @@
             },
 
             initWishlist() {
-                // Optional: You can load wishlist items from server if needed
-                // For badge count only
                 fetch('/wishlist/count')
                     .then(res => res.json())
                     .then(data => {
-                        this.wishlist = Array(data.count).fill({}); // dummy array for count
+                        this.wishlist = Array(data.count).fill({});
                     });
             },
 
             addToWishlist(product) {
-    fetch('/wishlist', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            product_name: product.name,
-            product_image: product.img,
-            price: product.price
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-    })
-    .then(data => {
-        alert(data.message);
-        this.wishlist.push(product);
-        this.showModal = false;
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Failed to add to wishlist.");
-    });
-}
+                fetch('/wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_name: product.name,
+                        product_image: product.img,
+                        price: product.price
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    this.wishlist.push(product);
+                    this.showModal = false;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to add to wishlist.");
+                });
+            }
+        }
+    }
 
+    // ✅ MOVE THIS OUTSIDE
+    function cartComponent() {
+        return {
+            products: [
+                {
+                    name: "Brown Sugar",
+                    price: 5000,
+                    img: "/product_images/brownsugar.jpg"
+                },
+                {
+                    name: "White Sugar",
+                    price: 5500,
+                    img: "/product_images/whitesugar.jpg"
+                },
+                {
+                    name: "Raw Sugar",
+                    price: 3500,
+                    img: "/product_images/raw-sugar.jpg"
+                },
+                {
+                    name: "Sugar Cubes",
+                    price: 6000,
+                    img: "/product_images/sugarcubes.png"
+                },
+                {
+                    name: "Molasses",
+                    price: 2000,
+                    img: "/product_images/molasses.jpg"
+                },
+                {
+                    name: "Bagase",
+                    price: 2500,
+                    img: "/product_images/bagase.png"
+                }
+            ],
+
+            addToCart(product) {
+                fetch('{{ route('customer.cart.add') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({
+                        product_name: product.name,
+                        price: product.price,
+                        quantity: 1
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Error adding to cart');
+                });
+            }
         }
     }
 </script>
+
 
 
 </body>

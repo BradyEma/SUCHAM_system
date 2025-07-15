@@ -14,6 +14,7 @@ use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\Retailer\RetailerInventoryController;
 use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerCartController;
 
 
 
@@ -155,6 +156,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+
+    //cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/customer/cart', [CustomerCartController::class, 'index'])->name('customer.cart');
+    Route::post('/customer/cart/add', [CustomerCartController::class, 'addToCart'])->name('customer.cart.add');
+    Route::post('/cart/decrease/{id}', [CustomerCartController::class, 'decreaseQuantity'])->name('cart.decrease');
+    Route::post('/cart/increase/{id}', [App\Http\Controllers\CustomerCartController::class, 'increaseQuantity'])->name('cart.increase');
+    Route::delete('/cart/remove/{id}', [App\Http\Controllers\CustomerCartController::class, 'removeItem'])->name('cart.remove');
+
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
