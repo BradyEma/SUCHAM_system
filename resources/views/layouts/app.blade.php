@@ -80,23 +80,21 @@
         <i class="fas fa-leaf text-accent-400 text-xl"></i>
         <span class="text-2xl font-bold">
             @php
-                $backUrl = url()->previous();
-                if ($backUrl === url()->current()) {
-                    switch (auth()->user()->role) {
-                        case 'admin':
-                            $backUrl = route('admin.dashboard'); break;
-                        case 'supplier':
-                            $backUrl = route('supplier.dashboard'); break;
-                        case 'wholesaler':
-                            $backUrl = route('wholesaler.dashboard'); break;
-                        case 'retailer':
-                            $backUrl = route('retailer.dashboard'); break;
-                        case 'customer':
-                            $backUrl = route('customer.dashboard'); break;
-                        default:
-                            $backUrl = '/';
-                    }
-                }
+                function getHomeRouteForRole($role) {
+                      return match($role) {
+                          'admin' => route('admin.dashboard'),
+                          'supplier' => route('supplier.dashboard'),
+                          'wholesaler' => route('wholesaler.dashboard'),
+                          'retailer' => route('retailer.dashboard'),
+                          'customer' => route('customer.dashboard'),
+                          default => '/',
+                      };
+                  }
+
+            // Get the back URL based on the authenticated user's role    
+
+                  $backUrl = getHomeRouteForRole(auth()->user()->role);
+
             @endphp
             <a href="{{ $backUrl }}">GoldenFields</a>
         </span>

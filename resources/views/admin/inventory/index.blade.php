@@ -106,6 +106,11 @@
                     <i class="fas fa-chart-pie w-5 text-center"></i>
                     <span>Customer Segments</span>
          </a>
+        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+            <i class="fas fa-question-circle w-5 text-center"></i>
+            <span>Support Center</span>
+        </a>
+
         
         <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
             <i class="fas fa-cog w-5 text-center"></i>

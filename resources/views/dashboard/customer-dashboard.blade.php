@@ -72,8 +72,9 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 space-y-8 shadow-xl">
             @php
-    $user = auth()->user();
-@endphp
+                $user = auth()->user();
+                use Illuminate\Support\Str;
+            @endphp
 
 <div class="flex items-center space-x-3"> 
     <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">

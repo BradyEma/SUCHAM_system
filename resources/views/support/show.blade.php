@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-3xl mx-auto p-6">
+<div class="max-w-4xl mx-auto p-6">
 
     <a href="{{ route('support.index') }}" class="text-sm text-blue-600 hover:underline mb-4 inline-block">
         ← Back to Support Tickets
@@ -66,7 +66,7 @@
             </div>
         @endif
 
-        {{-- Admin One-Time Reply (if exists) --}}
+        {{-- Admin One-Time Reply --}}
         @if ($ticket->admin_reply)
             <div class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded">
                 <h3 class="font-semibold text-gray-800 mb-2">Admin Reply:</h3>
@@ -75,35 +75,51 @@
         @endif
 
         {{-- Reply Form --}}
-        <form action="{{ route('support.reply.store', $ticket->id) }}" method="POST" class="mt-6">
-            @csrf
-            <label class="block font-semibold mb-1">Reply</label>
-            <textarea name="message" rows="4" class="w-full border p-2 rounded" required></textarea>
+        <div class="mt-6">
+            @if(auth()->user()->isAdmin())
+                {{-- Admin Reply Form --}}
+                <form action="{{ route('support.reply', $ticket->id) }}" method="POST">
+                    @csrf
+                    <label class="block font-semibold mb-1">Admin Reply</label>
+                    <textarea name="reply_text" rows="4" class="w-full border p-2 rounded" required></textarea>
 
-            <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                Send Reply
-            </button>
-        </form>
+                    <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Send Admin Reply
+                    </button>
+                </form>
+            @else
+                {{-- User Reply Form --}}
+                <form action="{{ route('support.reply.store', $ticket->id) }}" method="POST">
+                    @csrf
+                    <label class="block font-semibold mb-1">Reply</label>
+                    <textarea name="message" rows="4" class="w-full border p-2 rounded" required></textarea>
 
-        {{-- change ticket status --}}
+                    <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Send Reply
+                    </button>
+                </form>
+            @endif
+        </div>
+
+        {{-- Ticket Status Change (Admins Only) --}}
         @can('update', $ticket)
-    <form action="{{ route('support.updateStatus', $ticket->id) }}" method="POST" class="mt-6">
-        @csrf
-        @method('PATCH')
+            <form action="{{ route('support.updateStatus', $ticket->id) }}" method="POST" class="mt-6">
+                @csrf
+                @method('PATCH')
 
-        <label class="block font-semibold mb-1">Change Ticket Status</label>
-        <select name="status" class="p-2 border rounded w-full max-w-sm inline-block" required>
-            <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
-            <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-            <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
-        </select>
+                <label class="block font-semibold mb-1">Change Ticket Status</label>
 
-        <button type="submit" class="ml-2 mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-            Update Status
-        </button>
-    </form>
-@endcan
+                <select name="status" class="p-2 border rounded w-full max-w-sm inline-block" required>
+                    <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Open</option>
+                    <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                    <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
+                </select>
 
+                <button type="submit" class="ml-2 mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Update Status
+                </button>
+            </form>
+        @endcan
 
     </div>
 </div>

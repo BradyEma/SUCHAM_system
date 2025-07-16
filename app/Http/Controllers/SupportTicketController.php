@@ -8,6 +8,8 @@ use App\Models\SupportTicket;
 use App\Mail\SupportTicketReplyMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Log;
+
 
 
 class SupportTicketController extends Controller
@@ -63,6 +65,8 @@ class SupportTicketController extends Controller
     //admin reply method
     public function reply(Request $request, SupportTicket $ticket)
     {
+
+        $ticket->load('user');
         // Ensure only admins can reply
         if (!auth()->user()->isAdmin()) {
             abort(403, 'Unauthorized');
@@ -79,11 +83,16 @@ class SupportTicketController extends Controller
             'status' => 'resolved',
         ]);
 
+        $replyMessage = $request->reply_text;
+
+
         // Send reply email to user
         //(incase an email is to sent every time a message is sent) 
         // Mail::to($ticket->user->email)->send(new SupportTicketReplyMail($ticket, $replyMessage));
         // for an email being sent on first reply only below
-        if (!$ticket->replied_at) {
+        
+
+        if (!$ticket->replied_at && $ticket->user) {
             Mail::to($ticket->user->email)->send(new SupportTicketReplyMail($ticket, $replyMessage));
             $ticket->update(['replied_at' => now()]);
         }

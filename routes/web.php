@@ -1,30 +1,34 @@
 <?php
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SupplierRegisterController;
-use App\Http\Controllers\SupplierProfileController;
-use App\Http\Controllers\RoleSelectionController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
 use App\Livewire\Admin\Messages\Messages;
-use App\Livewire\Admin\Messages\ListConversation;
-use App\Http\Controllers\SupportTicketController;
-use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RetailerController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;
-use App\Http\Controllers\VendorValidationController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\WholesalerController;
+use App\Http\Controllers\RoleSelectionController;
+use App\Http\Controllers\SupportTicketController;
+use App\Livewire\Admin\Messages\ListConversation;
 
+use Illuminate\Support\Facades\Mail;
+use App\Models\SupportTicket;
+use App\Mail\SupportTicketReplyMail;
 
 
 Route::get('/', fn () => view('welcome'));
 
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\WholesalerController;
+use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\SupplierProfileController;
+use App\Http\Controllers\SupplierRegisterController;
+use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\Admin\CustomerSegmentController;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -174,22 +178,42 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
 Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
 Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
 //support center
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
 
-    // Admin-only
-    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->middleware('can:isAdmin')->name('support.reply');
+    // ✅ THIS route must exist
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->name('support.reply');
 
-    // UI improved placeholder
+    // For user replies
+    Route::post('/support/{ticket}/reply/user', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
+
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
-    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
-
-    Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])
-        ->name('support.updateStatus');
-
+    Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
 });
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+//     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+//     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
+
+//     // Admin-only
+//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])
+//     ->middleware('can:isAdmin')
+//     ->name('support.reply');
+    
+
+//     // UI improved placeholder
+//     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
+
+//     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])
+//         ->name('support.updateStatus');
+
+// });
 // reexamine this section
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
@@ -204,5 +228,6 @@ Route::get('/login', fn () => view('auth.login'))->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 // Supplier registration
 Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
+
 
 require __DIR__.'/auth.php';

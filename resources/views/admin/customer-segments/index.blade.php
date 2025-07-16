@@ -72,44 +72,47 @@
                 
                 </a>
                 
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-boxes w-5 text-center"></i>
-                    <span>Inventory</span>
-                </a>
-                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-clipboard-list w-5 text-center"></i>
-                    <span>Order Management</span>
-                </a>
-                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-shopping-cart w-5 text-center"></i>
-                    <span>Procurement</span>
-                </a>
-                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-comment-dots w-5 text-center"></i>
-                    <span>Chat</span>
-                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
-                </a>
-                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-truck w-5 text-center"></i>
-                    <span>Logistics</span>
-                </a>
+                <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-boxes w-5 text-center"></i>
+                            <span>Inventory</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-clipboard-list w-5 text-center"></i>
+                            <span>Order Management</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-shopping-cart w-5 text-center"></i>
+                            <span>Procurement</span>
+                        </a>
+                        
+                       <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-comment-dots w-5 text-center"></i>
+                            <span>Chat</span>
+                            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Logistics</span>
+                        </a>
 
-                {{-- Customer Segments for machine learning --}}
-                <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-                    <i class="fas fa-chart-pie w-5 text-center"></i>
-                    <span>Customer Segments</span>
-                </a>
-                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-question-circle w-5 text-center"></i>
-                    <span>Support Center</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-cog w-5 text-center"></i>
-                    <span>Settings</span>
+                        {{-- Customer Segments for machine learning --}}
+                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-chart-pie w-5 text-center"></i>
+                            <span>Customer Segments</span>
+                        </a>
+                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-question-circle w-5 text-center"></i>
+                            <span>Support Center</span>
+                        </a>
+
+
+                        <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Profile</span>
+                        </a>
                 </a>
             </nav>
         </div>
