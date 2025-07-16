@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Retailer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use App\Models\Product; 
 
 
 class CustomerCartController extends Controller
@@ -34,13 +35,17 @@ class CustomerCartController extends Controller
 }
 
 
-   public function addToCart(Request $request)
+ 
+
+public function addToCart(Request $request)
 {
     try {
         $request->validate([
+            'product_id' => 'required|integer',
             'product_name' => 'required|string',
             'price' => 'required|numeric',
             'quantity' => 'required|integer|min:1',
+            'product_image' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -55,18 +60,21 @@ class CustomerCartController extends Controller
         } else {
             Cart::create([
                 'user_id' => $user->id,
+                'product_id' => $request->product_id,
                 'product_name' => $request->product_name,
                 'price' => $request->price,
                 'quantity' => $request->quantity,
+                'product_image' => $request->product_image,
             ]);
         }
 
         return response()->json(['message' => 'Product added to cart successfully']);
     } catch (\Exception $e) {
-        Log::error('Cart Error: ' . $e->getMessage());
+        \Log::error('Cart Error: ' . $e->getMessage());
         return response()->json(['message' => 'Error adding to cart'], 500);
     }
 }
+
   public function decreaseQuantity($id)
 {
     $item = Cart::findOrFail($id);

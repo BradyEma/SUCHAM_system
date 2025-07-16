@@ -177,14 +177,15 @@
                                 <div class="cart-item grid grid-cols-1 md:grid-cols-12 gap-4 p-4 items-center">
                                     <!-- Product Info -->
                                     <div class="col-span-5 flex items-center">
-                                        <img src="{{ asset('storage/' . $item->product_image) }}" 
-                                             alt="{{ $item->product_name }}" 
-                                             class="w-16 h-16 object-cover rounded-lg mr-4">
-                                        <div>
-                                            <h3 class="font-medium text-gray-800">{{ $item->product_name }}</h3>
-                                            <p class="text-sm text-gray-500">Product ID: GF-{{ $item->product_id }}</p>
-                                        </div>
-                                    </div>
+    <img src="{{ asset($item->product_image ?? 'product_images/default.jpg') }}" 
+     alt="{{ $item->product_name }}" 
+     class="w-16 h-16 object-cover rounded-lg mr-4">
+    <div>
+        <h3 class="font-medium text-gray-800">{{ $item->product->name ?? $item->product_name }}</h3>
+        <p class="text-sm text-gray-500">Product ID: GF-{{ str_pad($item->product_id ?? 0, 2, '0', STR_PAD_LEFT) }}</p>
+    </div>
+</div>
+
                                     
                                     <!-- Price -->
                                     <div class="col-span-2 text-gray-700">

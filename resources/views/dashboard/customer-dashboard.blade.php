@@ -338,61 +338,71 @@
     // ✅ MOVE THIS OUTSIDE
     function cartComponent() {
         return {
-            products: [
-                {
-                    name: "Brown Sugar",
-                    price: 5000,
-                    img: "/product_images/brownsugar.jpg"
-                },
-                {
-                    name: "White Sugar",
-                    price: 5500,
-                    img: "/product_images/whitesugar.jpg"
-                },
-                {
-                    name: "Raw Sugar",
-                    price: 3500,
-                    img: "/product_images/raw-sugar.jpg"
-                },
-                {
-                    name: "Sugar Cubes",
-                    price: 6000,
-                    img: "/product_images/sugarcubes.png"
-                },
-                {
-                    name: "Molasses",
-                    price: 2000,
-                    img: "/product_images/molasses.jpg"
-                },
-                {
-                    name: "Bagase",
-                    price: 2500,
-                    img: "/product_images/bagase.png"
-                }
-            ],
+           products: [
+    {
+        product_id: 1,
+        name: "Brown Sugar",
+        price: 5000,
+        img: "/product_images/brownsugar.jpg"
+    },
+    {
+        product_id: 2,
+        name: "White Sugar",
+        price: 5500,
+        img: "/product_images/whitesugar.jpg"
+    },
+    {
+        product_id: 3,
+        name: "Raw Sugar",
+        price: 3500,
+        img: "/product_images/raw-sugar.jpg"
+    },
+    {
+        product_id: 4,
+        name: "Sugar Cubes",
+        price: 6000,
+        img: "/product_images/sugarcubes.png"
+    },
+    {
+        product_id: 5,
+        name: "Molasses",
+        price: 2000,
+        img: "/product_images/molasses.jpg"
+    },
+    {
+        product_id: 6,
+        name: "Bagase",
+        price: 2500,
+        img: "/product_images/bagase.png"
+    }
+]
+,
 
             addToCart(product) {
-                fetch('{{ route('customer.cart.add') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    },
-                    body: JSON.stringify({
-                        product_name: product.name,
-                        price: product.price,
-                        quantity: 1
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message);
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Error adding to cart');
-                });
-            }
+    fetch('{{ route('customer.cart.add') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({
+            product_id: product.product_id,
+            product_name: product.name,
+            price: product.price,
+            quantity: 1,
+            product_image: product.img
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Error adding to cart');
+    });
+}
+
         }
     }
 </script>
