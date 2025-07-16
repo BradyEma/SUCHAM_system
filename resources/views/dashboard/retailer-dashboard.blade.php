@@ -74,8 +74,8 @@
                 <div class="flex-1 overflow-y-auto py-4">
                     <nav class="px-2 space-y-1">
                         <!-- Dashboard -->
-                        <a href="#" class="bg-primary-700 text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
-                            <i class="fas fa-tachometer-alt mr-3 text-yellow-400"></i>
+                        <a href="{{ route('retailer.dashboard') }}" class="bg-white text-black group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                            <i class="fas fa-tachometer-alt mr-3 text-black"></i>
                             Dashboard
                         </a>
                         
@@ -87,7 +87,7 @@
                         </a>
                         
                         <!-- Orders -->
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('retailer.orders') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             My Orders
                             <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
@@ -114,6 +114,7 @@
                     
                    
                 </div>
+            
                 
                 <!-- Logout -->
                <div class="p-4 border-t border-primary-700">

@@ -9,6 +9,8 @@ use App\Models\Retailer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use App\Models\Product; 
+use App\Models\RetailerOrder;
+use Illuminate\Support\Str;
 
 
 class CustomerCartController extends Controller
@@ -103,5 +105,47 @@ public function addToCart(Request $request)
 
     return redirect()->back()->with('message', 'Item removed from cart.');
 }
+
+public function checkout(Request $request)
+{
+    $request->validate([
+        'retailer_id' => 'required|exists:retailers,id',
+    ]);
+
+    $user = Auth::user();
+    $cartItems = Cart::where('user_id', $user->id)->get();
+
+    if ($cartItems->isEmpty()) {
+        return back()->with('error', 'Your cart is empty.');
+    }
+
+   do {
+    $transactionId = 'GF-' . mt_rand(1000, 9999);
+} while (RetailerOrder::where('transaction_id', $transactionId)->exists());
+
+    $retailerId = $request->input('retailer_id');
+
+    foreach ($cartItems as $item) {
+        RetailerOrder::create([
+            'transaction_id' => $transactionId,
+            'retailer_id' => $retailerId,
+            'user_id' => $user->id,
+            'product_id' => $item->product_id,
+            'product_name' => $item->product_name,
+            'product_image' => $item->product_image,
+            'quantity' => $item->quantity,
+            'price' => $item->price,
+            'total' => $item->price * $item->quantity,
+            'status' => 'pending',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    Cart::where('user_id', $user->id)->delete();
+
+    return redirect()->route('customer.cart')->with('success', 'Order placed successfully!');
+}
+
 
 }

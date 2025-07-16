@@ -15,6 +15,8 @@ use App\Http\Controllers\Retailer\RetailerInventoryController;
 use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\Retailer\OrderController;
 
 
 
@@ -111,9 +113,8 @@ Route::middleware(['auth'])->group(function () {
 
    //retailer
    Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
-
    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile')->middleware('auth');
-
+    Route::get('/retailer/orders', [OrderController::class, 'index'])->name('retailer.orders');
 
 
     // User profile routes
@@ -165,6 +166,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/decrease/{id}', [CustomerCartController::class, 'decreaseQuantity'])->name('cart.decrease');
     Route::post('/cart/increase/{id}', [App\Http\Controllers\CustomerCartController::class, 'increaseQuantity'])->name('cart.increase');
     Route::delete('/cart/remove/{id}', [App\Http\Controllers\CustomerCartController::class, 'removeItem'])->name('cart.remove');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout')->middleware('auth');
+    Route::post('/cart/checkout', [CustomerCartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/retailer/orders/{transactionId}', [App\Http\Controllers\Retailer\OrderController::class, 'show'])
+    ->name('retailer.orders.show');
 
 });
 
