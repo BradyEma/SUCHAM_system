@@ -21,4 +21,11 @@ public function items() {
     return $this->hasMany(PurchaseOrderItem::class);
 }
 
+public function goodsReceived() {
+    return $this->hasOne(GoodsReceived::class);
+}
+
+ public function supplier() {
+        return $this->belongsTo(Supplier::class);
+    }
 }

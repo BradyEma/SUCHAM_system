@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\WholesalerInventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class WholesalerInventoryController extends Controller
 {
+
+public function export()
+{
+    $inventory = WholesalerInventory::all();
+
+    $csvData = "Product Name,Product ID,Stock,Unit Price,Measurements\n";
+    foreach ($inventory as $item) {
+        $csvData .= "{$item->product_name},{$item->product_id},{$item->stock},{$item->unit_price},{$item->measurements}\n";
+    }
+
+    $filename = 'wholesaler_inventory_' . now()->format('Ymd_His') . '.csv';
+
+    return Response::make($csvData, 200, [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => "attachment; filename=\"$filename\"",
+    ]);
+}
+
 public function index()
 {
     $products = WholesalerInventory::orderBy('created_at', 'desc')->paginate(10);

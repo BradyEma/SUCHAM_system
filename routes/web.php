@@ -17,6 +17,19 @@ use App\Http\Controllers\ProcurementRequestController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\GoodsReceivedController;
 
+
+
+use App\Http\Controllers\ProcurementDashboardController;
+
+// Procurement routes without authentication
+Route::prefix('procurement')->name('procurement.')->group(function () {
+    Route::get('/dashboard', [ProcurementDashboardController::class, 'index'])
+        ->name('dashboard');
+        
+    Route::get('/metrics', [ProcurementDashboardController::class, 'metrics'])
+        ->name('metrics');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::resource('procurement-requests', ProcurementRequestController::class);
     Route::resource('purchase-orders', PurchaseOrderController::class);
@@ -26,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/retailer_inventory/export', [RetailerInventoryController::class, 'export'])->name('retailer_inventory.export');
 
 Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
+Route::get('wholesaler_inventory/export', [WholesalerInventoryController::class, 'export'])->name('wholesaler_inventory.export');
 
 Route::resource('retailer_inventory', RetailerInventoryController::class);
 

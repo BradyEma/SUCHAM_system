@@ -118,202 +118,188 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-8 overflow-auto">
-            <div class="flex justify-between items-start mb-8">
+  <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
                 <div>
-                    <h1 class="text-3xl font-bold text-green-800">Supplier Inventory</h1>
+                    <h1 class="text-3xl font-bold text-gray-800">
+                        <span class="gold-gradient-text">Inventory Management</span>
+                    </h1>
                     <p class="text-gray-600">Manage your product listings and inventory</p>
                 </div>
-                <div class="flex space-x-4">
-                    <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
-                        <i class="fas fa-file-export mr-2"></i> Export
-                    </button>
-                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
-                         <!-- Add Product Button (now links to create form) -->
-         <a href="{{ route('supplier_inventory.create') }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center">
-        <i class="fas fa-plus mr-2"></i> Add Product
-        </a>
-    
-                    </button>
-                </div>
-            </div>
-
-            <!-- Products Summary -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-500">Total Products</h2>
-                            <p class="text-3xl font-bold text-green-700">0</p>
-                        </div>
-                        <div class="p-3 rounded-full bg-green-100 text-green-700">
-                            <i class="fas fa-box-open text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-500">In Stock</h2>
-                            <p class="text-3xl font-bold text-green-700">0</p>
-                        </div>
-                        <div class="p-3 rounded-full bg-blue-100 text-blue-700">
-                            <i class="fas fa-check-circle text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-500">Low Stock</h2>
-                            <p class="text-3xl font-bold text-yellow-700">0</p>
-                        </div>
-                        <div class="p-3 rounded-full bg-yellow-100 text-yellow-700">
-                            <i class="fas fa-exclamation-triangle text-xl"></i>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-bell text-gray-400"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Products Table -->
-            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200"> <!-- ← Add this line -->
-                 <tbody class="bg-white divide-y divide-gray-200">
-            <thead>
-            <tr class="bg-green-50 text-green-800 text-lg">
-                <th>product_name</th>
-                <th>product_id</th>
-                <th>quantity</th>
-                <th>unit_price</th>
-                <th>unit_of_measurement</th>
-                <th>status</th>
-                <th class="text-right">actions</th>
-            </tr>
-        </thead>
-    @forelse ($products as $product)
-        <tr class="bg-gray-50 text-black-800 text-lg">
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product_name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->product_id }}</td>
-           <td class="px-6 py-4 whitespace-nowrap">{{ $product->quantity }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->unit_price }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->unit_of_measurement }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $product->status }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-right">{{ $product->actions}}</td>
-                   
-                </form>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                <div class="flex flex-col items-center justify-center py-12">
-                    <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="card bg-white p-5 border-l-4 border-green-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Total Products</h3>
+                            <div class="text-2xl font-bold text-green-800">0</div>
+                        </div>
+                        <div class="bg-green-100 p-2 rounded-lg">
+                            <i class="fas fa-boxes text-green-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card bg-white p-5 border-l-4 border-blue-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">In Stock</h3>
+                            <div class="text-2xl font-bold text-blue-800">0</div>
+                        </div>
+                        <div class="bg-blue-100 p-2 rounded-lg">
+                            <i class="fas fa-check-circle text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card bg-white p-5 border-l-4 border-amber-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Low Stock</h3>
+                            <div class="text-2xl font-bold text-amber-800">0</div>
+                        </div>
+                        <div class="bg-amber-100 p-2 rounded-lg">
+                            <i class="fas fa-exclamation-triangle text-amber-600"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card bg-white p-5 border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Out of Stock</h3>
+                            <div class="text-2xl font-bold text-red-800">0</div>
+                        </div>
+                        <div class="bg-red-100 p-2 rounded-lg">
+                            <i class="fas fa-times-circle text-red-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Bar -->
+            <div class="card bg-white p-4 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                    <div class="relative w-full md:w-64">
+                        <input type="text" placeholder="Search products..." class="search-input w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gold-500">
+                        <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
+                    </div>
                     
-                   
-                </div>
-            </td>
-        </tr>
-    @endforelse
-</tbody>
+                   <div class="flex space-x-3">
+    <a href="{{ route('retailer_inventory.create') }}">
+        <button class="btn-primary flex items-center">
+            <i class="fas fa-plus mr-2"></i> Add Product
+        </button>
+    </a>
 
-                   
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Empty state -->
+    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+        <i class="fas fa-filter mr-2"></i> Filter
+    </button>
+
+    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+       <a href="{{ route('retailer_inventory.export') }}">
+    <i class="fas fa-download mr-2"></i> Export
+    </button>
+</div>
+
+                </div>
+            </div>
+            
+            <!-- Inventory Table -->
+            <div class="card bg-white overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                    <div class="flex flex-col items-center justify-center py-12">
-                                        <i class="fas fa-box-open text-4xl text-gray-300 mb-4"></i>
-                                        
-                                    </div>
-                                </td>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Your dynamic content will go here -->
+                            @forelse ($products as $product)
+                                <tr class="table-row">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-box text-green-600"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $product->product_name }}</div>
+                                                <div class="text-sm text-gray-500">Category</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->product_id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $product->stock }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">${{ number_format($product->unit_price, 2) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->measurements }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($product->stock > 20)
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check-circle mr-1"></i> In Stock
+                                            </span>
+                                        @elseif($product->stock > 0)
+                                            <span class="badge badge-warning">
+                                                <i class="fas fa-exclamation-triangle mr-1"></i> Low Stock
+                                            </span>
+                                        @else
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-times-circle mr-1"></i> Out of Stock
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
+                                        <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No products found.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
-                <!-- Pagination -->
-                <div class="bg-white px-6 py-3 flex items-center justify-between border-t border-gray-200">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                        <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Showing <span class="font-medium">0</span> to <span class="font-medium">0</span> of <span class="font-medium">0</span> products
-                            </p>
-                        </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
-                                    <i class="fas fa-chevron-left"></i>
-                                </a>
-                                <a href="#" aria-current="page" class="z-10 bg-yellow-50 border-yellow-500 text-yellow-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    1
-                                </a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    2
-                                </a>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    3
-                                </a>
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                                    ...
-                                </span>
-                                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                                    8
-                                </a>
-                                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </a>
-                            </nav>
-                        </div>
-                    </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="mt-6 flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">24</span> results
+                </div>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="px-3 py-1 border rounded-lg bg-green-800 text-white">1</button>
+                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">2</button>
+                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">3</button>
+                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
-
-    <script>
-        // This script would handle the actions dropdown functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            // For mobile view, we'll add click handlers to show actions
-            const actionButtons = document.querySelectorAll('.actions-btn');
-            
-            actionButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const dropdown = this.nextElementSibling;
-                    const allDropdowns = document.querySelectorAll('.actions-dropdown');
-                    
-                    // Close all other dropdowns
-                    allDropdowns.forEach(d => {
-                        if (d !== dropdown) d.style.display = 'none';
-                    });
-                    
-                    // Toggle current dropdown
-                    if (dropdown.style.display === 'block') {
-                        dropdown.style.display = 'none';
-                    } else {
-                        dropdown.style.display = 'block';
-                    }
-                });
-            });
-            
-            // Close dropdowns when clicking elsewhere
-            document.addEventListener('click', function() {
-                document.querySelectorAll('.actions-dropdown').forEach(dropdown => {
-                    dropdown.style.display = 'none';
-                });
-            });
-        });
-    </script>
 </body>
 </html>
