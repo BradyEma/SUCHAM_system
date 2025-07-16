@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RetailerOrder;
 use Illuminate\Support\Facades\Auth;
+use App\Models\RetailerInventory;
 
 class OrderController extends Controller
 {
@@ -38,6 +39,34 @@ public function show($transactionId)
         'orderItems' => $orderItems,
         'transactionId' => $transactionId
     ]);
+}
+
+public function markAsOnDelivery($transactionId)
+{
+    $orderItems = RetailerOrder::where('transaction_id', $transactionId)->get();
+
+    if ($orderItems->isEmpty()) {
+        return redirect()->back()->with('error', 'Order not found.');
+    }
+
+    foreach ($orderItems as $item) {
+        // 1. Update order status
+        $item->status = 'on delivery';
+        $item->save();
+
+        // 2. Deduct quantity from retailer inventory using product_name
+        $inventory = RetailerInventory::where('retailer_id', $item->retailer_id)
+            ->where('product_name', $item->product_name)
+            ->first();
+
+        if ($inventory) {
+            $inventory->quantity -= $item->quantity;
+            $inventory->quantity = max($inventory->quantity, 0); // prevent negative
+            $inventory->save();
+        }
+    }
+
+    return redirect()->back()->with('success', 'Order marked as On Delivery and inventory updated.');
 }
 
 

@@ -5,12 +5,16 @@
     <title>Retailer Order Details</title>
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
 </head>
 <body class="bg-gray-100 py-10 px-4">
 
 <div class="max-w-6xl mx-auto bg-white shadow rounded-lg p-6">
 
     <div class="mb-6">
+         <a href="{{ route('retailer.orders') }}" class="flex items-center text-primary-600 hover:text-primary-700 mb-5">
+                        <i class="fas fa-arrow-left mr-2"></i> Continue Shopping
+                    </a>
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">
             <i class="fas fa-receipt text-primary-600 mr-2"></i> Order Details
         </h2>
@@ -76,6 +80,15 @@
             </div>
         </div>
     </div>
+  @if($orderItems->first()->status === 'pending')
+    <form action="{{ route('retailer.orders.complete', $transactionId) }}" method="POST" class="mt-4">
+    @csrf
+    <button type="submit"
+        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
+        Complete to Delivery
+    </button>
+</form>
+@endif
 
 </div>
 

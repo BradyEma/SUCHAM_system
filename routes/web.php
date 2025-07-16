@@ -114,7 +114,8 @@ Route::middleware(['auth'])->group(function () {
    //retailer
    Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile')->middleware('auth');
-    Route::get('/retailer/orders', [OrderController::class, 'index'])->name('retailer.orders');
+   Route::get('/retailer/orders', [OrderController::class, 'index'])->name('retailer.orders');
+   Route::post('/retailer/orders/{transactionId}/complete', [App\Http\Controllers\Retailer\OrderController::class, 'markAsOnDelivery'])->name('retailer.orders.complete');
 
 
     // User profile routes
