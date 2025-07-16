@@ -11,7 +11,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RetailerController;
 use App\Http\Controllers\SupplierInventoryController;
-use App\Http\Controllers\RetailerInventoryController;
 use App\Http\Controllers\WholesalerInventoryController;
 use App\Http\Controllers\ProcurementRequestController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -36,12 +35,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('goods-received', GoodsReceivedController::class);
 });
 
-Route::get('/retailer_inventory/export', [RetailerInventoryController::class, 'export'])->name('retailer_inventory.export');
 
 Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
 Route::get('wholesaler_inventory/export', [WholesalerInventoryController::class, 'export'])->name('wholesaler_inventory.export');
 
-Route::resource('retailer_inventory', RetailerInventoryController::class);
 
 
 Route::resource('supplier_inventory', SupplierInventoryController::class);
