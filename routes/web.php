@@ -17,6 +17,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCartController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Retailer\OrderController;
+use App\Http\Controllers\CustomerOrderController;
 
 
 
@@ -47,6 +48,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
     Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
 });
+
+
+
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('orders', [CustomerOrderController::class, 'index'])->name('orders');           // list orders
+    Route::get('orders/{transactionId}', [CustomerOrderController::class, 'show'])->name('orders.show');  // order details
+   Route::post('orders/{transactionId}/cancel', [CustomerOrderController::class, 'cancel'])->name('orders.cancel');
+
+
+});
+
 
 Route::get('/wishlist/count', function () {
     return response()->json([

@@ -9,6 +9,7 @@ use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\RetailerOrder;
 
 class CustomerController extends Controller
 {
@@ -112,20 +113,43 @@ public function wishlist()
     return view('dashboard.customer-wishlist');
 }
 
+
+
 public function orders()
 {
     $user = Auth::user();
 
-    // Count unread messages for the current user
-    $unreadCount = Message::whereHas('conversation', function ($query) use ($user) {
-        $query->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
-    })
-    ->where('sender_id', '!=', $user->id)
-    ->where('is_read', false)
-    ->count();
+   $orders = RetailerOrder::with('product')
+    ->where('user_id', $user->id)
+    ->orderByDesc('created_at')
+    ->get();
 
-    return view('dashboard.customer-orders', compact('unreadCount'));
+$groupedOrders = $orders->groupBy('transaction_id');
+
+
+    $totalAmount = $groupedOrders->sum('amount');
+    $itemsCount = $groupedOrders->count();
+
+    $unreadCount = Message::whereHas('conversation', function ($query) use ($user) {
+    $query->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+})
+->where('sender_id', '!=', $user->id)
+->where('is_read', false) // or '' depending on your DB
+->count();
+
+
+    return view('dashboard.customer-orders', [
+    'user' => $user,
+    'groupedOrders' => $groupedOrders,
+    'totalAmount' => $totalAmount,
+    'itemsCount' => $itemsCount,
+    'unreadCount' => $unreadCount // ✅ Add this
+]);
+
 }
+
+
+
 
 
 }

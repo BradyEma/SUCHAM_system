@@ -12,20 +12,25 @@ class OrderController extends Controller
 {
  public function index()
 {
-   
-
     $retailerId = Auth::user()->retailer->id ?? null;
-   
+
     $orders = RetailerOrder::with('customer')
         ->where('retailer_id', $retailerId)
         ->latest()
         ->get()
         ->groupBy('transaction_id');
-     
-        $user = Auth::user();
-    return view('dashboard.retailer-orders', compact('orders', 'user'));
 
+    // ✅ Add this block to count distinct transactions
+    $totalOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
+    $user = Auth::user();
+
+    // ✅ Now pass $totalOrders to the view
+    return view('dashboard.retailer-orders', compact('orders', 'user', 'totalOrders'));
 }
+
 
 public function show($transactionId)
 {

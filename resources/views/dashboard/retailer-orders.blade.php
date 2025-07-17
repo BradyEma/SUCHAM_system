@@ -165,17 +165,18 @@
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-white p-4 rounded-lg shadow border-l-4 border-primary-500">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Total Orders</p>
-                                <p class="text-2xl font-bold">24</p>
-                            </div>
-                            <div class="bg-primary-100 p-3 rounded-full">
-                                <i class="fas fa-shopping-cart text-primary-600"></i>
-                            </div>
-                        </div>
-                    </div>
+                   <div class="bg-white p-4 rounded-lg shadow border-l-4 border-primary-500">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-gray-500">Total Orders</p>
+            <p class="text-2xl font-bold">{{ $totalOrders }}</p>
+        </div>
+        <div class="bg-primary-100 p-3 rounded-full">
+            <i class="fas fa-shopping-cart text-primary-600"></i>
+        </div>
+    </div>
+</div>
+
                     <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
                         <div class="flex items-center justify-between">
                             <div>

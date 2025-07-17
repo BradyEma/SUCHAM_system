@@ -12,7 +12,7 @@
 <div class="max-w-6xl mx-auto bg-white shadow rounded-lg p-6">
 
     <div class="mb-6">
-         <a href="{{ route('retailer.orders') }}" class="flex items-center text-primary-600 hover:text-primary-700 mb-5">
+         <a href="{{ route('customer.orders') }}" class="flex items-center text-primary-600 hover:text-primary-700 mb-5">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Orders
                     </a>
         <h2 class="text-2xl font-semibold text-gray-800 mb-2">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="mb-8">
-        <h3 class="text-md font-semibold text-gray-700 mb-3">Customer Information</h3>
+        <h3 class="text-md font-semibold text-gray-700 mb-3">My Information</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
             <div><strong>Name:</strong> {{ $orderItems->first()->customer->name ?? 'N/A' }}</div>
             <div><strong>Email:</strong> {{ $orderItems->first()->customer->email ?? 'N/A' }}</div>
@@ -80,15 +80,7 @@
             </div>
         </div>
     </div>
-  @if($orderItems->first()->status === 'pending')
-    <form action="{{ route('retailer.orders.complete', $transactionId) }}" method="POST" class="mt-4">
-    @csrf
-    <button type="submit"
-        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
-        Complete to Delivery
-    </button>
-</form>
-@endif
+  
 
 </div>
 

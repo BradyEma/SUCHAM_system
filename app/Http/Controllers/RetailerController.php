@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Retailer;
 use App\Models\RetailerInventory;
 use Illuminate\Support\Facades\Storage;
+use App\Models\RetailerOrder;
+
 
 
 
 class RetailerController extends Controller
 {
-    public function dashboard()
+   public function dashboard()
 {
     $user = auth()->user();
     $retailer = $user->retailer;
@@ -24,11 +26,17 @@ class RetailerController extends Controller
         ]);
     }
 
+    // Count unique transaction IDs for this retailer's orders
+    $totalOrders = RetailerOrder::where('retailer_id', $retailer->id)
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
     // Check if required fields are filled
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
-    return view('dashboard.retailer-dashboard', compact('user', 'retailer', 'profileIsComplete'));
+    return view('dashboard.retailer-dashboard', compact('user', 'retailer', 'profileIsComplete', 'totalOrders'));
 }
+
 
 
 
