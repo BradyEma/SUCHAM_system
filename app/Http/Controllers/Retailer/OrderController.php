@@ -20,16 +20,36 @@ class OrderController extends Controller
         ->get()
         ->groupBy('transaction_id');
 
-    // ✅ Add this block to count distinct transactions
     $totalOrders = RetailerOrder::where('retailer_id', $retailerId)
         ->distinct('transaction_id')
         ->count('transaction_id');
 
+    // ✅ Count pending orders
+    $pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
+   $completedOrders = RetailerOrder::where('retailer_id', $retailerId)
+    ->where('status', 'completed')
+    ->distinct('transaction_id')
+    ->count('transaction_id');
+
+    $cancelledOrders = RetailerOrder::where('retailer_id', $retailerId)
+    ->where('status', 'cancelled')
+    ->distinct('transaction_id')
+    ->count('transaction_id');
+   
+    $deliveryOrders = RetailerOrder::where('retailer_id', $retailerId)
+    ->where('status', 'on delivery')
+    ->distinct('transaction_id')
+    ->count('transaction_id');
+
     $user = Auth::user();
 
-    // ✅ Now pass $totalOrders to the view
-    return view('dashboard.retailer-orders', compact('orders', 'user', 'totalOrders'));
+return view('dashboard.retailer-orders', compact('orders', 'user', 'totalOrders', 'pendingOrders', 'completedOrders', 'cancelledOrders', 'deliveryOrders'));
 }
+
 
 
 public function show($transactionId)

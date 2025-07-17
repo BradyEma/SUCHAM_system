@@ -164,52 +164,61 @@
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
                 <!-- Stats Cards -->
+                 <p class="text-2x1 font-semibold text-primary-700 bg-primary-100 px-4 py-1 rounded-lg shadow-sm inline-block mb-5">
+    Total Orders: {{ $totalOrders }}
+</p>
+
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                   <div class="bg-white p-4 rounded-lg shadow border-l-4 border-primary-500">
+                    
+                  <div class="bg-white p-4 rounded-lg shadow border-l-4 border-blue-500">
     <div class="flex items-center justify-between">
         <div>
-            <p class="text-sm font-medium text-gray-500">Total Orders</p>
-            <p class="text-2xl font-bold">{{ $totalOrders }}</p>
+            <p class="text-sm font-medium text-gray-500">On Delivery</p>
+            <p class="text-2xl font-bold">{{ $deliveryOrders }}</p>
         </div>
-        <div class="bg-primary-100 p-3 rounded-full">
-            <i class="fas fa-shopping-cart text-primary-600"></i>
+        <div class="bg-blue-100 p-3 rounded-full">
+            <i class="fas fa-truck text-blue-600"></i>
         </div>
     </div>
 </div>
 
-                    <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Pending</p>
-                                <p class="text-2xl font-bold">8</p>
-                            </div>
-                            <div class="bg-yellow-100 p-3 rounded-full">
-                                <i class="fas fa-clock text-yellow-600"></i>
-                            </div>
-                        </div>
-                    </div>
+
+                   <div class="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-gray-500">Pending</p>
+            <p class="text-2xl font-bold">{{ $pendingOrders }}</p>
+        </div>
+        <div class="bg-yellow-100 p-3 rounded-full">
+            <i class="fas fa-clock text-yellow-600"></i>
+        </div>
+    </div>
+</div>
+
                     <div class="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Completed</p>
-                                <p class="text-2xl font-bold">12</p>
-                            </div>
-                            <div class="bg-green-100 p-3 rounded-full">
-                                <i class="fas fa-check-circle text-green-600"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-500">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500">Cancelled</p>
-                                <p class="text-2xl font-bold">4</p>
-                            </div>
-                            <div class="bg-red-100 p-3 rounded-full">
-                                <i class="fas fa-times-circle text-red-600"></i>
-                            </div>
-                        </div>
-                    </div>
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-gray-500">Completed</p>
+            <p class="text-2xl font-bold">{{ $completedOrders }}</p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+            <i class="fas fa-check-circle text-green-600"></i>
+        </div>
+    </div>
+</div>
+
+                   <div class="bg-white p-4 rounded-lg shadow border-l-4 border-red-500">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-gray-500">Cancelled</p>
+            <p class="text-2xl font-bold">{{ $cancelledOrders }}</p>
+        </div>
+        <div class="bg-red-100 p-3 rounded-full">
+            <i class="fas fa-times-circle text-red-600"></i>
+        </div>
+    </div>
+</div>
+
                 </div>
 
                 <!-- Orders Table -->
