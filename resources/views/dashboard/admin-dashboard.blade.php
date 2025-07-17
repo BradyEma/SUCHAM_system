@@ -471,12 +471,21 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.run.demand') }}">
-                        @csrf
-                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
-                            🔁 Run Demand Forecast Now
-                        </button>
-                    </form>
+                    <div class="flex justify-between items-center space-x-4 p-4">
+                        <form method="POST" action="{{ route('admin.run.demand') }}">
+                            @csrf
+                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
+                                🔁 Run Demand Forecast Now
+                            </button>
+                        </form>
+
+                        <a href="{{ route('admin.demand.export') }}" 
+                        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md">
+                            📄 Export Forecast as PDF
+                        </a>
+                    </div>
+
+
                 </div>
 
 

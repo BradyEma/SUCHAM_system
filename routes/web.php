@@ -29,6 +29,7 @@ use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\Admin\CustomerSegmentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Retailer\RetailerInventoryController;
+ use App\Http\Controllers\DemandForecastController;
 
 
 Route::get('/', fn () => view('welcome'));
@@ -174,6 +175,11 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
         ->middleware(['auth', 'role:admin'])
         ->name('admin.send.promo');
+
+    // route for the export button of forecast predictions
+    Route::get('/admin/export-demand-predictions', [DemandForecastController::class, 'exportPdf'])
+     ->name('admin.demand.export');
+
 
 Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
 Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
