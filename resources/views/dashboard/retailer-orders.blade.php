@@ -100,7 +100,7 @@
                     <a href="{{ route('retailer.inventory.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                         <i class="fas fa-boxes mr-3"></i>
                         <span class="nav-text">Inventory</span>
-                        <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto badge">5</span>
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ number_format($lowStockCount) }}</span>
                     </a>
                     
                     <!-- Orders -->
@@ -114,7 +114,6 @@
                     <a href="{{ route('chat.livewire') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                         <i class="fas fa-comment-dots mr-3"></i>
                         <span class="nav-text">Messages</span>
-                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto badge">2 unread</span>
                     </a>
                     
                     <!-- Support -->

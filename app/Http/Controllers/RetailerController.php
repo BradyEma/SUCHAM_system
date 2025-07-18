@@ -119,10 +119,25 @@ class RetailerController extends Controller
         ]);
     }
 
+   $lowStockCount = 0;
+
+if ($retailer) {
+    $retailerId = $retailer->id;
+
+    $lowStockCount = RetailerInventory::where('retailer_id', $retailerId)
+        ->whereColumn('quantity', '<', 'minimum_stock_level')
+        ->count();
+}
+
+$pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
     
-    return view('dashboard.retailer-profile', compact('user', 'retailer', 'profileIsComplete'));
+    return view('dashboard.retailer-profile', compact('user', 'retailer', 'profileIsComplete', 'lowStockCount', 'pendingOrders'));
 }
 
 

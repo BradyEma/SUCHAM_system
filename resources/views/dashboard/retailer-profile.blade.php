@@ -82,17 +82,17 @@
                         <a href="{{ route('retailer.inventory.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-boxes mr-3"></i>
                             Inventory
-                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">5</span>
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ number_format($lowStockCount) }}</span>
                         </a>
                         
                         <!-- Orders -->
                         <a href="{{ route('retailer.orders') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             My Orders
-                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ $pendingOrders }}</span>
                         </a>
                         
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('chat.livewire') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                                 <i class="fas fa-bell mr-3"></i>
                                 Messages
                         </a>

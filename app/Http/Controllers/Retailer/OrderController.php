@@ -48,9 +48,13 @@ class OrderController extends Controller
     ->distinct('transaction_id')
     ->count('transaction_id');
 
+    $lowStockCount = RetailerInventory::where('retailer_id', $retailerId)
+        ->whereColumn('quantity', '<', 'minimum_stock_level')
+        ->count();
+
     $user = Auth::user();
 
-return view('dashboard.retailer-orders', compact('orders', 'user', 'totalOrders', 'pendingOrders', 'completedOrders', 'cancelledOrders', 'deliveryOrders'));
+return view('dashboard.retailer-orders', compact('orders', 'user', 'totalOrders', 'pendingOrders', 'completedOrders', 'cancelledOrders', 'deliveryOrders', 'lowStockCount'));
 }
 
 
