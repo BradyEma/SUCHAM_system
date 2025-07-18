@@ -56,6 +56,15 @@ class RetailerController extends Controller
     ->orderBy('created_at', 'desc')
     ->limit(5)
     ->get();
+    
+     $lowStockCount = RetailerInventory::where('retailer_id', $retailerId)
+        ->whereColumn('quantity', '<', 'minimum_stock_level')
+        ->count();
+
+    $pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
 
 
     $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailerId)->count();
@@ -85,7 +94,7 @@ class RetailerController extends Controller
    return view('dashboard.retailer-dashboard', compact(
     'user', 'retailer', 'profileIsComplete', 'totalOrders',
     'totalProducts', 'pendingOrders', 'monthlySales', 'topProducts', 'range',
-    'recentOrders'
+    'recentOrders', 'lowStockCount', 'pendingOrders'
 ));
 
 }

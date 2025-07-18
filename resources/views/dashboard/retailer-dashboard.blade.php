@@ -85,20 +85,20 @@
                         <a href="{{ route('retailer.inventory.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-boxes mr-3"></i>
                             Inventory
-                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">5</span>
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ number_format($lowStockCount) }}</span>
                         </a>
                         
                         <!-- Orders -->
                         <a href="{{ route('retailer.orders') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             My Orders
-                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
+                            <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ $pendingOrders }}</span>
                         </a>
                         
                        <a href="{{ route('chat.livewire') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
     <i class="fas fa-comment-dots mr-3"></i>
     <span>Messages</span>
-    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+    
 </a>
                         
                         <!-- Support -->
@@ -273,9 +273,11 @@
                             <h2 class="text-2xl font-bold mb-2">Welcome back, {{ $user->name }}!</h2>
                             <p class="opacity-90">Here's your retail performance overview and quick actions.</p>
                         </div>
-                        <button class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
-                            <i class="fas fa-download mr-2"></i> Download Reports
-                        </button>
+                        <a href="{{ route('retailer.orders') }}">
+                            <button class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
+                                <i class="fas fa-eye mr-2"></i> View Reports
+                            </button>
+                        </a>
                     </div>
                 </div>
 
@@ -499,39 +501,13 @@
                         
                         <!-- Inventory Alerts -->
                         <div class="mt-6 pt-6 border-t border-gray-200">
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">Inventory Alerts</h4>
-                            <div class="space-y-3">
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 mt-1">
-                                        <span class="h-2 w-2 rounded-full bg-red-500"></span>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-gray-700">Golden Sugar 5kg - <span class="font-medium">Low stock (3 left)</span></p>
-                                        <p class="text-xs text-gray-500">Reorder now to avoid stockout</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 mt-1">
-                                        <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-gray-700">Organic Molasses 1L - <span class="font-medium">Running low (7 left)</span></p>
-                                        <p class="text-xs text-gray-500">Consider reordering soon</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start">
-                                    <div class="flex-shrink-0 mt-1">
-                                        <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm text-gray-700">Brown Sugar 2kg - <span class="font-medium">Running low (5 left)</span></p>
-                                        <p class="text-xs text-gray-500">Consider reordering soon</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="mt-4 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-secondary-600 hover:bg-secondary-700">
-                                <i class="fas fa-box-open mr-2"></i> Manage Inventory
-                            </button>
+                           
+                               
+                            <a href="{{ route('retailer.inventory.index') }}">
+                                <button class="mt-4 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-secondary-700">
+                                    <i class="fas fa-box-open mr-2"></i> Manage Inventory
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
