@@ -398,72 +398,61 @@
                     <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-medium text-gray-900">Recent Orders</h3>
-                            <a href="#" class="text-sm font-medium text-primary-600 hover:text-primary-500">View all orders</a>
+                            <a href="{{ route('retailer.orders') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">View all orders</a>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th scope="col" class="relative px-6 py-3"><span class="sr-only">Action</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-2107</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 15, 2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1,245</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Delivered</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-2106</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 12, 2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">5</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$845</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Shipped</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-2105</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 10, 2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$1,980</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Processing</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-2104</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jun 8, 2023</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">3</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$420</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Cancelled</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order</th>
+                    <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                    <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Items</th>
+                    <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Total (UGX)</th>
+                    <th scope="col" class="px-6 py-3.5 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @forelse($recentOrders as $order)
+                <tr class="hover:bg-gray-50 transition-colors duration-100">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ $order->transaction_id }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-700">{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm text-gray-700">{{ $order->total_quantity }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-semibold text-gray-900">{{ number_format($order->total_amount) }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @php
+                            $colors = [
+                                'pending' => 'bg-yellow-100 text-yellow-800',
+                                'processing' => 'bg-blue-100 text-blue-800',
+                                'completed' => 'bg-green-100 text-green-800',
+                                'cancelled' => 'bg-red-100 text-red-800',
+                            ];
+                            $statusColor = $colors[$order->status] ?? 'bg-gray-100 text-gray-800';
+                        @endphp
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColor }}">
+                            {{ ucfirst($order->status) }}
+                        </span>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+                        No recent orders available
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
                     </div>
                     
                     <!-- Quick Actions -->

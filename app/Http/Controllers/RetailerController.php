@@ -43,6 +43,20 @@ class RetailerController extends Controller
         ->whereMonth('created_at', Carbon::now()->month)
         ->whereYear('created_at', Carbon::now()->year)
         ->sum('total');
+    
+   $recentOrders = RetailerOrder::select(
+        'transaction_id',
+        DB::raw('SUM(quantity) as total_quantity'),
+        DB::raw('SUM(total) as total_amount'),
+        'status',
+        'created_at'
+    )
+    ->where('retailer_id', $retailerId)
+    ->groupBy('transaction_id', 'status', 'created_at')  // group by transaction_id + fields you select
+    ->orderBy('created_at', 'desc')
+    ->limit(5)
+    ->get();
+
 
     $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailerId)->count();
 
@@ -68,10 +82,12 @@ class RetailerController extends Controller
         ->limit(5)
         ->get();
 
-    return view('dashboard.retailer-dashboard', compact(
-        'user', 'retailer', 'profileIsComplete', 'totalOrders',
-        'totalProducts', 'pendingOrders', 'monthlySales', 'topProducts', 'range'
-    ));
+   return view('dashboard.retailer-dashboard', compact(
+    'user', 'retailer', 'profileIsComplete', 'totalOrders',
+    'totalProducts', 'pendingOrders', 'monthlySales', 'topProducts', 'range',
+    'recentOrders'
+));
+
 }
 
 
