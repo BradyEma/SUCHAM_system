@@ -79,6 +79,8 @@ class RetailerController extends Controller
 
 
 
+
+
   public function showProfileForm()
 {
     $user = auth()->user(); // ← Add this

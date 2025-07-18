@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retailer Dashboard | GoldenFields Agro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -359,14 +361,15 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-medium text-gray-900">Sales Performance</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>Last 7 days</option>
-                                <option selected>Last 30 days</option>
-                                <option>Last 90 days</option>
-                            </select>
+                           <select id="salesRange" class="...">
+    <option value="7">Last 7 days</option>
+    <option value="30" selected>Last 30 days</option>
+    <option value="90">Last 90 days</option>
+</select>
+
                         </div>
                         <div class="h-64">
-                            <canvas id="salesChart"></canvas>
+                            <canvas id="salesChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
                     
@@ -560,41 +563,61 @@
         // Initialize charts
         document.addEventListener('DOMContentLoaded', function() {
             // Sales Chart
-            const salesCtx = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(salesCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Sales ($)',
-                        data: [4500, 5200, 4800, 6200, 7500, 8200, 9500],
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderColor: 'rgba(34, 197, 94, 1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
+           const salesCtx = document.getElementById('salesChart').getContext('2d');
+    let salesChart;
+
+    async function fetchSalesData(range = '30') {
+        const response = await fetch(`/retailer/sales-chart-data?range=${range}`);
+        const data = await response.json();
+
+        const labels = data.map(item => item.date);
+        const values = data.map(item => item.total_sales);
+
+        if (salesChart) {
+            salesChart.destroy();
+        }
+
+        salesChart = new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales (UGX)',
+                    data: values,
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'UGX ' + value.toLocaleString();
                             }
                         }
                     }
                 }
-            });
+            }
+        });
+    }
+
+    document.getElementById('salesRange').addEventListener('change', function () {
+        fetchSalesData(this.value);
+    });
+
+    // Load default
+    fetchSalesData('30');
+
 
             // Products Chart
            const productsChart = new Chart(document.getElementById('productsChart').getContext('2d'), {

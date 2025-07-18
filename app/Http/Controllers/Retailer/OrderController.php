@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\RetailerOrder;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RetailerInventory;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -111,6 +112,41 @@ public function markAsCompleted($transactionId)
 
    return redirect('/retailer/orders')->with('success', 'Order marked as Completed.');
 
+}
+
+public function salesChartData(Request $request)
+{
+    $retailerId = auth()->user()->retailer->id;
+    $range = $request->get('range', '30'); // default 30 days
+
+    $query = DB::table('retailer_orders')
+        ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(total) as total_sales'))
+        ->where('retailer_id', $retailerId)
+        ->where('status', 'completed');
+
+    // Filter date range
+    if ($range == '7') {
+        $query->whereBetween('created_at', [now()->subDays(7), now()]);
+    } elseif ($range == '30') {
+        $query->whereBetween('created_at', [now()->subDays(30), now()]);
+    } elseif ($range == '90') {
+        $query->whereBetween('created_at', [now()->subDays(90), now()]);
+    }
+
+    $salesData = $query
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderBy('date')
+        ->get();
+
+    // Format data for chart
+    $formatted = $salesData->map(function ($item) {
+        return [
+            'date' => $item->date,
+            'total_sales' => (int) $item->total_sales,
+        ];
+    });
+
+    return response()->json($formatted);
 }
 
 
