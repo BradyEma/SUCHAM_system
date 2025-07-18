@@ -6,11 +6,11 @@
 <div class="w-full">
 
     {{-- Flash Message --}}
-    @if(session('success'))
+    {{-- @if(session('success'))
         <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-6 border border-green-300 mx-4">
             {{ session('success') }}
         </div>
-    @endif
+    @endif --}}
 
     {{-- Page Heading --}}
     <div class="flex justify-between items-center px-6 py-4 border-b">

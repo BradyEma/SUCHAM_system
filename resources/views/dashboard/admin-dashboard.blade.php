@@ -455,34 +455,152 @@
 
                 <!-- Charts Row -->
                 <div class="w-full mb-6">
+                    <!-- dropdown for the Forecast Chart containing time frames -->
+                    
                     <!-- Forecasted Sugar Demand -->
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">📈 Forecasted Sugar Demand</h3>
+                            <h3 class="text-lg font-medium text-gray-900">Demand Forecast</h3>
+
+                            <div class="flex gap-2">
+                                <select id="productFilter" class="border rounded p-1 text-sm">
+                                    <option value="all">All Products</option>
+                                </select>
+
+                                <select id="granularityFilter" class="border rounded p-1 text-sm">
+                                    <option value="month" selected>Monthly</option>
+                                    <option value="year">Yearly</option>
+                                    <option value="week">Weekly</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="relative w-full" style="height: 400px;">
-                            <canvas id="demandChart" class="w-full h-full"></canvas>
+                        <div class="h-96">
+                            <canvas id="forecastChart" class="w-full h-full">></canvas>
                         </div>
                     </div>
+
+
+                    @push('scripts')
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                    let chart;
+
+                    async function loadChart(product = 'all', granularity = 'month') {
+                        const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
+                        const data = await res.json();
+
+                        const filtered = product === 'all'
+                            ? data
+                            : data.filter(row => row.product === product);
+
+                        const labels = [...new Set(filtered.map(row => row.period))].sort();
+
+                        const historical = labels.map(label => {
+                            const row = filtered.find(r => r.period === label && r.type === 'historical');
+                            return row ? +row.quantity : null;
+                        });
+
+                        const forecast = labels.map(label => {
+                            const row = filtered.find(r => r.period === label && r.type === 'forecast');
+                            return row ? +row.quantity : null;
+                        });
+
+                        const ctx = document.getElementById('forecastChart').getContext('2d');
+                        if (chart) chart.destroy();
+
+                        chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels,
+                                datasets: [
+                                    {
+                                        label: 'Historical Demand',
+                                        data: historical,
+                                        borderColor: '#3B82F6',
+                                        backgroundColor: '#3B82F6',
+                                        tension: 0.4,
+                                    },
+                                    {
+                                        label: 'Forecasted Demand',
+                                        data: forecast,
+                                        borderColor: '#F59E0B',
+                                        backgroundColor: '#F59E0B',
+                                        borderDash: [5, 5],
+                                        tension: 0.4,
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: { display: true, text: 'Quantity' }
+                                    },
+                                    x: {
+                                        title: { display: true, text: granularity.charAt(0).toUpperCase() + granularity.slice(1) }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Populate product filter dynamically
+                    async function loadProductFilter() {
+                        const res = await fetch(`/admin/demand-predictions`);
+                        const data = await res.json();
+                        const products = [...new Set(data.map(r => r.product))];
+
+                        const select = document.getElementById('productFilter');
+                        select.innerHTML = '<option value="all">All Products</option>';
+                        products.forEach(p => {
+                            const option = document.createElement('option');
+                            option.value = p;
+                            option.textContent = p;
+                            select.appendChild(option);
+                        });
+                    }
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        loadProductFilter().then(() => loadChart());
+
+                        document.getElementById('productFilter').addEventListener('change', e => {
+                            loadChart(e.target.value, document.getElementById('granularityFilter').value);
+                        });
+
+                        document.getElementById('granularityFilter').addEventListener('change', e => {
+                            loadChart(document.getElementById('productFilter').value, e.target.value);
+                        });
+                    });
+                    </script>
+                @endpush
+
+
+
                     {{-- forecast button --}}
-                    @if (session('success'))
-                        <div class="p-3 mb-4 bg-green-100 text-green-800 rounded">
-                            {{ session('success') }}
-                        </div>
+                    @if(session('success'))
+                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mt-2">{!! session('success') !!}</div>
                     @endif
-
+                    @if(session('error'))
+                        <div class="bg-red-100 text-red-700 px-4 py-2 rounded mt-2">{!! session('error') !!}</div>
+                    @endif
+                    
                     <div class="flex justify-between items-center space-x-4 p-4">
-                        <form method="POST" action="{{ route('admin.run.demand') }}">
-                            @csrf
-                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
-                                🔁 Run Demand Forecast Now
-                            </button>
-                        </form>
+                        <div class="flex justify-end mb-4">
+                            <form method="POST" action="{{ route('generate.forecast') }}">
+                                @csrf
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm">
+                                    🔄 Generate Forecast Now
+                                </button>
+                            </form>
+                        </div>
 
-                        <a href="{{ route('admin.demand.export') }}" 
-                        class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md">
-                            📄 Export Forecast as PDF
+
+                        <a href="{{ route('forecast.pdf') }}" target="_blank"
+                            class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm ml-2">
+                                🧾 Export Forecast PDF
                         </a>
+
                     </div>
 
 
@@ -672,87 +790,9 @@
             document.getElementById('mobile-sidebar').classList.add('hidden');
         });
 
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Orders Chart
-            const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-            const ordersChart = new Chart(ordersCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Orders',
-                        data: [65, 59, 80, 81, 56, 55, 90],
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderColor: 'rgba(34, 197, 94, 1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Revenue Chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['North', 'South', 'East', 'West', 'Central'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: [125000, 98000, 75000, 110000, 85000],
-                        backgroundColor: [
-                            'rgba(249, 115, 22, 0.7)',
-                            'rgba(34, 197, 94, 0.7)',
-                            'rgba(59, 130, 246, 0.7)',
-                            'rgba(234, 88, 12, 0.7)',
-                            'rgba(139, 92, 246, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(249, 115, 22, 1)',
-                            'rgba(34, 197, 94, 1)',
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(234, 88, 12, 1)',
-                            'rgba(139, 92, 246, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
+            
     </script>
+    @stack('scripts') 
+
 </body>
 </html>

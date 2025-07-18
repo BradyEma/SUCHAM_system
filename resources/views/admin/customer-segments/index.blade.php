@@ -99,11 +99,11 @@
                         </a>
 
                         {{-- Customer Segments for machine learning --}}
-                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                             <i class="fas fa-chart-pie w-5 text-center"></i>
                             <span>Customer Segments</span>
                         </a>
-                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item ">
                             <i class="fas fa-question-circle w-5 text-center"></i>
                             <span>Support Center</span>
                         </a>
@@ -151,12 +151,15 @@
             </div>
 
             <!-- Chart -->
-            <div class="bg-white p-6 rounded shadow mb-6">
-                <h3 class="text-lg font-medium text-gray-800 mb-4">Customer Segment Distribution</h3>
-                <div class="w-full max-w-xs mx-auto">
-                    <canvas id="segmentChart" height="120"></canvas>
+            <div class="bg-white p-8 rounded-2xl shadow-lg mb-8 w-full max-w-3xl mx-auto">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-6">
+                    Customer Segment Distribution
+                </h3>
+                <div class="relative w-full h-96">
+                    <canvas id="segmentChart" class="absolute top-0 left-0 w-full h-full"></canvas>
                 </div>
             </div>
+
 
             <!-- Action Buttons -->
             <div class="bg-white p-4 rounded shadow mb-6 flex gap-4">

@@ -14,7 +14,7 @@ use App\Http\Controllers\WholesalerController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
-
+use App\Http\Controllers\Admin\CustomerSegmentController;
 use Illuminate\Support\Facades\Mail;
 use App\Models\SupportTicket;
 use App\Mail\SupportTicketReplyMail;
@@ -26,10 +26,15 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\SupplierRegisterController;
 use App\Http\Controllers\VendorValidationController;
-use App\Http\Controllers\Admin\CustomerSegmentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;
- use App\Http\Controllers\DemandForecastController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;  
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Controllers\ML\ForecastExportController;
+
+
+
+
 
 
 Route::get('/', fn () => view('welcome'));
@@ -161,6 +166,7 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
     });
+
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
@@ -171,14 +177,23 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Artisan::call('ml:run-demand-prediction');
         return redirect()->back()->with('success', 'Demand forecast updated successfully.');
     })->middleware(['auth', 'role:admin'])->name('admin.run.demand');
+    // Route for demand predictions
+    Route::get('/admin/demand-predictions', [AdminController::class, 'demandPredictions'])->name('admin.demand.predictions');
+    // Route for demand predictions button
+
+        Route::post('/generate-forecast', [ForecastController::class, 'generate'])->name('generate.forecast');
+
+        // route for the export button of forecast predictions
+        Route::get('/forecast-pdf', [ForecastExportController::class, 'download'])->name('forecast.pdf');
+
+
+//customer segments updated routes
+
 //promo email button
     Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
         ->middleware(['auth', 'role:admin'])
         ->name('admin.send.promo');
 
-    // route for the export button of forecast predictions
-    Route::get('/admin/export-demand-predictions', [DemandForecastController::class, 'exportPdf'])
-     ->name('admin.demand.export');
 
 
 Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
@@ -200,33 +215,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
 });
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
-//     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
-//     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
-
-//     // Admin-only
-//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])
-//     ->middleware('can:isAdmin')
-//     ->name('support.reply');
-    
-
-//     // UI improved placeholder
-//     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
-//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
-
-//     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])
-//         ->name('support.updateStatus');
-
-// });
-// reexamine this section
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
-//     Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
-//     Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
-//     Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->name('support.reply');
-// });
 
 
 // Auth routes

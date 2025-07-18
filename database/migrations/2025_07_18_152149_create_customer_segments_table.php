@@ -9,14 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('customer_segments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->unique();
-            $table->integer('order_amount');
+            $table->unsignedBigInteger('customer_id');
+            $table->string('customers_email');
+            $table->decimal('order_amount', 12, 2);
             $table->integer('order_count');
-            $table->integer('cluster'); // segment 0, 1, or 2
+            $table->integer('cluster');
+            $table->string('label');
             $table->timestamps();
         });
     }
