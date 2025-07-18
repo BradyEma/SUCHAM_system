@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class PurchaseOrder extends Model
 {
      protected $fillable = [
+        'po_number',
         'supplier_id', 
         'requested_by', 
         'order_date',
-         'status'
+        'delivery_date',
+        'total_amount',
+         'status',
+         'notes',
         ];
 
         public function procurementRequest() {

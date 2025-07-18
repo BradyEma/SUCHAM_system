@@ -35,8 +35,8 @@
         <!-- Header -->
         <div class="row mb-4">
             <div class="col">
-                <h2 class="gold-text">Create New Purchase Order</h2>
-                <a href="{{ route('purchase-orders.index') }}" class="btn btn-sm gold-border gold-text">
+                <h2 class="black-text">Create New Purchase Order</h2>
+                <a href="{{ route('purchase-orders.index') }}" class="btn btn-sm gold-border black-text">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
             </div>
@@ -48,15 +48,15 @@
                 <form action="{{ route('purchase-orders.store') }}" method="POST">
                     @csrf
 
-                    <!-- Vendor Selection -->
+                    <!-- supplier Selection -->
                     <div class="form-group mb-4">
-                        <label class="green-text fw-bold">Vendor</label>
-                        <select class="form-control gold-border" name="vendor_id">
-                            @foreach($vendors as $vendor)
-                                <option value="{{ $vendor->id }}">{{ $vendor->name }}</option>
+                        <label class="green-text fw-bold">Supplier</label>
+                        <select class="form-control gold-border" name="supplier_id">
+                            @foreach($suppliers as $supplier)
+                                <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                             @endforeach
                         </select>
-                        <small class="text-muted">Can't find a vendor? <a href="#" class="green-text">Add New</a></small>
+                        <small class="text-muted">Can't find a supplier? <a href="#" class="green-text">Add New</a></small>
                     </div>
 
                     <!-- Order Details -->

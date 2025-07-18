@@ -25,6 +25,10 @@ return new class extends Migration
     $table->string('TIN')->nullable();
     $table->string('document_path')->nullable();
 
+     // File upload field (e.g. for PDFs)
+        $table->string('document_path')->nullable();      // this will store the path to uploaded PDF
+
+
     $table->timestamps();
 });
 

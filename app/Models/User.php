@@ -59,7 +59,28 @@ class User extends Authenticatable
    
      public function retailer()
 {
-    return $this->hasOne(\App\Models\Retailer::class);
+    return $this->hasOne(Retailer::class);
+}
+
+public function isOnline()
+{
+    return $this->last_seen && $this->last_seen->gt(now()->subMinutes(5));
+}
+
+public function canChatWith(User $otherUser): bool
+{
+    if ($this->role === 'admin') {
+        return true; // admin can talk to anyone
+    }
+
+    $allowedChat = [
+        'supplier'   => ['admin'],
+        'wholesaler' => ['admin', 'retailer'],
+        'retailer'   => ['admin', 'wholesaler', 'customer'],
+        'customer'   => ['admin', 'retailer'],
+    ];
+
+    return in_array($otherUser->role, $allowedChat[$this->role] ?? []);
 }
 
 }

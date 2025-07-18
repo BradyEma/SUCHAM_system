@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,65 +63,58 @@
                 <!-- Logo -->
                 <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
                     <div class="flex items-center space-x-2">
-                        <i class="fas fa-leaf text-accent-400 text-xl"></i>
+                        <i class="fas fa-leaf text-yellow-500 text-xl"></i>
                         <span class="text-xl font-bold">GoldenFields</span>
-                        <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
+                        <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-2">ADMIN</span>
                     </div>
                 </div>
                 
                 <!-- User Profile -->
-                <div class="p-4 border-b border-primary-700 flex items-center space-x-3">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Admin" class="h-10 w-10 rounded-full border-2 border-yellow-400">
-                    <div>
-                        <p class="font-medium">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-primary-200">Super Admin</p>
-                    </div>
-                </div>
+               
                 
                 <!-- Main Navigation -->
                 <div class="flex-1 overflow-y-auto py-4">
-       <nav class="flex-1 p-4 space-y-2">
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-            <i class="fas fa-tachometer-alt w-5 text-center"></i>
-            <span>Activity</span>
-           
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-boxes w-5 text-center"></i>
-            <span>Inventory</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-clipboard-list w-5 text-center"></i>
-            <span>Order Management</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-shopping-cart w-5 text-center"></i>
-            <span>Procurement</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-comment-dots w-5 text-center"></i>
-            <span>Chat</span>
-            <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-truck w-5 text-center"></i>
-            <span>Logistics</span>
-        </a>
-        
-        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-            <i class="fas fa-cog w-5 text-center"></i>
-            <span>Settings</span>
-        </a>
-    </nav>
-</div>
-                    
-                  
-                
+
+                    <nav class="flex-1 p-4 space-y-2">
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                            <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                            <span>Activity</span>
+                        
+                        </a>
+                        
+                        <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-boxes w-5 text-center"></i>
+                            <span>Inventory</span>
+                     </a>
+                        
+                        <a href="{{ route('admin.procurement.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-shopping-cart w-5 text-center"></i>
+                            <span>Procurement</span>
+                        </a>
+                        
+                       <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-comment-dots w-5 text-center"></i>
+                            <span>Chat</span>
+                            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Logistics</span>
+                        </a>
+
+                        {{-- Customer Segments for machine learning --}}
+                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-chart-pie w-5 text-center"></i>
+                            <span>Customer Segments</span>
+                        </a>
+
+                        <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Profile</span>
+                        </a>
+
+                       
                
             </div>
         </div>
@@ -169,8 +164,8 @@
                         </div>
                         <div class="relative">
                             <button class="flex items-center space-x-2 focus:outline-none" id="user-menu-button">
-                                <span class="text-sm font-medium text-gray-700 hidden md:inline">Admin User</span>
-                                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User avatar">
+                                <span class="text-sm font-medium text-gray-700 hidden md:inline">Admin</span>
+<img class="h-8 w-8 rounded-full -ml-4" src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="User avatar">
                             </button>
                         </div>
                     </div>
@@ -184,7 +179,7 @@
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h2 class="text-3xl font-bold text-white-800">Welcome, {{ Auth::user()->name }}!</h2>
+                            <h2 class="text-3xl font-bold text-white-800">Welcome Admin, {{ Auth::user()->name }}!</h2>
                             <p class="opacity-90">Here's what's happening with your agro business today.</p>
                         </div>
                         <button class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
@@ -255,6 +250,125 @@
         </table>
     </div>
 </section>
+
+<div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 mb-10">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-primary-500">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Vendor Name
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Validation Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Details
+                    </th>
+                    <th scope="col" class="px-2 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach ($suppliers as $supplier)
+               @php
+    $supplierUserId = $supplier->user_id;
+    $validation = $validations[$supplierUserId] ?? null;
+    $response = $validation && $validation->validation_result 
+        ? json_decode($validation->validation_result, true) 
+        : null;
+
+    if (is_string($response)) {
+        $response = json_decode($response, true); // double-decoding safeguard
+    }
+@endphp
+
+
+
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                                <span class="text-primary-600 font-medium">{{ strtoupper(substr($supplier->user->name, 0, 1)) }}</span>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">{{ $supplier->user->name }}</div>
+                                <div class="text-sm text-gray-500">{{ $supplier->user->email }}</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        @if ($response)
+                            @if ($response['success'])
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i> Approved
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    <i class="fas fa-times-circle mr-1"></i> Rejected
+                                </span>
+                            @endif
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                <i class="fas fa-clock mr-1"></i> Pending
+                            </span>
+                        @endif
+                    </td>
+
+   
+
+<td class="px-6 py-4">
+   
+
+   
+    @if ($validation)
+        @if (is_array($response) && isset($response['success']) && $response['success'] === true)
+            <div class="text-sm text-green-600">
+                <i class="fas fa-calendar-check mr-2"></i>
+                Visit scheduled:
+                <span class="font-medium">
+                    {{ $validation->visit_date ? \Carbon\Carbon::parse($validation->visit_date)->format('F j, Y') : 'Pending date confirmation' }}
+                </span>
+            </div>
+        @elseif (is_array($response) && isset($response['success']) && $response['success'] === false)
+            <div class="text-sm font-medium text-red-600">
+                Insufficient requirements
+            </div>
+        @else
+            <div class="text-sm font-medium text-red-600">
+                Malformed or missing validation response
+            </div>
+        @endif
+    @else
+        <div class="text-sm text-gray-500 italic">
+            No validation data submitted yet.
+        </div>
+    @endif
+</td>
+
+
+
+
+
+
+
+                    <td class="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-primary-600 hover:text-primary-900 mr-3">
+                            <i class="fas fa-eye mr-1"></i> View
+                        </a>
+                        
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    
+</div>
+
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <!-- Total Orders -->
@@ -335,37 +449,63 @@
                 </div>
 
                 <!-- Charts Row -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Orders Chart -->
+                <div class="w-full mb-6">
+                    <!-- Forecasted Sugar Demand -->
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Order Trends</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>Last 7 days</option>
-                                <option selected>Last 30 days</option>
-                                <option>Last 90 days</option>
-                            </select>
+                            <h3 class="text-lg font-medium text-gray-900">📈 Forecasted Sugar Demand</h3>
                         </div>
-                        <div class="h-64">
-                            <canvas id="ordersChart"></canvas>
+                        <div class="relative w-full" style="height: 400px;">
+                            <canvas id="demandChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
-                    
-                    <!-- Revenue Chart -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Revenue Breakdown</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>By Product</option>
-                                <option selected>By Region</option>
-                                <option>By Supplier</option>
-                            </select>
+                    {{-- forecast button --}}
+                    @if (session('success'))
+                        <div class="p-3 mb-4 bg-green-100 text-green-800 rounded">
+                            {{ session('success') }}
                         </div>
-                        <div class="h-64">
-                            <canvas id="revenueChart"></canvas>
-                        </div>
-                    </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.run.demand') }}">
+                        @csrf
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
+                            🔁 Run Demand Forecast Now
+                        </button>
+                    </form>
                 </div>
+
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    const demandCtx = document.getElementById('demandChart').getContext('2d');
+
+                    new Chart(demandCtx, {
+                        type: 'line',
+                        data: {
+                            labels: {!! json_encode($forecastLabels) !!},
+                            datasets: [{
+                                label: 'Predicted Quantity (KG)',
+                                data: {!! json_encode($forecastData) !!},
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                                fill: true,
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false, // important for full container usage
+                            responsive: true,
+                            plugins: {
+                                legend: { display: true },
+                                title: {
+                                    display: true,
+                                    text: 'Projected Sugar Demand by Month'
+                                }
+                            }
+                        }
+                    });
+                </script>
+
 
                 <!-- Recent Activity & Quick Actions -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

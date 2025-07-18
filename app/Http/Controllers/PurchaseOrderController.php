@@ -3,102 +3,102 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseOrder;
+use App\Models\Supplier; // ✅ Moved here correctly
 use Illuminate\Http\Request;
+use App\Models\PurchaseOrderItem;
 
 class PurchaseOrderController extends Controller
 {
     public function index()
     {
-        // Fetch purchase orders without vendor relationship
-        $purchaseOrders = PurchaseOrder::orderBy('created_at', 'desc')
-            ->paginate(10); // 10 items per page
-        
-        // Pass the variable to the view
+        $purchaseOrders = PurchaseOrder::orderBy('created_at', 'desc')->paginate(10);
         return view('purchase_orders.index', compact('purchaseOrders'));
     }
-    
-    /**
-     * Show the form for creating a new purchase order.
-     */
+
     public function create()
     {
-        return view('purchase_orders.create');
+        $suppliers = Supplier::all(); // Now it will work correctly
+        return view('purchase_orders.create', compact('suppliers'));
     }
-    
-    /**
-     * Store a newly created purchase order in storage.
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'supplier_name' => 'required|string|max:255',
-            'order_date' => 'required|date',
-            'total_amount' => 'required|numeric|min:0',
-            'status' => 'required|in:pending,approved,rejected',
-            'description' => 'nullable|string',
-            'notes' => 'nullable|string',
+
+
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'supplier_id' => 'required|exists:suppliers,id',
+        'order_date' => 'required|date',
+        'delivery_date' => 'nullable|date',
+        'notes' => 'nullable|string',
+        'items' => 'required|array|min:1',
+        'items.*.name' => 'required|string|max:255',
+        'items.*.quantity' => 'required|integer|min:1',
+        'items.*.unit_price' => 'required|numeric|min:0',
+    ]);
+
+    // Calculate total amount
+    $totalAmount = collect($validated['items'])->reduce(function ($carry, $item) {
+        return $carry + ($item['quantity'] * $item['unit_price']);
+    }, 0);
+
+    // Generate PO number
+    $poNumber = 'PO-' . date('Y') . '-' . str_pad(PurchaseOrder::count() + 1, 4, '0', STR_PAD_LEFT);
+
+    // Create the purchase order
+    $purchaseOrder = PurchaseOrder::create([
+        'po_number' => $poNumber,
+        'supplier_id' => $validated['supplier_id'],
+        'order_date' => $validated['order_date'],
+        'delivery_date' => $validated['delivery_date'] ?? null,
+        'notes' => $validated['notes'] ?? null,
+        'total_amount' => $totalAmount,
+        'status' => 'pending', // default
+    ]);
+
+    // Save items
+    foreach ($validated['items'] as $item) {
+        $purchaseOrder->items()->create([
+            'product_name' => $item['product_name'],
+            'quantity' => $item['quantity'],
+            'unit_price' => $item['unit_price'],
+            'total_price' => $item['quantity'] * $item['unit_price'],
         ]);
-        
-        // Generate PO number (you can customize this logic)
-        $poNumber = 'PO-' . date('Y') . '-' . str_pad(PurchaseOrder::count() + 1, 4, '0', STR_PAD_LEFT);
-        
-        $purchaseOrder = PurchaseOrder::create([
-            'po_number' => $poNumber,
-            'supplier_name' => $validated['supplier_name'],
-            'order_date' => $validated['order_date'],
-            'total_amount' => $validated['total_amount'],
-            'status' => $validated['status'],
-            'description' => $validated['description'] ?? null,
-            'notes' => $validated['notes'] ?? null,
-        ]);
-        
+    }
+
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Purchase order created successfully.');
     }
-    
-    /**
-     * Display the specified purchase order.
-     */
+
     public function show(PurchaseOrder $purchaseOrder)
     {
         return view('purchase_orders.show', compact('purchaseOrder'));
     }
-    
-    /**
-     * Show the form for editing the specified purchase order.
-     */
+
     public function edit(PurchaseOrder $purchaseOrder)
     {
         return view('purchase_orders.edit', compact('purchaseOrder'));
     }
-    
-    /**
-     * Update the specified purchase order in storage.
-     */
+
     public function update(Request $request, PurchaseOrder $purchaseOrder)
     {
         $validated = $request->validate([
             'supplier_name' => 'required|string|max:255',
             'order_date' => 'required|date',
+            'delivery_date' => 'required|date',
             'total_amount' => 'required|numeric|min:0',
             'status' => 'required|in:pending,approved,rejected',
             'description' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
-        
+
         $purchaseOrder->update($validated);
-        
+
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Purchase order updated successfully.');
     }
-    
-    /**
-     * Remove the specified purchase order from storage.
-     */
+
     public function destroy(PurchaseOrder $purchaseOrder)
     {
         $purchaseOrder->delete();
-        
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Purchase order deleted successfully.');
     }

@@ -1,3 +1,5 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,12 +61,15 @@
                     <span>Orders</span>
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">3 new</span>
                 </a>
-                <a href="{{ route('supplier.inventory') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+
+               
+
+                <a href="{{ route('supplier.products') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span>Inventory</span>
                 </a>
                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
@@ -78,10 +83,12 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-8 overflow-auto">
+          
+
          
 @if (!$supplier)
     <div class="bg-blue-100 text-blue-800 p-4 mb-4 border-l-4 border-blue-500">
-        ⚠️ Please fill in your Business details in <a href="{{ route('supplier.profile') }}" class="underline font-medium">Profile</a> to continue.
+        ⚠️ Please fill in your Business and Vendor Validation details in <a href="{{ route('supplier.profile') }}" class="underline font-medium">Profile</a> to continue.
     </div>
 @elseif ($supplier && $supplier->status === 'active')
     <div id="approval-notification" class="bg-green-100 text-green-800 p-4 mb-4 border-l-4 border-green-500 flex justify-between items-center">

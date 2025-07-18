@@ -10,7 +10,8 @@ class PurchaseOrderItem extends Model
         'purchase_order_id', 
         'product_name',
          'quantity',
-        'unit_price'
+        'unit_price',
+        'total_price',
     ];
 public function purchaseOrder() {
     return $this->belongsTo(PurchaseOrder::class);
