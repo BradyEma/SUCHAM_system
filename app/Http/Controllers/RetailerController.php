@@ -9,12 +9,13 @@ use App\Models\RetailerInventory;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RetailerOrder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 
 class RetailerController extends Controller
 {
-   public function dashboard()
+  public function dashboard()
 {
     $user = auth()->user();
     $retailer = $user->retailer;
@@ -26,31 +27,52 @@ class RetailerController extends Controller
         ]);
     }
 
-    $totalOrders = \App\Models\RetailerOrder::where('retailer_id', $retailer->id)
+    $retailerId = $retailer->id;
+
+    $totalOrders = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
         ->distinct('transaction_id')
         ->count('transaction_id');
     
-    $pendingOrders = RetailerOrder::where('retailer_id', $retailer->id)
-    ->where('status', 'pending')
-    ->distinct('transaction_id')
-    ->count('transaction_id');
+    $pendingOrders = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
 
-    $monthlySales = RetailerOrder::where('retailer_id', $retailer->id)
+    $monthlySales = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
         ->where('status', 'completed')
         ->whereMonth('created_at', Carbon::now()->month)
         ->whereYear('created_at', Carbon::now()->year)
         ->sum('total');
 
-
-    $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailer->id)->count();
+    $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailerId)->count();
 
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
+    // 🔽 Range selection logic for top products
+    $range = request('range', 'month'); // default to "month"
+
+    $query = DB::table('retailer_orders')
+        ->select('product_name', DB::raw('SUM(quantity) as total_quantity'))
+        ->where('retailer_id', $retailerId);
+
+    if ($range === 'week') {
+        $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    } elseif ($range === 'year') {
+        $query->whereYear('created_at', now()->year);
+    } else {
+        $query->whereMonth('created_at', now()->month);
+    }
+
+    $topProducts = $query->groupBy('product_name')
+        ->orderByDesc('total_quantity')
+        ->limit(5)
+        ->get();
+
     return view('dashboard.retailer-dashboard', compact(
-        'user', 'retailer', 'profileIsComplete', 'totalOrders', 'totalProducts', 'pendingOrders', 'monthlySales'
+        'user', 'retailer', 'profileIsComplete', 'totalOrders',
+        'totalProducts', 'pendingOrders', 'monthlySales', 'topProducts', 'range'
     ));
 }
-
 
 
 

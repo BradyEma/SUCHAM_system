@@ -285,19 +285,17 @@
     <div>
         <p class="text-sm font-medium text-gray-500 truncate">Monthly Sales</p>
         <p class="mt-1 text-3xl font-semibold text-gray-900">
-            UGX {{ number_format($monthlySales) }}
+            {{ number_format($monthlySales) }}
         </p>
     </div>
     <div class="bg-primary-100 p-3 rounded-full">
-        <i class="fas fa-dollar-sign text-primary-600"></i>
+        <span class="text-primary-600 font-semibold">UGX</span>
     </div>
 </div>
 
                         <div class="mt-4">
-                            <span class="text-green-600 text-sm font-semibold">
-                                <i class="fas fa-arrow-up mr-1"></i> 18.5%
-                            </span>
-                            <span class="text-gray-500 text-sm ml-2">vs last month</span>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="text-gray-500 text-sm ml-2">Business Accurate</span>
                         </div>
                     </div>
                     
@@ -376,11 +374,14 @@
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-medium text-gray-900">Top Selling Products</h3>
-                            <select class="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-3 rounded-md text-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500">
-                                <option>This Week</option>
-                                <option selected>This Month</option>
-                                <option>This Year</option>
-                            </select>
+                            <form method="GET" action="{{ route('retailer.dashboard') }}">
+    <select name="range" onchange="this.form.submit()" class="border rounded p-1">
+        <option value="week" {{ $range === 'week' ? 'selected' : '' }}>This Week</option>
+        <option value="month" {{ $range === 'month' ? 'selected' : '' }}>This Month</option>
+        <option value="year" {{ $range === 'year' ? 'selected' : '' }}>This Year</option>
+    </select>
+</form>
+
                         </div>
                         <div class="h-64">
                             <canvas id="productsChart"></canvas>
@@ -596,41 +597,40 @@
             });
 
             // Products Chart
-            const productsCtx = document.getElementById('productsChart').getContext('2d');
-            const productsChart = new Chart(productsCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Golden Sugar 5kg', 'Organic Molasses 1L', 'Brown Sugar 2kg', 'White Sugar 1kg', 'Premium Syrup'],
-                    datasets: [{
-                        data: [35, 25, 20, 15, 5],
-                        backgroundColor: [
-                            'rgba(249, 115, 22, 0.7)',
-                            'rgba(34, 197, 94, 0.7)',
-                            'rgba(234, 88, 12, 0.7)',
-                            'rgba(59, 130, 246, 0.7)',
-                            'rgba(139, 92, 246, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(249, 115, 22, 1)',
-                            'rgba(34, 197, 94, 1)',
-                            'rgba(234, 88, 12, 1)',
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(139, 92, 246, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        }
-                    },
-                    cutout: '70%'
+           const productsChart = new Chart(document.getElementById('productsChart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($topProducts->pluck('product_name')) !!},
+            datasets: [{
+                data: {!! json_encode($topProducts->pluck('total_quantity')) !!},
+                backgroundColor: [
+                    'rgba(253, 233, 20, 0.7)',
+                    'rgba(13, 135, 58, 0.7)',
+                    'rgba(234, 88, 12, 0.7)',
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(139, 92, 246, 0.7)'
+                ],
+                borderColor: [
+                    'rgb(198, 221, 22)',
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(234, 88, 12, 1)',
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(139, 92, 246, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
                 }
-            });
+            },
+            cutout: '70%'
+        }
+    });
         });
     </script>
 </body>
