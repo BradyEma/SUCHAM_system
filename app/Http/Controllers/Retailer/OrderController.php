@@ -8,6 +8,8 @@ use App\Models\RetailerOrder;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RetailerInventory;
 
+
+
 class OrderController extends Controller
 {
  public function index()
@@ -79,7 +81,7 @@ public function markAsOnDelivery($transactionId)
         $item->status = 'on delivery';
         $item->save();
 
-        // 2. Deduct quantity from retailer inventory using product_name
+        // 2. Deduct quantity from inventory
         $inventory = RetailerInventory::where('retailer_id', $item->retailer_id)
             ->where('product_name', $item->product_name)
             ->first();
@@ -91,7 +93,24 @@ public function markAsOnDelivery($transactionId)
         }
     }
 
-    return redirect()->back()->with('success', 'Order marked as On Delivery and inventory updated.');
+    return redirect('/retailer/orders')->with('success', 'Order signed off to delivery.');
+}
+
+public function markAsCompleted($transactionId)
+{
+    $orderItems = RetailerOrder::where('transaction_id', $transactionId)->get();
+
+    if ($orderItems->isEmpty()) {
+        return redirect()->back()->with('error', 'Order not found.');
+    }
+
+    foreach ($orderItems as $item) {
+        $item->status = 'completed';
+        $item->save();
+    }
+
+   return redirect('/retailer/orders')->with('success', 'Order marked as Completed.');
+
 }
 
 

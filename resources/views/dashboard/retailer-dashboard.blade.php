@@ -282,14 +282,17 @@
                     <!-- Monthly Sales -->
                     <div class="bg-white p-6 rounded-lg shadow-sm border-l-4 border-green-500">
                         <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-500 truncate">Monthly Sales</p>
-                                <p class="mt-1 text-3xl font-semibold text-gray-900">$24,580</p>
-                            </div>
-                            <div class="bg-primary-100 p-3 rounded-full">
-                                <i class="fas fa-dollar-sign text-primary-600"></i>
-                            </div>
-                        </div>
+    <div>
+        <p class="text-sm font-medium text-gray-500 truncate">Monthly Sales</p>
+        <p class="mt-1 text-3xl font-semibold text-gray-900">
+            UGX {{ number_format($monthlySales) }}
+        </p>
+    </div>
+    <div class="bg-primary-100 p-3 rounded-full">
+        <i class="fas fa-dollar-sign text-primary-600"></i>
+    </div>
+</div>
+
                         <div class="mt-4">
                             <span class="text-green-600 text-sm font-semibold">
                                 <i class="fas fa-arrow-up mr-1"></i> 18.5%
@@ -303,17 +306,15 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Inventory Items</p>
-                                <p class="mt-1 text-3xl font-semibold text-gray-900">127</p>
+                                <p class="mt-1 text-3xl font-semibold text-gray-900">{{ number_format($totalProducts) }}</p>
                             </div>
                             <div class="bg-primary-100 p-3 rounded-full">
                                 <i class="fas fa-boxes text-primary-600"></i>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-red-600 text-sm font-semibold">
-                                <i class="fas fa-arrow-down mr-1"></i> 5.2%
-                            </span>
-                            <span class="text-gray-500 text-sm ml-2">5 low stock</span>
+                            <i class="fas fa-star text-yellow-400"></i>
+                            <span class="text-gray-500 text-sm ml-2">Certified Products</span>
                         </div>
                     </div>
                     
@@ -322,17 +323,15 @@
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-500 truncate">Pending Orders</p>
-                                <p class="mt-1 text-3xl font-semibold text-gray-900">3</p>
+                                <p class="mt-1 text-3xl font-semibold text-gray-900">{{ $pendingOrders }}</p>
                             </div>
                             <div class="bg-primary-100 p-3 rounded-full">
                                 <i class="fas fa-shopping-cart text-primary-600"></i>
                             </div>
                         </div>
                         <div class="mt-4">
-                            <span class="text-gray-600 text-sm font-semibold">
-                                <i class="fas fa-equals mr-1"></i> 0%
-                            </span>
-                            <span class="text-gray-500 text-sm ml-2">vs last month</span>
+                            <i class="fas fa-star text-yellow-400 -ml-3"></i>
+                            <span class="text-gray-500 text-sm ">98% successful deliveries</span>
                         </div>
                     </div>
                     

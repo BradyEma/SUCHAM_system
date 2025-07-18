@@ -91,8 +91,8 @@
             <div class="flex-1 overflow-y-auto py-4">
                 <nav class="px-2 space-y-1">
                     <!-- Dashboard -->
-                    <a href="{{ route('retailer.dashboard') }}" class="text-primary-200 group flex items-center px-4 py-3 text-sm font-medium rounded-md">
-                        <i class="fas fa-tachometer-alt mr-3 text-yellow-400"></i>
+                    <a href="{{ route('retailer.dashboard') }}" class="text-primary-200 group flex items-center hover:bg-primary-700 px-4 py-3 text-sm font-medium rounded-md">
+                        <i class="fas fa-tachometer-alt mr-3 "></i>
                         <span class="nav-text">Dashboard</span>
                     </a>
                     
@@ -107,7 +107,7 @@
                     <a href="{{ route('retailer.orders') }}" class="bg-white text-black group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                         <i class="fas fa-shopping-cart mr-3 text-black"></i>
                         <span class="nav-text">My Orders</span>
-                        <span class="bg-black text-white text-xs font-bold px-2 py-0.5 rounded-full ml-auto badge">3</span>
+                        <span class="bg-black text-white text-xs font-bold px-2 py-0.5 rounded-full ml-auto badge">{{ $pendingOrders }}</span>
                     </a>
                     
                     <!-- Messages -->

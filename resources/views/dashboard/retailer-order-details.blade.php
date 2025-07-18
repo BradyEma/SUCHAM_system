@@ -81,14 +81,25 @@
         </div>
     </div>
   @if($orderItems->first()->status === 'pending')
-    <form action="{{ route('retailer.orders.complete', $transactionId) }}" method="POST" class="mt-4">
+    <form action="{{ route('retailer.orders.onDelivery', $transactionId) }}" method="POST">
     @csrf
     <button type="submit"
         class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
-        Complete to Delivery
+        Push to Delivery
     </button>
 </form>
 @endif
+
+ @if($orderItems->first()->status === 'on delivery')
+    <form action="{{ route('retailer.orders.complete', $transactionId) }}" method="POST" class="mt-4">
+        @csrf
+        <button type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">
+            Complete Order
+        </button>
+    </form>
+@endif
+
 
 </div>
 

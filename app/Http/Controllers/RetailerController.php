@@ -8,7 +8,7 @@ use App\Models\Retailer;
 use App\Models\RetailerInventory;
 use Illuminate\Support\Facades\Storage;
 use App\Models\RetailerOrder;
-
+use Carbon\Carbon;
 
 
 
@@ -26,16 +26,31 @@ class RetailerController extends Controller
         ]);
     }
 
-    // Count unique transaction IDs for this retailer's orders
-    $totalOrders = RetailerOrder::where('retailer_id', $retailer->id)
+    $totalOrders = \App\Models\RetailerOrder::where('retailer_id', $retailer->id)
         ->distinct('transaction_id')
         ->count('transaction_id');
+    
+    $pendingOrders = RetailerOrder::where('retailer_id', $retailer->id)
+    ->where('status', 'pending')
+    ->distinct('transaction_id')
+    ->count('transaction_id');
 
-    // Check if required fields are filled
+    $monthlySales = RetailerOrder::where('retailer_id', $retailer->id)
+        ->where('status', 'completed')
+        ->whereMonth('created_at', Carbon::now()->month)
+        ->whereYear('created_at', Carbon::now()->year)
+        ->sum('total');
+
+
+    $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailer->id)->count();
+
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
-    return view('dashboard.retailer-dashboard', compact('user', 'retailer', 'profileIsComplete', 'totalOrders'));
+    return view('dashboard.retailer-dashboard', compact(
+        'user', 'retailer', 'profileIsComplete', 'totalOrders', 'totalProducts', 'pendingOrders', 'monthlySales'
+    ));
 }
+
 
 
 
