@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 
 class WishlistController extends Controller
 {
@@ -13,7 +14,10 @@ class WishlistController extends Controller
     $wishlistItems = Wishlist::where('user_id', auth()->id())->get();
     $wishlistCount = $wishlistItems->count();
 
-    return view('dashboard.customer-wishlist', compact('wishlistItems', 'wishlistCount'));
+    $userId = auth()->id();
+    $cartCount = Cart::where('user_id', $userId)->count();
+
+    return view('dashboard.customer-wishlist', compact('wishlistItems', 'wishlistCount', 'cartCount'));
 }
 
 

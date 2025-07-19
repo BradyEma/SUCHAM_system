@@ -99,8 +99,8 @@
 
             <a href="{{ route('wishlist.index') }}"
    class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
-    <i class="fas fa-heart w-5 text-center text-black"></i>
-    <span class="text-black">My Wishlist</span>
+    <i class="fas fa-heart w-5 text-center text-primary-200"></i>
+    <span class="text-white">My Wishlist</span>
 
     @if(isset($wishlistCount) && $wishlistCount > 0)
         <span class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
@@ -108,7 +108,8 @@
         </span>
     @endif
 </a>
-            <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative active">
+           
+<a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative active">
     <i class="fas fa-shopping-cart w-5 text-center text-black"></i>
     <span class="text-black">My Cart</span>
 
