@@ -227,68 +227,138 @@
                 </div>
 
                 <!-- Charts Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Sales Chart -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-semibold text-gray-900">Weekly Sales Performance</h2>
-                        </div>
-                        <div class="p-6">
-                            <canvas id="salesChart" height="250"></canvas>
+                <!-- Demand Forecast Chart for Wholesaler -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">📈 Demand Forecast (Last 2 Years)</h2>
+                        <div class="flex gap-4">
+                            <select id="wh-productFilter" class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option value="all">All Products</option>
+                            </select>
+                            <select id="wh-granularityFilter" class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option value="month" selected>Monthly</option>
+                                <option value="year">Yearly</option>
+                            </select>
                         </div>
                     </div>
-
-                    <!-- Top Products -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h2 class="text-lg font-semibold text-gray-900">Top Selling Products</h2>
-                        </div>
-                        <div class="divide-y divide-gray-200">
-                            <div class="p-6">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                                        <i class="fas fa-wheat text-yellow-600"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">Premium Maize Flour</div>
-                                        <div class="text-sm text-gray-500">25kg bags</div>
-                                    </div>
-                                    <div class="ml-auto">
-                                        <span class="text-sm font-medium text-green-600">142 sold</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                                        <i class="fas fa-seedling text-green-600"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">Organic Beans</div>
-                                        <div class="text-sm text-gray-500">50kg sacks</div>
-                                    </div>
-                                    <div class="ml-auto">
-                                        <span class="text-sm font-medium text-green-600">98 sold</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                        <i class="fas fa-honey-jar text-blue-600"></i>
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">Pure Honey</div>
-                                        <div class="text-sm text-gray-500">1kg jars</div>
-                                    </div>
-                                    <div class="ml-auto">
-                                        <span class="text-sm font-medium text-green-600">76 sold</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="h-96">
+                        <canvas id="wh-forecastChart"></canvas>
                     </div>
                 </div>
+
+                <script>
+                let whChart;
+
+                async function loadWhForecast(product = 'all', granularity = 'month') {
+                    const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
+                    const data = await res.json();
+
+                    // Filter to only last 24 months
+                    const twoYearsAgo = new Date();
+                    twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+                    const filtered = data.filter(row => {
+                        const date = new Date(row.period + "-01");
+                        return date >= twoYearsAgo && (product === 'all' || row.product === product);
+                    });
+
+                    const labels = [...new Set(filtered.map(row => row.period))].sort();
+
+                    const historical = labels.map(label => {
+                        const row = filtered.find(r => r.period === label && r.type === 'historical');
+                        return row ? +row.quantity : null;
+                    });
+
+                    const forecast = labels.map(label => {
+                        const row = filtered.find(r => r.period === label && r.type === 'forecast');
+                        return row ? +row.quantity : null;
+                    });
+
+                    const ctx = document.getElementById('wh-forecastChart').getContext('2d');
+                    if (whChart) whChart.destroy();
+
+                    whChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [
+                                {
+                                    label: 'Historical Demand',
+                                    data: historical,
+                                    borderColor: '#3B82F6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Forecasted Demand',
+                                    data: forecast,
+                                    borderColor: '#F59E0B',
+                                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                    fill: true,
+                                    tension: 0.3,
+                                    borderDash: [6, 4]
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Quantity (Units)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: granularity.charAt(0).toUpperCase() + granularity.slice(1)
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                async function loadWhProductOptions() {
+                    const res = await fetch('/admin/demand-predictions');
+                    const data = await res.json();
+                    const products = [...new Set(data.map(r => r.product))];
+
+                    const select = document.getElementById('wh-productFilter');
+                    select.innerHTML = '<option value="all">All Products</option>';
+                    products.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p;
+                        option.textContent = p;
+                        select.appendChild(option);
+                    });
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    loadWhProductOptions().then(() => loadWhForecast());
+
+                    document.getElementById('wh-productFilter').addEventListener('change', () => {
+                        loadWhForecast(
+                            document.getElementById('wh-productFilter').value,
+                            document.getElementById('wh-granularityFilter').value
+                        );
+                    });
+
+                    document.getElementById('wh-granularityFilter').addEventListener('change', () => {
+                        loadWhForecast(
+                            document.getElementById('wh-productFilter').value,
+                            document.getElementById('wh-granularityFilter').value
+                        );
+                    });
+                });
+                </script>
+
 
                 <!-- Recent Orders -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mb-6">
