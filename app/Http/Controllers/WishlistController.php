@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class WishlistController extends Controller
 {
-   public function index()
+  public function index()
 {
     $wishlistItems = Wishlist::where('user_id', auth()->id())->get();
-    return view('dashboard.customer-wishlist', compact('wishlistItems'));
+    $wishlistCount = $wishlistItems->count();
+
+    return view('dashboard.customer-wishlist', compact('wishlistItems', 'wishlistCount'));
 }
+
 
 
     public function store(Request $request)

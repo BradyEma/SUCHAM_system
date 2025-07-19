@@ -86,10 +86,20 @@
                 <i class="fas fa-tachometer-alt w-5 text-center text-primary-200"></i>
                 <span class="text-white">Dashboard</span>
             </a>
-            <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item active hover:bg-primary-700">
-                <i class="fas fa-heart w-5 text-center text-black"></i>
-                <span class="text-black">My Wishlist</span>
-            </a>
+            <a href="{{ route('wishlist.index') }}"
+   class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item active hover:bg-primary-700 relative">
+    <i class="fas fa-heart w-5 text-center text-black"></i>
+    <span class="text-black">My Wishlist</span>
+
+    @if(isset($wishlistCount) && $wishlistCount > 0)
+        <span class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {{ $wishlistCount }}
+        </span>
+    @endif
+</a>
+
+
+
             <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                     <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
                     <span class="text-white">My Cart</span>
@@ -119,17 +129,31 @@
     
     <!-- Main Content -->
     <main class="flex-1 p-6">
-        @if(session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+     @if(session('success'))
+    <div id="success-alert" 
+         class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 relative">
         {{ session('success') }}
+        <button onclick="document.getElementById('success-alert').style.display='none'" 
+                class="absolute top-1 right-2 text-green-700 font-bold hover:text-green-900
+                       text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full
+                       focus:outline-none focus:ring-2 focus:ring-green-400"
+                aria-label="Close">&times;</button>
     </div>
 @endif
 
 @if(session('error'))
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div id="error-alert" 
+         class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 relative">
         {{ session('error') }}
+        <button onclick="document.getElementById('error-alert').style.display='none'" 
+                class="absolute top-1 right-2 text-red-700 font-bold hover:text-red-900
+                       text-3xl leading-none w-8 h-8 flex items-center justify-center rounded-full
+                       focus:outline-none focus:ring-2 focus:ring-red-400"
+                aria-label="Close">&times;</button>
     </div>
 @endif
+
+
 
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-6">

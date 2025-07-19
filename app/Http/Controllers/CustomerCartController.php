@@ -31,8 +31,11 @@ class CustomerCartController extends Controller
     $retailers = Retailer::all();
     $unreadCount = 0;
 
+     $userId = auth()->id();
+    $cartCount = Cart::where('user_id', $userId)->count();
+
     return view('dashboard.customer-cart', compact(
-        'user', 'cartItems', 'deliveryFee', 'tax', 'totalAmount', 'retailers', 'unreadCount'
+        'user', 'cartItems', 'deliveryFee', 'tax', 'totalAmount', 'retailers', 'unreadCount', 'cartCount'
     ));
 }
 
