@@ -50,9 +50,9 @@ public function addToCart(Request $request)
             'product_image' => 'nullable|string',
         ]);
 
-        $user = Auth::user();
+        $user = auth()->user();
 
-        // Check if item already exists in cart
+        // Check if product already exists in cart
         $existing = Cart::where('user_id', $user->id)
             ->where('product_name', $request->product_name)
             ->first();
@@ -71,12 +71,15 @@ public function addToCart(Request $request)
             ]);
         }
 
-        // If it's a JS (fetch) request, return JSON
+        // 🔥 Remove from wishlist (by product_name match)
+        \App\Models\Wishlist::where('user_id', $user->id)
+            ->where('product_name', $request->product_name)
+            ->delete();
+
         if ($request->expectsJson()) {
             return response()->json(['message' => 'Product added to cart.'], 200);
         }
 
-        // Otherwise, redirect back with flash message
         return redirect()->back()->with('success', 'Product added to cart.');
     } catch (\Exception $e) {
         \Log::error('Cart Error: ' . $e->getMessage());
@@ -85,7 +88,7 @@ public function addToCart(Request $request)
             return response()->json(['message' => 'Error adding to cart'], 500);
         }
 
-        return redirect()->back()->with('error', 'Error adding to cart: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'Failed to add product to cart.');
     }
 }
 
