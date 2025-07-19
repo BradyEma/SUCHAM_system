@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Product; 
 use App\Models\RetailerOrder;
 use Illuminate\Support\Str;
+use App\Models\Wishlist;
 
 
 class CustomerCartController extends Controller
@@ -34,8 +35,10 @@ class CustomerCartController extends Controller
      $userId = auth()->id();
     $cartCount = Cart::where('user_id', $userId)->count();
 
+    $wishlistCount = Wishlist::where('user_id', auth()->id())->count();
+
     return view('dashboard.customer-cart', compact(
-        'user', 'cartItems', 'deliveryFee', 'tax', 'totalAmount', 'retailers', 'unreadCount', 'cartCount'
+        'user', 'cartItems', 'deliveryFee', 'tax', 'totalAmount', 'retailers', 'unreadCount', 'cartCount', 'wishlistCount'
     ));
 }
 

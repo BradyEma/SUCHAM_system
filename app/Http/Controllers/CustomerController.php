@@ -10,6 +10,8 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\RetailerOrder;
+use App\Models\Cart;
+
 
 class CustomerController extends Controller
 {
@@ -18,7 +20,7 @@ class CustomerController extends Controller
     $user = Auth::user();
 
     $wishlistCount = Wishlist::where('user_id', auth()->id())->count();
-
+    
     // Get customer's active conversations
     $conversations = Conversation::where('sender_id', $user->id)
         ->orWhere('receiver_id', $user->id)
@@ -43,6 +45,9 @@ class CustomerController extends Controller
         return $conversation->updated_at->isAfter(now()->subDays(7));
     })->count();
 
+     $userId = auth()->id();
+    $cartCount = Cart::where('user_id', $userId)->count();
+
     $stats = [
         'active_orders' => 0,
         'total_spent' => 0,
@@ -57,7 +62,8 @@ class CustomerController extends Controller
         'unreadCount',
         'recentActivity',
         'stats',
-        'wishlistCount'
+        'wishlistCount',
+        'cartCount'
     ));
 }
 
