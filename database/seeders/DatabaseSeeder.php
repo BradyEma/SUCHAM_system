@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(FaqSeeder::class);
         // Create admin user
-        User::updateOrCreate([
+        User::Create([
             'name' => 'Admin User',
             'email' => 'admin@sucham.com',
-            'password' => Hash::make('password'),
+            'password' => bcrypt('Rubangakene'),
             'role' => 'admin',
         ]);
 
