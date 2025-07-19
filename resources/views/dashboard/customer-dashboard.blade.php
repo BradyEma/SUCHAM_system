@@ -378,30 +378,38 @@
 ]
 ,
 
-            addToCart(product) {
+         addToCart(product) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const formData = new URLSearchParams();
+    formData.append('product_id', product.product_id);
+    formData.append('product_name', product.name);
+    formData.append('price', product.price);
+    formData.append('quantity', 1);
+    formData.append('product_image', product.img);
+
     fetch('{{ route('customer.cart.add') }}', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json' // 👈 this tells Laravel to return JSON
         },
-        body: JSON.stringify({
-            product_id: product.product_id,
-            product_name: product.name,
-            price: product.price,
-            quantity: 1,
-            product_image: product.img
-        })
+        body: formData.toString()
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw new Error('Invalid server response');
+        return res.json();
+    })
     .then(data => {
-        alert(data.message);
+        alert(data.message || 'Product added to cart!');
     })
     .catch(err => {
-        console.error(err);
+        console.error('Fetch error:', err);
         alert('Error adding to cart');
     });
 }
+
 
         }
     }

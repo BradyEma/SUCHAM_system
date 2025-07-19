@@ -43,15 +43,16 @@ public function addToCart(Request $request)
 {
     try {
         $request->validate([
-            'product_id' => 'required|integer',
+            'product_id' => 'nullable|integer',
             'product_name' => 'required|string',
             'price' => 'required|numeric',
             'quantity' => 'required|integer|min:1',
-            'product_image' => 'required|string',
+            'product_image' => 'nullable|string',
         ]);
 
         $user = Auth::user();
 
+        // Check if item already exists in cart
         $existing = Cart::where('user_id', $user->id)
             ->where('product_name', $request->product_name)
             ->first();
@@ -62,7 +63,7 @@ public function addToCart(Request $request)
         } else {
             Cart::create([
                 'user_id' => $user->id,
-                'product_id' => $request->product_id,
+                'product_id' => $request->product_id ?? null,
                 'product_name' => $request->product_name,
                 'price' => $request->price,
                 'quantity' => $request->quantity,
@@ -70,10 +71,21 @@ public function addToCart(Request $request)
             ]);
         }
 
-        return response()->json(['message' => 'Product added to cart successfully']);
+        // If it's a JS (fetch) request, return JSON
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Product added to cart.'], 200);
+        }
+
+        // Otherwise, redirect back with flash message
+        return redirect()->back()->with('success', 'Product added to cart.');
     } catch (\Exception $e) {
         \Log::error('Cart Error: ' . $e->getMessage());
-        return response()->json(['message' => 'Error adding to cart'], 500);
+
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Error adding to cart'], 500);
+        }
+
+        return redirect()->back()->with('error', 'Error adding to cart: ' . $e->getMessage());
     }
 }
 

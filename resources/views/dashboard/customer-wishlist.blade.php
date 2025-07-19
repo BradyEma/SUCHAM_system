@@ -119,6 +119,18 @@
     
     <!-- Main Content -->
     <main class="flex-1 p-6">
+        @if(session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ session('error') }}
+    </div>
+@endif
+
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -168,14 +180,23 @@
                         <span class="text-primary-600 font-bold">UGX {{ number_format($item->price ?? 0) }}</span>
                         <span class="bg-green-100 text-green-800 stock-badge">In Stock</span>
                     </div>
-                    <div class="flex space-x-2 mt-4">
-                        <button class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg">
-                            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                        </button>
-                        <button class="w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </div>
+                    <div x-data="{
+    product_id: getProductIdByName('{{ $item->product_name }}')
+}">
+    <form action="{{ route('customer.cart.add') }}" method="POST">
+        @csrf
+        <input type="hidden" name="product_id" :value="product_id">
+        <input type="hidden" name="product_name" value="{{ $item->product_name }}">
+        <input type="hidden" name="price" value="{{ $item->price }}">
+        <input type="hidden" name="quantity" value="1">
+        <input type="hidden" name="product_image" value="{{ $item->product_image }}">
+
+        <button type="submit" class="bg-primary-600 text-white px-4 py-2 rounded-lg">
+            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+        </button>
+    </form>
+</div>
+
                 </div>
             </div>
         @endforeach
@@ -187,6 +208,21 @@
 </div>
 
 <script>
+
+     const products = [
+        { product_id: 1, name: "Brown Sugar" },
+        { product_id: 2, name: "White Sugar" },
+        { product_id: 3, name: "Raw Sugar" },
+        { product_id: 4, name: "Sugar Cubes" },
+        { product_id: 5, name: "Molasses" },
+        { product_id: 6, name: "Bagase" },
+    ];
+
+    function getProductIdByName(name) {
+        const product = products.find(p => p.name === name);
+        return product ? product.product_id : null;
+    }
+
     function wishlistPage() {
         return {
             wishlist: [],
