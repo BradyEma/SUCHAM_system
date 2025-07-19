@@ -454,189 +454,297 @@
                 </div>
 
                 <!-- Charts Row -->
-                <div class="w-full mb-6">
-                    <!-- dropdown for the Forecast Chart containing time frames -->
-                    
-                    <!-- Forecasted Sugar Demand -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Demand Forecast</h3>
-
-                            <div class="flex gap-2">
-                                <select id="productFilter" class="border rounded p-1 text-sm">
-                                    <option value="all">All Products</option>
-                                </select>
-
-                                <select id="granularityFilter" class="border rounded p-1 text-sm">
-                                    <option value="month" selected>Monthly</option>
-                                    <option value="year">Yearly</option>
-                                    <option value="week">Weekly</option>
-                                </select>
+                <div class="w-full mb-8">
+                <!-- Forecast Card -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                    <svg class="w-5 h-5 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    Demand Forecast Analysis
+                                </h3>
+                                <p class="text-sm text-gray-600 mt-1">Historical vs. predicted demand patterns</p>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <div class="relative">
+                                    <select id="productFilter" class="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="all">All Products</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <select id="granularityFilter" class="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="month" selected>Monthly</option>
+                                        <option value="year">Yearly</option>
+                                        <option value="week">Weekly</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="h-96">
-                            <canvas id="forecastChart" class="w-full h-full">></canvas>
+                    </div>
+                    
+                    <!-- Enhanced Chart Container -->
+                    <div class="p-1 sm:p-4">
+                        <div class="h-[32rem] w-full"> <!-- Increased height -->
+                            <canvas id="forecastChart" class="w-full h-full"></canvas>
                         </div>
                     </div>
-
-
-                    @push('scripts')
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script>
-                    let chart;
-
-                    async function loadChart(product = 'all', granularity = 'month') {
-                        const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
-                        const data = await res.json();
-
-                        const filtered = product === 'all'
-                            ? data
-                            : data.filter(row => row.product === product);
-
-                        const labels = [...new Set(filtered.map(row => row.period))].sort();
-
-                        const historical = labels.map(label => {
-                            const row = filtered.find(r => r.period === label && r.type === 'historical');
-                            return row ? +row.quantity : null;
-                        });
-
-                        const forecast = labels.map(label => {
-                            const row = filtered.find(r => r.period === label && r.type === 'forecast');
-                            return row ? +row.quantity : null;
-                        });
-
-                        const ctx = document.getElementById('forecastChart').getContext('2d');
-                        if (chart) chart.destroy();
-
-                        chart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels,
-                                datasets: [
-                                    {
-                                        label: 'Historical Demand',
-                                        data: historical,
-                                        borderColor: '#3B82F6',
-                                        backgroundColor: '#3B82F6',
-                                        tension: 0.4,
-                                    },
-                                    {
-                                        label: 'Forecasted Demand',
-                                        data: forecast,
-                                        borderColor: '#F59E0B',
-                                        backgroundColor: '#F59E0B',
-                                        borderDash: [5, 5],
-                                        tension: 0.4,
-                                    }
-                                ]
-                            },
-                            options: {
-                                responsive: true,
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        title: { display: true, text: 'Quantity' }
-                                    },
-                                    x: {
-                                        title: { display: true, text: granularity.charAt(0).toUpperCase() + granularity.slice(1) }
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    // Populate product filter dynamically
-                    async function loadProductFilter() {
-                        const res = await fetch(`/admin/demand-predictions`);
-                        const data = await res.json();
-                        const products = [...new Set(data.map(r => r.product))];
-
-                        const select = document.getElementById('productFilter');
-                        select.innerHTML = '<option value="all">All Products</option>';
-                        products.forEach(p => {
-                            const option = document.createElement('option');
-                            option.value = p;
-                            option.textContent = p;
-                            select.appendChild(option);
-                        });
-                    }
-
-                    document.addEventListener('DOMContentLoaded', () => {
-                        loadProductFilter().then(() => loadChart());
-
-                        document.getElementById('productFilter').addEventListener('change', e => {
-                            loadChart(e.target.value, document.getElementById('granularityFilter').value);
-                        });
-
-                        document.getElementById('granularityFilter').addEventListener('change', e => {
-                            loadChart(document.getElementById('productFilter').value, e.target.value);
-                        });
-                    });
-                    </script>
-                @endpush
-
-
-
-                    {{-- forecast button --}}
-                    @if(session('success'))
-                        <div class="bg-green-100 text-green-700 px-4 py-2 rounded mt-2">{!! session('success') !!}</div>
-                    @endif
-                    @if(session('error'))
-                        <div class="bg-red-100 text-red-700 px-4 py-2 rounded mt-2">{!! session('error') !!}</div>
-                    @endif
                     
-                    <div class="flex justify-between items-center space-x-4 p-4">
-                        <div class="flex justify-end mb-4">
-                            <form method="POST" action="{{ route('generate.forecast') }}">
+                    <!-- Card Footer -->
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="text-sm text-gray-600">Historical</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
+                                <span class="text-sm text-gray-600">Forecasted</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <form method="POST" action="{{ route('generate.forecast') }}" class="w-full sm:w-auto">
                                 @csrf
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm">
-                                    🔄 Generate Forecast Now
+                                <button type="submit" class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Generate Forecast
                                 </button>
                             </form>
+                            
+                            <a href="{{ route('forecast.pdf') }}" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                Export PDF
+                            </a>
                         </div>
-
-
-                        <a href="{{ route('forecast.pdf') }}" target="_blank"
-                            class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm ml-2">
-                                🧾 Export Forecast PDF
-                        </a>
-
                     </div>
-
-
                 </div>
 
+                <!-- Status Messages -->
+                @if(session('success'))
+                    <div class="mt-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-green-500 mt-0.5">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-green-700">{!! session('success') !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if(session('error'))
+                    <div class="mt-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-red-500 mt-0.5">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">{!! session('error') !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
 
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    const demandCtx = document.getElementById('demandChart').getContext('2d');
+            @push('scripts')
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+            // Enhanced Chart Configuration with Same Logic
+            let chart;
 
-                    new Chart(demandCtx, {
-                        type: 'line',
-                        data: {
-                            labels: {!! json_encode($forecastLabels) !!},
-                            datasets: [{
-                                label: 'Predicted Quantity (KG)',
-                                data: {!! json_encode($forecastData) !!},
-                                borderColor: '#3b82f6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                fill: true,
-                                tension: 0.4
-                            }]
-                        },
-                        options: {
-                            maintainAspectRatio: false, // important for full container usage
-                            responsive: true,
-                            plugins: {
-                                legend: { display: true },
-                                title: {
-                                    display: true,
-                                    text: 'Projected Sugar Demand by Month'
+            async function loadChart(product = 'all', granularity = 'month') {
+                const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
+                const data = await res.json();
+
+                const filtered = product === 'all'
+                    ? data
+                    : data.filter(row => row.product === product);
+
+                const labels = [...new Set(filtered.map(row => row.period))].sort();
+
+                const historical = labels.map(label => {
+                    const row = filtered.find(r => r.period === label && r.type === 'historical');
+                    return row ? +row.quantity : null;
+                });
+
+                const forecast = labels.map(label => {
+                    const row = filtered.find(r => r.period === label && r.type === 'forecast');
+                    return row ? +row.quantity : null;
+                });
+
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                if (chart) chart.destroy();
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: 'Historical Demand',
+                                data: historical,
+                                borderColor: '#3B82F6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#3B82F6',
+                                pointRadius: 4,
+                                pointHoverRadius: 6,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Forecasted Demand',
+                                data: forecast,
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                borderWidth: 3,
+                                borderDash: [6, 4],
+                                pointBackgroundColor: '#F59E0B',
+                                pointRadius: 4,
+                                pointHoverRadius: 6,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20,
+                                    font: {
+                                        size: 13,
+                                        weight: '600'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#1F2937',
+                                titleFont: {
+                                    size: 14,
+                                    weight: '600'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                usePointStyle: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' units';
+                                    }
                                 }
                             }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false,
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: 'Quantity (Units)', 
+                                    font: {
+                                        weight: '600',
+                                        size: 13
+                                    },
+                                    padding: {top: 10, bottom: 10}
+                                },
+                                ticks: {
+                                    padding: 8
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: granularity.charAt(0).toUpperCase() + granularity.slice(1) + ' Period',
+                                    font: {
+                                        weight: '600',
+                                        size: 13
+                                    },
+                                    padding: {top: 10, bottom: 10}
+                                },
+                                ticks: {
+                                    padding: 8
+                                }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
                         }
-                    });
-                </script>
+                    }
+                });
+            }
+
+            // Rest of the original logic remains exactly the same
+            async function loadProductFilter() {
+                const res = await fetch(`/admin/demand-predictions`);
+                const data = await res.json();
+                const products = [...new Set(data.map(r => r.product))];
+
+                const select = document.getElementById('productFilter');
+                select.innerHTML = '<option value="all">All Products</option>';
+                products.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p;
+                    option.textContent = p;
+                    select.appendChild(option);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadProductFilter().then(() => loadChart());
+
+                document.getElementById('productFilter').addEventListener('change', e => {
+                    loadChart(e.target.value, document.getElementById('granularityFilter').value);
+                });
+
+                document.getElementById('granularityFilter').addEventListener('change', e => {
+                    loadChart(document.getElementById('productFilter').value, e.target.value);
+                });
+            });
+            </script>
+            @endpush
 
 
                 <!-- Recent Activity & Quick Actions -->

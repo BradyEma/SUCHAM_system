@@ -187,12 +187,21 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Route::get('/forecast-pdf', [ForecastExportController::class, 'download'])->name('forecast.pdf');
 
 
-//customer segments updated routes
+    //customer segments updated routes
+    Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
+    // refreshing the ml customer segments
+    Route::post('/admin/refresh-segments', [CustomerSegmentController::class, 'refresh'])->name('admin.refresh.segments');
+    // exporting customer segments as pdf
+    Route::get('/admin/customer-segments/export', [CustomerSegmentController::class, 'exportPdf'])->name('admin.export.segments');
+    // send promo email to customer segments
+    Route::post('/admin/send-promo', [CustomerSegmentController::class, 'sendPromo'])->name('admin.send.promo');
+
+
 
 //promo email button
-    Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
-        ->middleware(['auth', 'role:admin'])
-        ->name('admin.send.promo');
+    // Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
+    //     ->middleware(['auth', 'role:admin'])
+    //     ->name('admin.send.promo');
 
 
 
