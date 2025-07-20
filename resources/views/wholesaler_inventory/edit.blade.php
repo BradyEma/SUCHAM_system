@@ -87,9 +87,9 @@
 
             <label for="units">Units</label>
             <select id="units" name="units" required>
-                <option value="kg" {{ $inventory->units == 'kg' ? 'selected' : '' }}>KG</option>
-                <option value="litres" {{ $inventory->units == 'litres' ? 'selected' : '' }}>Litres</option>
-                <option value="bags" {{ $inventory->units == 'bags' ? 'selected' : '' }}>Bags</option>
+                <option value="kg" {{ $product->units == 'kg' ? 'selected' : '' }}>KG</option>
+                <option value="litres" {{ $product->units == 'litres' ? 'selected' : '' }}>Litres</option>
+                <option value="bags" {{ $product->units == 'bags' ? 'selected' : '' }}>Bags</option>
             </select>
 
             <label for="unit_price">Unit Price</label>
