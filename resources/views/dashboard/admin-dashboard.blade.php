@@ -113,6 +113,11 @@
                             <i class="fas fa-chart-pie w-5 text-center"></i>
                             <span>Customer Segments</span>
                         </a>
+                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-question-circle w-5 text-center"></i>
+                            <span>Support Center</span>
+                        </a>
+
 
                         <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-truck w-5 text-center"></i>
@@ -194,60 +199,60 @@
                 </div>
 
                 <section class="mb-8">
-    <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
-        <h2 class="text-xl font-semibold text-white">Supplier Management</h2>
-    </div>
-    
-    <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
-        <table class="min-w-full divide-y divide-green-200">
-            <thead class="bg-green-50">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Profile</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-green-100">
-                @foreach ($suppliers as $supplier)
-                <tr class="hover:bg-green-50 transition-colors duration-150">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $supplier->user->name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->user->email }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->business_name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->location }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                       <a href="{{ asset('storage/' . $supplier->document_path) }}" target="_blank" class="text-green-600 hover:text-green-800 font-medium flex items-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-    </svg>
-    View PDF
-</a>
+                    <div class="bg-gradient-to-r from-green-700 to-green-800 rounded-lg shadow-lg p-4 mb-4">
+                        <h2 class="text-xl font-semibold text-white">Supplier Management</h2>
+                    </div>
+                    
+                    <div class="overflow-x-auto rounded-lg shadow-md border border-green-100">
+                        <table class="min-w-full divide-y divide-green-200">
+                            <thead class="bg-green-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Business</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Certificate</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-green-800 uppercase tracking-wider">Profile</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-green-100">
+                                @foreach ($suppliers as $supplier)
+                                <tr class="hover:bg-green-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $supplier->user->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->user->email }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->business_name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $supplier->location }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <a href="{{ asset('storage/' . $supplier->document_path) }}" target="_blank" class="text-green-600 hover:text-green-800 font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            View PDF
+                        </a>
 
 
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                       @if ($supplier->status === 'active')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-@elseif ($supplier->status === 'pending')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-@elseif ($supplier->status === 'suspended')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Suspended</span>
-@elseif ($supplier->status === 'deactivated')
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Deactivated</span>
-@else
-    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Unknown</span>
-@endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            @if ($supplier->status === 'active')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        @elseif ($supplier->status === 'pending')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                        @elseif ($supplier->status === 'suspended')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Suspended</span>
+                        @elseif ($supplier->status === 'deactivated')
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Deactivated</span>
+                        @else
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Unknown</span>
+                        @endif
 
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                     <a href="{{ route('admin.suppliers.show', ['id' => $supplier->user_id]) }}" class="inline-flex items-center justify-center group">
-    <span class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-blacke font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform group-hover:-translate-y-0.5">
-        View
-    </span>
-                  </td>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('admin.suppliers.show', ['id' => $supplier->user_id]) }}" class="inline-flex items-center justify-center group">
+                        <span class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-400 text-blacke font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform group-hover:-translate-y-0.5">
+                            View
+                        </span>
+                                    </td>
 
                 </tr>
                 @endforeach
@@ -353,12 +358,6 @@
     @endif
 </td>
 
-
-
-
-
-
-
                     <td class="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('admin.suppliers.show', $supplier->user_id) }}" class="text-primary-600 hover:text-primary-900 mr-3">
                             <i class="fas fa-eye mr-1"></i> View
@@ -373,6 +372,7 @@
     
     
 </div>
+
 
                 <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -454,62 +454,297 @@
                 </div>
 
                 <!-- Charts Row -->
-                <div class="w-full mb-6">
-                    <!-- Forecasted Sugar Demand -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">📈 Forecasted Sugar Demand</h3>
-                        </div>
-                        <div class="relative w-full" style="height: 400px;">
-                            <canvas id="demandChart" class="w-full h-full"></canvas>
+                <div class="w-full mb-8">
+                <!-- Forecast Card -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    <!-- Card Header -->
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                    <svg class="w-5 h-5 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                    Demand Forecast Analysis
+                                </h3>
+                                <p class="text-sm text-gray-600 mt-1">Historical vs. predicted demand patterns</p>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <div class="relative">
+                                    <select id="productFilter" class="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="all">All Products</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative">
+                                    <select id="granularityFilter" class="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                        <option value="month" selected>Monthly</option>
+                                        <option value="year">Yearly</option>
+                                        <option value="week">Weekly</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    {{-- forecast button --}}
-                    @if (session('success'))
-                        <div class="p-3 mb-4 bg-green-100 text-green-800 rounded">
-                            {{ session('success') }}
+                    
+                    <!-- Enhanced Chart Container -->
+                    <div class="p-1 sm:p-4">
+                        <div class="h-[32rem] w-full"> <!-- Increased height -->
+                            <canvas id="forecastChart" class="w-full h-full"></canvas>
                         </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('admin.run.demand') }}">
-                        @csrf
-                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded shadow-sm">
-                            🔁 Run Demand Forecast Now
-                        </button>
-                    </form>
+                    </div>
+                    
+                    <!-- Card Footer -->
+                    <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                <span class="text-sm text-gray-600">Historical</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
+                                <span class="text-sm text-gray-600">Forecasted</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <form method="POST" action="{{ route('generate.forecast') }}" class="w-full sm:w-auto">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                    Generate Forecast
+                                </button>
+                            </form>
+                            
+                            <a href="{{ route('forecast.pdf') }}" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                </svg>
+                                Export PDF
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Status Messages -->
+                @if(session('success'))
+                    <div class="mt-4 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-green-500 mt-0.5">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-green-700">{!! session('success') !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                
+                @if(session('error'))
+                    <div class="mt-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 text-red-500 mt-0.5">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">{!! session('error') !!}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
 
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    const demandCtx = document.getElementById('demandChart').getContext('2d');
+            @push('scripts')
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+            // Enhanced Chart Configuration with Same Logic
+            let chart;
 
-                    new Chart(demandCtx, {
-                        type: 'line',
-                        data: {
-                            labels: {!! json_encode($forecastLabels) !!},
-                            datasets: [{
-                                label: 'Predicted Quantity (KG)',
-                                data: {!! json_encode($forecastData) !!},
-                                borderColor: '#3b82f6',
-                                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                                fill: true,
-                                tension: 0.4
-                            }]
-                        },
-                        options: {
-                            maintainAspectRatio: false, // important for full container usage
-                            responsive: true,
-                            plugins: {
-                                legend: { display: true },
-                                title: {
-                                    display: true,
-                                    text: 'Projected Sugar Demand by Month'
+            async function loadChart(product = 'all', granularity = 'month') {
+                const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
+                const data = await res.json();
+
+                const filtered = product === 'all'
+                    ? data
+                    : data.filter(row => row.product === product);
+
+                const labels = [...new Set(filtered.map(row => row.period))].sort();
+
+                const historical = labels.map(label => {
+                    const row = filtered.find(r => r.period === label && r.type === 'historical');
+                    return row ? +row.quantity : null;
+                });
+
+                const forecast = labels.map(label => {
+                    const row = filtered.find(r => r.period === label && r.type === 'forecast');
+                    return row ? +row.quantity : null;
+                });
+
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                if (chart) chart.destroy();
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: 'Historical Demand',
+                                data: historical,
+                                borderColor: '#3B82F6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                borderWidth: 3,
+                                pointBackgroundColor: '#3B82F6',
+                                pointRadius: 4,
+                                pointHoverRadius: 6,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Forecasted Demand',
+                                data: forecast,
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                borderWidth: 3,
+                                borderDash: [6, 4],
+                                pointBackgroundColor: '#F59E0B',
+                                pointRadius: 4,
+                                pointHoverRadius: 6,
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 20,
+                                    font: {
+                                        size: 13,
+                                        weight: '600'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: '#1F2937',
+                                titleFont: {
+                                    size: 14,
+                                    weight: '600'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                usePointStyle: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' units';
+                                    }
                                 }
                             }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    drawBorder: false,
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: 'Quantity (Units)', 
+                                    font: {
+                                        weight: '600',
+                                        size: 13
+                                    },
+                                    padding: {top: 10, bottom: 10}
+                                },
+                                ticks: {
+                                    padding: 8
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false,
+                                    drawBorder: false
+                                },
+                                title: { 
+                                    display: true, 
+                                    text: granularity.charAt(0).toUpperCase() + granularity.slice(1) + ' Period',
+                                    font: {
+                                        weight: '600',
+                                        size: 13
+                                    },
+                                    padding: {top: 10, bottom: 10}
+                                },
+                                ticks: {
+                                    padding: 8
+                                }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
                         }
-                    });
-                </script>
+                    }
+                });
+            }
+
+            // Rest of the original logic remains exactly the same
+            async function loadProductFilter() {
+                const res = await fetch(`/admin/demand-predictions`);
+                const data = await res.json();
+                const products = [...new Set(data.map(r => r.product))];
+
+                const select = document.getElementById('productFilter');
+                select.innerHTML = '<option value="all">All Products</option>';
+                products.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p;
+                    option.textContent = p;
+                    select.appendChild(option);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                loadProductFilter().then(() => loadChart());
+
+                document.getElementById('productFilter').addEventListener('change', e => {
+                    loadChart(e.target.value, document.getElementById('granularityFilter').value);
+                });
+
+                document.getElementById('granularityFilter').addEventListener('change', e => {
+                    loadChart(document.getElementById('productFilter').value, e.target.value);
+                });
+            });
+            </script>
+            @endpush
 
 
                 <!-- Recent Activity & Quick Actions -->
@@ -663,87 +898,9 @@
             document.getElementById('mobile-sidebar').classList.add('hidden');
         });
 
-        // Initialize charts
-        document.addEventListener('DOMContentLoaded', function() {
-            // Orders Chart
-            const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-            const ordersChart = new Chart(ordersCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Orders',
-                        data: [65, 59, 80, 81, 56, 55, 90],
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        borderColor: 'rgba(34, 197, 94, 1)',
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Revenue Chart
-            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['North', 'South', 'East', 'West', 'Central'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: [125000, 98000, 75000, 110000, 85000],
-                        backgroundColor: [
-                            'rgba(249, 115, 22, 0.7)',
-                            'rgba(34, 197, 94, 0.7)',
-                            'rgba(59, 130, 246, 0.7)',
-                            'rgba(234, 88, 12, 0.7)',
-                            'rgba(139, 92, 246, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(249, 115, 22, 1)',
-                            'rgba(34, 197, 94, 1)',
-                            'rgba(59, 130, 246, 1)',
-                            'rgba(234, 88, 12, 1)',
-                            'rgba(139, 92, 246, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
+            
     </script>
+    @stack('scripts') 
+
 </body>
 </html>

@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer_segments', function (Blueprint $table) {
+        Schema::create('support_ticket_replies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->unique();
-            $table->integer('order_amount');
-            $table->integer('order_count');
-            $table->integer('cluster'); // segment 0, 1, or 2
+            $table->foreignId('support_ticket_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('message');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer_segments');
+        Schema::dropIfExists('support_ticket_replies');
     }
 };

@@ -1,16 +1,25 @@
 <?php
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SupplierRegisterController;
-use App\Http\Controllers\SupplierProfileController;
-use App\Http\Controllers\RoleSelectionController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
 use App\Livewire\Admin\Messages\Messages;
-use App\Livewire\Admin\Messages\ListConversation;
-use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RetailerController;
+
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\WholesalerController;
+use App\Http\Controllers\RoleSelectionController;
+use App\Http\Controllers\SupportTicketController;
+use App\Livewire\Admin\Messages\ListConversation;
+use App\Http\Controllers\Admin\CustomerSegmentController;
+use Illuminate\Support\Facades\Mail;
+use App\Models\SupportTicket;
+use App\Mail\SupportTicketReplyMail;
+
 use App\Http\Controllers\Retailer\RetailerInventoryController;
 use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\WishlistController;
@@ -23,12 +32,19 @@ use App\Http\Controllers\CustomerOrderController;
 
 Route::get('/', fn () => view('welcome'));
 
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\WholesalerController;
-use App\Http\Controllers\Admin\CustomerSegmentController;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Admin\InventoryController;
+use App\Http\Controllers\SupplierProfileController;
+use App\Http\Controllers\SupplierRegisterController;
+
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+ 
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Controllers\ML\ForecastExportController;
+
+
+
+
 
 
 Route::get('/', fn () => view('welcome'));
@@ -199,6 +215,7 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
     });
+
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
@@ -209,13 +226,49 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Artisan::call('ml:run-demand-prediction');
         return redirect()->back()->with('success', 'Demand forecast updated successfully.');
     })->middleware(['auth', 'role:admin'])->name('admin.run.demand');
+    // Route for demand predictions
+    Route::get('/admin/demand-predictions', [AdminController::class, 'demandPredictions'])->name('admin.demand.predictions');
+    // Route for demand predictions button
+
+        Route::post('/generate-forecast', [ForecastController::class, 'generate'])->name('generate.forecast');
+
+        // route for the export button of forecast predictions
+        Route::get('/forecast-pdf', [ForecastExportController::class, 'download'])->name('forecast.pdf');
+
+
+    //customer segments updated routes
+    Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
+    // refreshing the ml customer segments
+    Route::post('/admin/refresh-segments', [CustomerSegmentController::class, 'refresh'])->name('admin.refresh.segments');
+    // exporting customer segments as pdf
+    Route::get('/admin/customer-segments/export', [CustomerSegmentController::class, 'exportPdf'])->name('admin.export.segments');
+    // send promo email to customer segments
+    Route::post('/admin/send-promo', [CustomerSegmentController::class, 'sendPromo'])->name('admin.send.promo');
+
+
+
 //promo email button
-    Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
-        ->middleware(['auth', 'role:admin'])
-        ->name('admin.send.promo');
+    // Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
+    //     ->middleware(['auth', 'role:admin'])
+    //     ->name('admin.send.promo');
 
 
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+    Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
+
+    // ✅ THIS route must exist
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->name('support.reply');
+
+    // For user replies
+    Route::post('/support/{ticket}/reply/user', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
+
+    Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+    Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
+});
 
 
 // Auth routes
@@ -223,5 +276,6 @@ Route::get('/login', fn () => view('auth.login'))->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 // Supplier registration
 Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
+
 
 require __DIR__.'/auth.php';

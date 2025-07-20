@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Product;
+use Database\Seeders\FaqSeeder;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -12,14 +13,17 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     */
+    */
+
+
     public function run(): void
     {
+        $this->call(FaqSeeder::class);
         // Create admin user
-        User::create([
+        User::Create([
             'name' => 'Admin User',
             'email' => 'admin@sucham.com',
-            'password' => Hash::make('password'),
+            'password' => bcrypt('Rubangakene'),
             'role' => 'admin',
         ]);
 

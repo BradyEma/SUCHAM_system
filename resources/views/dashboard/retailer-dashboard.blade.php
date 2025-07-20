@@ -358,41 +358,157 @@
                 </div>
 
                 <!-- Charts Row -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <!-- Sales Chart -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Sales Performance</h3>
-                           <select id="salesRange" class="...">
-    <option value="7">Last 7 days</option>
-    <option value="30" selected>Last 30 days</option>
-    <option value="90">Last 90 days</option>
-</select>
-
-                        </div>
-                        <div class="h-64">
-                            <canvas id="salesChart" class="w-full h-full"></canvas>
+                <!-- Demand Forecast Chart for Retailer -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">📉 Demand Forecast (Last 12 Months)</h2>
+                        <div class="flex gap-4">
+                            <select id="retail-productFilter" class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option value="all">All Products</option>
+                            </select>
+                            <select id="retail-granularityFilter" class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option value="month" selected>Monthly</option>
+                            </select>
                         </div>
                     </div>
-                    
-                    <!-- Top Products -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Top Selling Products</h3>
-                            <form method="GET" action="{{ route('retailer.dashboard') }}">
-    <select name="range" onchange="this.form.submit()" class="border rounded p-1">
-        <option value="week" {{ $range === 'week' ? 'selected' : '' }}>This Week</option>
-        <option value="month" {{ $range === 'month' ? 'selected' : '' }}>This Month</option>
-        <option value="year" {{ $range === 'year' ? 'selected' : '' }}>This Year</option>
-    </select>
-</form>
 
-                        </div>
-                        <div class="h-64">
-                            <canvas id="productsChart"></canvas>
-                        </div>
+                    <div class="h-96">
+                        <canvas id="retail-forecastChart"></canvas>
                     </div>
                 </div>
+
+                <!-- Chart.js -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                let retailChart;
+
+                async function loadRetailForecast(product = 'all', granularity = 'month') {
+                    const res = await fetch(`/admin/demand-predictions?group=${granularity}`);
+                    const data = await res.json();
+
+                    // Filter to only last 12 months
+                    const oneYearAgo = new Date();
+                    oneYearAgo.setMonth(oneYearAgo.getMonth() - 12);
+                    const filtered = data.filter(row => {
+                        const date = new Date(row.period + "-01");
+                        return date >= oneYearAgo && (product === 'all' || row.product === product);
+                    });
+
+                    const labels = [...new Set(filtered.map(row => row.period))].sort();
+
+                    const historical = labels.map(label => {
+                        const row = filtered.find(r => r.period === label && r.type === 'historical');
+                        return row ? +row.quantity : null;
+                    });
+
+                    const forecast = labels.map(label => {
+                        const row = filtered.find(r => r.period === label && r.type === 'forecast');
+                        return row ? +row.quantity : null;
+                    });
+
+                    const ctx = document.getElementById('retail-forecastChart').getContext('2d');
+                    if (retailChart) retailChart.destroy();
+
+                    retailChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [
+                                {
+                                    label: 'Historical Demand',
+                                    data: historical,
+                                    borderColor: '#10B981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    fill: true,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Forecasted Demand',
+                                    data: forecast,
+                                    borderColor: '#F97316',
+                                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                                    fill: true,
+                                    tension: 0.3,
+                                    borderDash: [5, 5]
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        usePointStyle: true,
+                                        font: {
+                                            size: 13,
+                                            weight: '600'
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: '#1F2937',
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} units`;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Quantity (Units)'
+                                    }
+                                },
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: granularity.charAt(0).toUpperCase() + granularity.slice(1)
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                async function loadRetailProductOptions() {
+                    const res = await fetch('/admin/demand-predictions');
+                    const data = await res.json();
+                    const products = [...new Set(data.map(r => r.product))];
+
+                    const select = document.getElementById('retail-productFilter');
+                    select.innerHTML = '<option value="all">All Products</option>';
+                    products.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p;
+                        option.textContent = p;
+                        select.appendChild(option);
+                    });
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    loadRetailProductOptions().then(() => loadRetailForecast());
+
+                    document.getElementById('retail-productFilter').addEventListener('change', () => {
+                        loadRetailForecast(
+                            document.getElementById('retail-productFilter').value,
+                            document.getElementById('retail-granularityFilter').value
+                        );
+                    });
+
+                    document.getElementById('retail-granularityFilter').addEventListener('change', () => {
+                        loadRetailForecast(
+                            document.getElementById('retail-productFilter').value,
+                            document.getElementById('retail-granularityFilter').value
+                        );
+                    });
+                });
+                </script>
 
                 <!-- Recent Activity & Quick Actions -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">

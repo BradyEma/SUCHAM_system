@@ -9,21 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('carts', function (Blueprint $table) {
-        $table->unsignedBigInteger('product_id')->nullable()->after('user_id');
-        $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-    });
-}
+    public function up(): void
+    {
+        Schema::table('support_tickets', function (Blueprint $table) {
+            $table->enum('category', ['complaint', 'inquiry', 'general'])->default('general');
+        });
 
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('carts', function (Blueprint $table) {
+        Schema::table('support_tickets', function (Blueprint $table) {
             //
         });
     }

@@ -8,7 +8,9 @@ use App\Models\RetailerOrder;
 use Illuminate\Support\Facades\Auth;
 use App\Models\RetailerInventory;
 use Illuminate\Support\Facades\DB;
-
+use League\Csv\Writer;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 
 class OrderController extends Controller
@@ -112,10 +114,12 @@ public function markAsCompleted($transactionId)
     foreach ($orderItems as $item) {
         $item->status = 'completed';
         $item->save();
+
+        // ✅ Append to datasets.csv
+        $this->saveOrderToDatasetCsv($item);
     }
 
-   return redirect('/retailer/orders')->with('success', 'Order marked as Completed.');
-
+    return redirect('/retailer/orders')->with('success', 'Order marked as Completed.');
 }
 
 public function salesChartData(Request $request)
@@ -151,6 +155,43 @@ public function salesChartData(Request $request)
     });
 
     return response()->json($formatted);
+}
+private function saveOrderToDatasetCsv($order)
+{
+    $path = storage_path('app/data/datasets.csv');
+
+    // Step 1: Create CSV file if missing
+    if (!file_exists($path)) {
+        file_put_contents($path, "order_id,customer_id,customers_email,product,order_amount,order_date\n");
+    }
+
+    // Step 2: Read existing customer_ids
+    $existingIds = [];
+    if (($handle = fopen($path, 'r')) !== false) {
+        $header = fgetcsv($handle); // skip header
+        while (($data = fgetcsv($handle)) !== false) {
+            $existingIds[] = $data[1]; // customer_id is the 2nd column
+        }
+        fclose($handle);
+    }
+
+    $originalCustomerId = $order->user_id;
+    $finalCustomerId = in_array($originalCustomerId, $existingIds)
+        ? $originalCustomerId
+        : $originalCustomerId + 120;
+
+    // Step 3: Format and write
+    $line = sprintf(
+        "%d,%d,%s,%s,%d,%s\n",
+        $order->id,
+        $finalCustomerId,
+        $order->user->email ?? 'unknown@example.com',
+        $order->product_name ?? 'sugar',
+        $order->total ?? 0,
+        \Carbon\Carbon::parse($order->created_at)->format('n/j/Y')
+    );
+
+    file_put_contents($path, $line, FILE_APPEND);
 }
 
 

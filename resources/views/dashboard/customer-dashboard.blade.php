@@ -62,16 +62,23 @@
     </style>
 </head>
 <body class="bg-gray-50">
-<div class="flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 pt-0 space-y-8 shadow-xl">
-        <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 space-y-8 shadow-xl">
+            @php
+                $user = auth()->user();
+                use Illuminate\Support\Str;
+            @endphp
+
+           <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-leaf text-yellow-400 text-xl"></i>
                 <span class="text-xl font-bold">GoldenFields</span>
                 <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-2">Customer</span>
             </div>
         </div>
+
 
         <div class="p-1 border-b border-primary-700 flex items-center space-x-3 -mt-5 ">
     <img 
@@ -118,20 +125,25 @@
                     @if($unreadCount > 0)
                         <span class="absolute right-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadCount }}</span>
                     @endif
-            </a>
-             <a href="{{ route('customer.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
+                </a>
+                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <span>Support Center</span>
+                </a>
+                <a href="{{ route('customer.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                     <i class="fas fa-user w-5 text-center text-primary-200"></i>
                     <span class="text-white">Profile</span>
-            </a>
-            <form method="POST" action="{{ route('logout') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 cursor-pointer">
-                   @csrf
-        <button type="submit"
-            class="w-full flex items-center justify-center px-4 py-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-black bg-yellow-600 hover:bg-secondary-700">
-            <i class="fas fa-sign-out-alt mr-2"></i> Logout
-        </button>
-            </form>
-        </nav>
-    </aside>
+                </a>
+
+                <form method="POST" action="{{ route('logout') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 cursor-pointer">
+                    @csrf
+                    <i class="fas fa-sign-out-alt w-5 text-center text-primary-200"></i>
+                    <span class="text-white">Logout</span>
+                </form>
+            </nav>
+        </aside>
+
+
 
     <!-- Main Content -->
     <main class="flex-1 p-8 overflow-auto">
