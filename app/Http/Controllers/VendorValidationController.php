@@ -9,6 +9,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\VendorValidation;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\VendorValidationResultMail;
+use Illuminate\Support\Facades\Mail;
+use App\Models\User;
+
 
 class VendorValidationController extends Controller
 {
@@ -56,25 +60,36 @@ class VendorValidationController extends Controller
 
         // Handle response
         if ($response->successful()) {
-            $responseData = json_decode($response->body(), true);
+    $responseData = json_decode($response->body(), true);
 
-            if (is_string($responseData)) {
-                $responseData = json_decode($responseData, true); // handles double-encoding
-            }
+    if (is_string($responseData)) {
+        $responseData = json_decode($responseData, true); // handles double-encoding
+    }
 
-            // Set the result
-            $validation->validation_result = json_encode($responseData);
+    // Save validation result
+    $validation->validation_result = json_encode($responseData);
 
-            // ✅ Add visit_date manually if validation passed
-            if ($responseData['success']) {
-                $validation->visit_date = now()->addDays(3);
-            }
+    // Add visit date if validation passed
+    if ($responseData['success']) {
+        $validation->visit_date = now()->addDays(3);
+    }
 
-            $validation->save();
-        } else {
-            $validation->validation_result = 'Failed: ' . $response->body();
-            $validation->save();
-        }
+    $validation->save();
+
+    // ✅ Send email to supplier
+    $user = User::find(Auth::id());
+
+    Mail::to($user->email)->send(new VendorValidationResultMail(
+        $user->name,
+        $responseData['success'],
+        $responseData['failedCriteria'] ?? []
+    ));
+} else {
+    // In case the Java server returns an error
+    $validation->validation_result = 'Failed: ' . $response->body();
+    $validation->save();
+}
+
 
         // ✅ Smart redirect logic
         $hasProfile = Supplier::where('user_id', Auth::id())->exists();
