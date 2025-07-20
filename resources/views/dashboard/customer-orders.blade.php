@@ -51,17 +51,20 @@
 </div>
 
         <nav class="space-y-1">
-            <a href="{{ route('customer.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item">
-                <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                <span class="text-black">Products</span>
+            <a href="{{ route('customer.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
+                <i class="fas fa-tachometer-alt w-5 text-center text-primary-200"></i>
+                <span class="text-white">Products</span>
             </a>
 
             <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
                 <i class="fas fa-heart w-5 text-center text-primary-200"></i>
                 <span class="text-white">My Wishlist</span>
-                <span x-show="wishlist.length > 0"
-                      class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
-                      x-text="wishlist.length"></span>
+                @if(isset($wishlistCount) && $wishlistCount > 0)
+    <span class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+        {{ $wishlistCount }}
+    </span>
+@endif
+
             </a>
              <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
     <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
@@ -74,8 +77,13 @@
     @endif
 </a>
             <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700  active">
-                    <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
-                    <span class="text-white">Orders</span>
+                    <i class="fas fa-clipboard-list w-5 text-center text-black"></i>
+                    <span class="text-black">Orders</span>
+                     @if(isset($pendingOrdersCount) && $pendingOrdersCount > 0)
+        <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {{ $pendingOrdersCount }}
+        </span>
+    @endif
             </a>
             <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
                     <i class="fas fa-comment-dots w-5 text-center text-primary-200"></i>
@@ -102,9 +110,11 @@
         <div class="max-w-6xl mx-auto">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">My Orders</h1>
-                <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg">
-                    <i class="fas fa-plus mr-2"></i> New Order
-                </button>
+                <a href="{{ route('customer.cart') }}">
+                    <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-plus mr-2"></i> New Order
+                    </button>
+                </a>
             </div>
 
             <!-- Enhanced Status Tabs Navigation -->

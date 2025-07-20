@@ -245,56 +245,94 @@
 
                     <!-- Checkout Section -->
                     <div class="bg-white shadow rounded-lg p-6">
-                        <form action="{{ route('cart.checkout') }}" method="POST">
-                            @csrf
-                            <h2 class="text-lg font-bold text-gray-800 mb-4">Checkout Details</h2>
-                            
-                            <!-- Retailer Selection -->
-                            <div class="mb-6">
-                                <label for="retailer_location" class="block text-sm font-medium text-gray-700 mb-2">
-                                    <i class="fas fa-store mr-2 text-primary-600"></i> Select Retailer Location
-                                </label>
-                                <select name="retailer_id" id="retailer_location" 
-                                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                                    @foreach($retailers as $retailer)
-                                        <option value="{{ $retailer->id }}">{{ $retailer->branch_name }} - {{ $retailer->location }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <!-- Order Summary -->
-                            <div class="border-t border-gray-200 pt-4">
-    <h3 class="text-md font-medium text-gray-800 mb-3">Order Summary</h3>
-    <div class="space-y-2 mb-4">
-        <div class="flex justify-between">
-            <span class="text-gray-600">Subtotal</span>
-            <span class="font-medium">
-                UGX {{ number_format($cartItems->sum(fn($item) => $item->price * $item->quantity)) }}
-            </span>
-        </div>
-        <div class="flex justify-between">
-            <span class="text-gray-600">Delivery Fee</span>
-            <span class="font-medium">UGX {{ number_format($deliveryFee) }}</span>
-        </div>
-        <div class="flex justify-between">
-            <span class="text-gray-600">Tax</span>
-            <span class="font-medium">UGX {{ number_format($tax) }}</span>
-        </div>
-    </div>
-    <div class="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
-        <span>Total</span>
-        <span class="text-primary-600">UGX {{ number_format($totalAmount) }}</span>
-    </div>
-</div>
+                       <form action="{{ route('cart.checkout') }}" method="POST">
+    @csrf
+    <h2 class="text-lg font-bold text-gray-800 mb-4">Checkout Details</h2>
     
-                            <!-- Checkout Button -->
-                            <div class="mt-6">
-                                <button type="submit" 
-                                        class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg font-semibold shadow-md transition flex items-center justify-center">
-                                    <i class="fas fa-lock mr-2"></i> Secure Checkout
-                                </button>
-                            </div>
-                        </form>
+    <!-- Retailer Selection -->
+    <div class="mb-6">
+        <label for="retailer_location" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-store mr-2 text-primary-600"></i> Select Retailer Location
+        </label>
+        <select name="retailer_id" id="retailer_location" 
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+            @foreach($retailers as $retailer)
+                <option value="{{ $retailer->id }}">{{ $retailer->branch_name }} - {{ $retailer->location }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <!-- Static Payment Method Selection -->
+    <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-credit-card mr-2 text-primary-600"></i> Payment Method
+        </label>
+        <div class="space-y-3">
+            <!-- Credit Card -->
+            <div class="flex items-center p-3 border border-gray-200 rounded-lg hover:border-primary-400 transition cursor-pointer">
+                <input type="radio" id="credit-card" name="payment_method" value="credit_card" class="h-4 w-4 text-primary-600 focus:ring-primary-500">
+                <div class="ml-3 flex items-center">
+                    <div class="flex space-x-2 mr-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="h-6" alt="Visa" onerror="this.style.display='none'">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" class="h-6" alt="Mastercard" onerror="this.style.display='none'">
+                    </div>
+                    <label for="credit-card" class="block text-sm font-medium text-gray-700 cursor-pointer">Credit/Debit Card</label>
+                </div>
+            </div>
+
+            <!-- Mobile Money -->
+            <div class="flex items-center p-3 border border-gray-200 rounded-lg hover:border-primary-400 transition cursor-pointer">
+                <input type="radio" id="mobile-money" name="payment_method" value="mobile_money" class="h-4 w-4 text-primary-600 focus:ring-primary-500" checked>
+               <div class="flex items-center">
+    <i class="fas fa-mobile-alt text-purple-600 text-xl mr-2 ml-5"></i>
+    <span class="text-sm">Mobile Money</span>
+</div>
+            </div>
+
+            <!-- Pay on Delivery -->
+            <div class="flex items-center p-3 border border-gray-200 rounded-lg hover:border-primary-400 transition cursor-pointer">
+                <input type="radio" id="cash-on-delivery" name="payment_method" value="cash_on_delivery" class="h-4 w-4 text-primary-600 focus:ring-primary-500">
+                <div class="ml-3 flex items-center">
+                    <i class="fas fa-money-bill-wave text-green-500 text-xl mr-4"></i>
+                    <label for="cash-on-delivery" class="block text-sm font-medium text-gray-700 cursor-pointer">Pay on Delivery</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="border-t border-gray-200 pt-4">
+        <h3 class="text-md font-medium text-gray-800 mb-3">Order Summary</h3>
+        <div class="space-y-2 mb-4">
+            <div class="flex justify-between">
+                <span class="text-gray-600">Subtotal</span>
+                <span class="font-medium">
+                    UGX {{ number_format($cartItems->sum(fn($item) => $item->price * $item->quantity)) }}
+                </span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-600">Delivery Fee</span>
+                <span class="font-medium">UGX {{ number_format($deliveryFee) }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-600">Tax</span>
+                <span class="font-medium">UGX {{ number_format($tax) }}</span>
+            </div>
+        </div>
+        <div class="border-t border-gray-200 pt-3 flex justify-between font-bold text-lg">
+            <span>Total</span>
+            <span class="text-primary-600">UGX {{ number_format($totalAmount) }}</span>
+        </div>
+    </div>
+    
+    <!-- Checkout Button -->
+    <div class="mt-6">
+        <button type="submit" 
+                class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg font-semibold shadow-md transition flex items-center justify-center">
+            <i class="fas fa-lock mr-2"></i> Secure Checkout
+        </button>
+    </div>
+</form>
                     </div>
                 @endif
             </div>

@@ -7,6 +7,9 @@ use App\Models\RetailerOrder;  // or your actual model name for orders
 use Illuminate\Support\Facades\Auth;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Wishlist;
+use App\Models\Cart;
+
 
 
 class CustomerOrderController extends Controller
@@ -30,11 +33,25 @@ class CustomerOrderController extends Controller
 
     $unreadCount = 0;  // just set to zero
 
+    $wishlistItems = Wishlist::where('user_id', $userId)->get();
+    $wishlistCount = $wishlistItems->count();
+
+    $cartCount = Cart::where('user_id', $userId)->count();
+
+    $pendingOrdersCount = \App\Models\RetailerOrder::where('user_id', $userId)
+    ->where('status', 'Pending')
+    ->count();
+
+
     return view('dashboard.customer-orders', [
-        'groupedOrders' => $groupedOrders,
-        'user' => auth()->user(),
-        'unreadCount' => $unreadCount,
-    ]);
+    'groupedOrders' => $groupedOrders,
+    'user' => auth()->user(),
+    'unreadCount' => $unreadCount,
+    'wishlistCount' => $wishlistCount,
+    'cartCount' => $cartCount,
+    'pendingOrdersCount' => $pendingOrdersCount,
+]);
+
 }
 
 
