@@ -72,18 +72,18 @@
             </div>
         @endif
 
-        <form action="{{ route('wholesaler_inventory.update', $inventory->id) }}" method="POST">
+        <form action="{{ route('wholesaler_inventory.update', $product->id) }}" method="POST">
             @csrf
             @method('PUT')
 
             <label for="product_id">Product ID</label>
-            <input type="text" id="product_id" name="product_id" value="{{ old('product_id', $inventory->product_id) }}" required>
+            <input type="text" id="product_id" name="product_id" value="{{ old('product_id', $product->product_id) }}" required>
 
             <label for="product_name">Product Name</label>
-            <input type="text" id="product_name" name="product_name" value="{{ old('product_name', $inventory->product_name) }}" required>
+            <input type="text" id="product_name" name="product_name" value="{{ old('product_name', $product->product_name) }}" required>
 
             <label for="quantity">Quantity</label>
-            <input type="number" id="quantity" name="quantity" value="{{ old('quantity', $inventory->quantity) }}" min="0" required>
+            <input type="number" id="quantity" name="quantity" value="{{ old('quantity', $product->quantity) }}" min="0" required>
 
             <label for="units">Units</label>
             <select id="units" name="units" required>
@@ -93,12 +93,12 @@
             </select>
 
             <label for="unit_price">Unit Price</label>
-            <input type="number" step="0.01" id="unit_price" name="unit_price" value="{{ old('unit_price', $inventory->unit_price) }}" required>
+            <input type="number" step="0.01" id="unit_price" name="unit_price" value="{{ old('unit_price', $product->unit_price) }}" required>
 
             <label for="status">Status</label>
             <select id="status" name="status" required>
-                <option value="in_stock" {{ $inventory->status == 'in_stock' ? 'selected' : '' }}>In Stock</option>
-                <option value="out_of_stock" {{ $inventory->status == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+                <option value="in_stock" {{ $product->status == 'in_stock' ? 'selected' : '' }}>In Stock</option>
+                <option value="out_of_stock" {{ $product->status == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
             </select>
 
             <button type="submit">Update Product</button>

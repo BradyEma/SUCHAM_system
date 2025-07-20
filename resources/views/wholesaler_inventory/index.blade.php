@@ -55,8 +55,6 @@
             background-color: #f3f4f6;
         }
         
-       
-        
         .card {
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -107,7 +105,7 @@
             box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
         }
         
-              .sidebar {
+        .sidebar {
             background: linear-gradient(180deg, #166534 0%, #14532d 100%);
         }
         .nav-item {
@@ -141,7 +139,7 @@
 <body class="min-h-screen">
     <div class="flex">
         <!-- Sidebar -->
-         <aside class="w-64 sidebar text-white p-6 space-y-6">
+        <aside class="w-64 sidebar text-white p-6 space-y-6">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
                     <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
@@ -151,37 +149,36 @@
                     <div class="text-xs text-green-200">Industries Ltd.</div>
                 </div>
             </div>
-           <nav class="space-y-1">
-                    <a href="{{ route('wholesaler.dashboard') }}"  class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                        <i class="fas fa-tachometer-alt mr-3"></i>
-                        Dashboard
-                    </a>
-                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-                        <i class="fas fa-boxes mr-3"></i>
-                        Inventory
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                        <i class="fas fa-shopping-cart mr-3"></i>
-                        Orders
-                        <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                        <i class="fas fa-truck mr-3"></i>
-                        Deliveries
-                    </a>
-                   
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                        <i class="fas fa-chart-line mr-3"></i>
-                        Messages
-                        <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>
-                    </a>
-                    
-                    <a href="{{ route('wholesaler.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                        <i class="fas fa-comments mr-3"></i>
-                        Profile
-                        
-                    </a>
-                </nav>
+            <nav class="space-y-1">
+                <a href="{{ route('wholesaler.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                    <i class="fas fa-boxes mr-3"></i>
+                    Inventory
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-shopping-cart mr-3"></i>
+                    Orders
+                    <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-truck mr-3"></i>
+                    Deliveries
+                </a>
+               
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-chart-line mr-3"></i>
+                    Messages
+                    <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>
+                </a>
+                
+                <a href="{{ route('wholesaler.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-comments mr-3"></i>
+                    Profile
+                </a>
+            </nav>
         </aside>
         <!-- Main Content -->
         <div class="flex-1 p-6">
@@ -209,50 +206,50 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Total Products</h3>
-                            <div class="text-2xl font-bold text-green-800">0</div>
+                            <div class="text-2xl font-bold text-green-800">{{ $totalProducts }}</div>
                         </div>
                         <div class="bg-green-100 p-2 rounded-lg">
                             <i class="fas fa-boxes text-green-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-blue-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">In Stock</h3>
-                            <div class="text-2xl font-bold text-blue-800">0</div>
+                            <div class="text-2xl font-bold text-blue-800">{{ $inStock }}</div>
                         </div>
                         <div class="bg-blue-100 p-2 rounded-lg">
                             <i class="fas fa-check-circle text-blue-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-amber-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Low Stock</h3>
-                            <div class="text-2xl font-bold text-amber-800">0</div>
+                            <div class="text-2xl font-bold text-amber-800">{{ $lowStock }}</div>
                         </div>
                         <div class="bg-amber-100 p-2 rounded-lg">
                             <i class="fas fa-exclamation-triangle text-amber-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-red-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Out of Stock</h3>
-                            <div class="text-2xl font-bold text-red-800">0</div>
+                            <div class="text-2xl font-bold text-red-800">{{ $outOfStock }}</div>
                         </div>
                         <div class="bg-red-100 p-2 rounded-lg">
                             <i class="fas fa-times-circle text-red-600"></i>
                         </div>
                     </div>
                 </div>
-            </div
+            </div>
             
             <!-- Action Bar -->
             <div class="card bg-white p-4 mb-6">
@@ -262,15 +259,13 @@
                         <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
                     </div>
                     
-                   <div class="flex space-x-3">
-    <a href="{{ route('wholesaler_inventory.create') }}">
-        <button class="btn-primary flex items-center">
-            <i class="fas fa-plus mr-2"></i> Add Product
-        </button>
-    </a>
-
-</div>
-
+                    <div class="flex space-x-3">
+                        <a href="{{ route('wholesaler_inventory.create') }}">
+                            <button class="btn-primary flex items-center">
+                                <i class="fas fa-plus mr-2"></i> Add Product
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
             
@@ -290,7 +285,6 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Your dynamic content will go here -->
                             @forelse ($products as $product)
                                 <tr class="table-row">
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -324,9 +318,26 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
-                                        <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
-                                        <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
+                                        <div class="flex space-x-3">
+                                            <!-- View -->
+                                            <a href="{{ route('wholesaler_inventory.show', $product->id) }}" class="text-green-600 hover:text-green-900">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                            <!-- Edit -->
+                                            <a href="{{ route('wholesaler_inventory.edit', $product->id) }}" class="text-amber-600 hover:text-amber-900">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <!-- Delete -->
+                                            <form action="{{ route('wholesaler_inventory.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -334,60 +345,57 @@
                                     <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No products found.</td>
                                 </tr>
                             @endforelse
-
-                            
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <!-- Pagination -->
-          <div class="mt-6 flex items-center justify-between">
-    <div class="text-sm text-gray-700">
-        Showing 
-        <span class="font-medium">{{ $products->firstItem() }}</span> 
-        to 
-        <span class="font-medium">{{ $products->lastItem() }}</span> 
-        of 
-        <span class="font-medium">{{ $products->total() }}</span> 
-        results
-    </div>
+            <div class="mt-6 flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    Showing 
+                    <span class="font-medium">{{ $products->firstItem() }}</span> 
+                    to 
+                    <span class="font-medium">{{ $products->lastItem() }}</span> 
+                    of 
+                    <span class="font-medium">{{ $products->total() }}</span> 
+                    results
+                </div>
 
-    <!-- Custom Pagination Styling -->
-    <div class="flex space-x-2">
-        {{-- Previous Page Link --}}
-        @if ($products->onFirstPage())
-            <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
-                <i class="fas fa-chevron-left"></i>
-            </span>
-        @else
-            <a href="{{ $products->previousPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-chevron-left"></i>
-            </a>
-        @endif
+                <!-- Custom Pagination Styling -->
+                <div class="flex space-x-2">
+                    {{-- Previous Page Link --}}
+                    @if ($products->onFirstPage())
+                        <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                    @else
+                        <a href="{{ $products->previousPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    @endif
 
-        {{-- Page Numbers --}}
-        @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
-            @if ($page == $products->currentPage())
-                <span class="px-3 py-1 border rounded-lg bg-green-800 text-white">{{ $page }}</span>
-            @else
-                <a href="{{ $url }}" class="px-3 py-1 border rounded-lg hover:bg-gray-100">{{ $page }}</a>
-            @endif
-        @endforeach
+                    {{-- Page Numbers --}}
+                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                        @if ($page == $products->currentPage())
+                            <span class="px-3 py-1 border rounded-lg bg-green-800 text-white">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-1 border rounded-lg hover:bg-gray-100">{{ $page }}</a>
+                        @endif
+                    @endforeach
 
-        {{-- Next Page Link --}}
-        @if ($products->hasMorePages())
-            <a href="{{ $products->nextPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        @else
-            <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
-                <i class="fas fa-chevron-right"></i>
-            </span>
-        @endif
-    </div>
-</div>
-
+                    {{-- Next Page Link --}}
+                    @if ($products->hasMorePages())
+                        <a href="{{ $products->nextPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    @else
+                        <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 </body>

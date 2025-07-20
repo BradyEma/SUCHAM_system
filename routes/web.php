@@ -50,10 +50,7 @@ Route::get('wholesaler_inventory/export', [WholesalerInventoryController::class,
 
 
 Route::resource('supplier_inventory', SupplierInventoryController::class);
-
-Route::get('/supplier/inventory', [SupplierInventoryController::class, 'index'])->name('supplier.inventory');
-
-
+ 
 Route::get('/', fn () => view('welcome'));
 
 Route::middleware(['auth', 'supplier.complete'])->group(function () {

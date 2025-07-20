@@ -6,7 +6,6 @@
     <title>Products - GoldenFields Supplier Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar {
@@ -31,30 +30,36 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
-        .product-table {
-    width: 100%;
-    table-layout: fixed; /* This is crucial for even column spacing */
-}
-        
-        .badge-low-stock {
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .badge-warning {
             background-color: #fef3c7;
             color: #92400e;
         }
-        .badge-out-of-stock {
+        .badge-danger {
             background-color: #fee2e2;
             color: #991b1b;
         }
-        .actions-dropdown {
-            display: none;
-            position: absolute;
-            right: 10px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 5px;
-            z-index: 10;
+        .btn-primary {
+            background-color: #d4af37;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
         }
-        .actions-container:hover .actions-dropdown {
-            display: block;
+        .btn-primary:hover {
+            background-color: #b8860b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(90deg, #d4af37, #fbbf24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         @media (max-width: 768px) {
             .table-header {
@@ -103,14 +108,10 @@
                     <span>Orders</span>
                     <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">3 new</span>
                 </a>
-
-               
-
                 <a href="{{ route('supplier_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span>Inventory</span>
                 </a>
-               
                 <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
@@ -123,7 +124,7 @@
             </nav>
         </aside>
 
-  <!-- Main Content -->
+        <!-- Main Content -->
         <div class="flex-1 p-6">
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
@@ -149,43 +150,43 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Total Products</h3>
-                            <div class="text-2xl font-bold text-green-800">0</div>
+                            <div class="text-2xl font-bold text-green-800">{{ $totalProducts }}</div>
                         </div>
                         <div class="bg-green-100 p-2 rounded-lg">
                             <i class="fas fa-boxes text-green-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-blue-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">In Stock</h3>
-                            <div class="text-2xl font-bold text-blue-800">0</div>
+                            <div class="text-2xl font-bold text-blue-800">{{ $inStock }}</div>
                         </div>
                         <div class="bg-blue-100 p-2 rounded-lg">
                             <i class="fas fa-check-circle text-blue-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-amber-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Low Stock</h3>
-                            <div class="text-2xl font-bold text-amber-800">0</div>
+                            <div class="text-2xl font-bold text-amber-800">{{ $lowStock }}</div>
                         </div>
                         <div class="bg-amber-100 p-2 rounded-lg">
                             <i class="fas fa-exclamation-triangle text-amber-600"></i>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card bg-white p-5 border-l-4 border-red-500">
                     <div class="flex justify-between items-start">
                         <div>
                             <h3 class="text-sm font-medium text-gray-500 mb-1">Out of Stock</h3>
-                            <div class="text-2xl font-bold text-red-800">0</div>
+                            <div class="text-2xl font-bold text-red-800">{{ $outOfStock }}</div>
                         </div>
                         <div class="bg-red-100 p-2 rounded-lg">
                             <i class="fas fa-times-circle text-red-600"></i>
@@ -198,20 +199,17 @@
             <div class="card bg-white p-4 mb-6">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                     <div class="relative w-full md:w-64">
-                        <input type="text" placeholder="Search products..." class="search-input w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-gold-500">
+                        <input type="text" placeholder="Search products..." class="search-input w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500">
                         <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
                     </div>
                     
-                   <div class="flex space-x-3">
-    <a href="{{ route('supplier_inventory.create') }}">
-        <button class="btn-primary flex items-center">
-            <i class="fas fa-plus mr-2"></i> Add Product
-        </button>
-    </a>
-
-  
-</div>
-
+                    <div class="flex space-x-3">
+                        <a href="{{ route('supplier_inventory.create') }}">
+                            <button class="btn-primary flex items-center">
+                                <i class="fas fa-plus mr-2"></i> Add Product
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
             
@@ -223,17 +221,16 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price (UGshs)</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <!-- Your dynamic content will go here -->
                             @forelse ($products as $product)
-                                <tr class="table-row">
+                                <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -246,29 +243,44 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->product_id }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $product->stock }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">${{ number_format($product->unit_price, 2) }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->measurements }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $product->quantity }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                                        {{ number_format($product->unit_price, 2) }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->unit_of_measurement }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($product->stock > 20)
-                                            <span class="badge badge-success">
+                                        @if($product->quantity > 20)
+                                            <span class="badge badge-success px-3 py-1 rounded-full text-xs">
                                                 <i class="fas fa-check-circle mr-1"></i> In Stock
                                             </span>
-                                        @elseif($product->stock > 0)
-                                            <span class="badge badge-warning">
+                                        @elseif($product->quantity > 0)
+                                            <span class="badge badge-warning px-3 py-1 rounded-full text-xs">
                                                 <i class="fas fa-exclamation-triangle mr-1"></i> Low Stock
                                             </span>
                                         @else
-                                            <span class="badge badge-danger">
+                                            <span class="badge badge-danger px-3 py-1 rounded-full text-xs">
                                                 <i class="fas fa-times-circle mr-1"></i> Out of Stock
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-eye"></i></a>
-                                        <a href="#" class="text-amber-600 hover:text-amber-900 mr-3"><i class="fas fa-edit"></i></a>
-                                        <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i></a>
-                                    </td>
+                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+    <div class="flex items-center space-x-4">
+<a href="{{ route('supplier_inventory.show', $product) }}" 
+   class="text-green-600 hover:text-green-900">
+   <i class="fas fa-eye"></i>
+</a>
+        <a href="{{ route('supplier_inventory.edit', $product) }}" class="text-amber-600 hover:text-amber-900" title="Edit">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form action="{{ route('supplier_inventory.destroy', $product) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="text-red-600 hover:text-red-900" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+    </div>
+</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -281,21 +293,20 @@
             </div>
             
             <!-- Pagination -->
-            <div class="mt-6 flex items-center justify-between">
-    <div class="text-sm text-gray-700">
-        Showing 
-        <span class="font-medium">{{ $products->firstItem() }}</span> 
-        to 
-        <span class="font-medium">{{ $products->lastItem() }}</span> 
-        of 
-        <span class="font-medium">{{ $products->total() }}</span> 
-        results
-    </div>
-    <div>
-        {{ $products->links('pagination::tailwind') }}
-    </div>
-</div>
-
+            <div class="mt-6 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="text-sm text-gray-700">
+                    Showing 
+                    <span class="font-medium">{{ $products->firstItem() }}</span> 
+                    to 
+                    <span class="font-medium">{{ $products->lastItem() }}</span> 
+                    of 
+                    <span class="font-medium">{{ $products->total() }}</span> 
+                    results
+                </div>
+                <div>
+                    {{ $products->links('pagination::tailwind') }}
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -33,4 +33,9 @@ class SupplierInventory extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'product_id';
+    }
 }

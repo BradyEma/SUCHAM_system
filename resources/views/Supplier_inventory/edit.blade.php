@@ -15,23 +15,23 @@
     <label class="block font-medium">Supplier:</label>
     <select name="supplier_id" required class="w-full border px-4 py-2 rounded border-green-300">
       @foreach ($suppliers as $supplier)
-        <option value="{{ $supplier->user_id }}" @if($supplier->user_id == $supplier_inventory->supplier_id) selected @endif>
+        <option value="{{ $supplier->user_id }}" @if($product->user_id == $product->supplier_id) selected @endif>
           {{ $supplier->business_name }}
         </option>
       @endforeach
     </select>
 
     <label class="block font-medium">Product Name:</label>
-    <input type="text" name="product_name" value="{{ $supplier_inventory->product_name }}" required class="w-full border px-4 py-2 rounded border-green-300">
+    <input type="text" name="product_name" value="{{ $product->product_name }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
     <label class="block font-medium">SKU:</label>
     <input type="number" name="SKU" value="{{ $supplier_inventory->SKU }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
     <label class="block font-medium">Quantity:</label>
-    <input type="number" name="quantity" value="{{ $supplier_inventory->quantity }}" required class="w-full border px-4 py-2 rounded border-green-300">
+    <input type="number" name="quantity" value="{{ $product->quantity }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
     <label class="block font-medium">Unit:</label>
-    <input type="text" name="unit" value="{{ $supplier_inventory->unit }}" required class="w-full border px-4 py-2 rounded border-green-300">
+    <input type="text" name="unit" value="{{ $product->unit }}" required class="w-full border px-4 py-2 rounded border-green-300">
 
     <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded">Update</button>
   </form>
