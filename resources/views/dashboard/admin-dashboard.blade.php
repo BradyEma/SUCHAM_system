@@ -120,7 +120,8 @@
 
 
                         <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                            <i class="fas fa-truck w-5 text-center"></i>
+                            <i class="fas fa-user w-5 text-center"></i>
+
                             <span>Profile</span>
                         </a>
 

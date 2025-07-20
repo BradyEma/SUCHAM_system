@@ -98,7 +98,7 @@
                         </a>
                         
                         <!-- Support -->
-                        <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('support.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-headset mr-3"></i>
                             Support Center
                         </a>
