@@ -42,24 +42,30 @@ class CustomerOrderController extends Controller
 
 
     // Show detail page for a single order by transaction ID
-    public function show($transactionId)
-    {
-        $user = Auth::user();
+   public function show($transactionId)
+{
+    $user = Auth::user();
 
-        // Fetch all items with this transaction ID belonging to this user
-        $orderItems = RetailerOrder::where('transaction_id', $transactionId)
-            ->where('user_id', $user->id)
-            ->get();
+    // Fetch all order items with this transaction ID for this user, with retailer and user info eager loaded
+    $orderItems = RetailerOrder::where('transaction_id', $transactionId)
+        ->where('user_id', $user->id)
+        ->with(['retailer.user']) // eager load retailer and the user linked to the retailer
+        ->get();
 
-        if ($orderItems->isEmpty()) {
-            abort(404, 'Order not found');
-        }
-
-        return view('dashboard.customer-orders-details', [
-            'orderItems' => $orderItems,
-            'transactionId' => $transactionId,
-        ]);
+    if ($orderItems->isEmpty()) {
+        abort(404, 'Order not found');
     }
+
+    // Get the retailer info from first order item (assuming same retailer for all items in this transaction)
+    $retailer = $orderItems->first()->retailer;
+
+    return view('dashboard.customer-orders-details', [
+        'orderItems' => $orderItems,
+        'transactionId' => $transactionId,
+        'retailer' => $retailer,
+    ]);
+}
+
 
    public function cancel(Request $request, $transactionId)
 {
