@@ -18,20 +18,23 @@ class ImportCustomerSegments extends Command
         return;
     }
 
-    $csv = Reader::createFromPath($path, 'r');
-    $csv->setHeaderOffset(0);
+   $csv = Reader::createFromPath($path, 'r');
+$csv->setDelimiter(",");  // 👈 important, your file is comma separated
+$csv->setHeaderOffset(0);
 
-    foreach ($csv as $row) {
-        CustomerSegment::updateOrCreate(
-            ['customer_id' => $row['customer_id']],
-            [
-                'order_amount' => $row['order_amount'],
-                'order_count' => $row['order_count'],
-                'cluster' => $row['cluster'],
-                // Removed: 'customers_email' and 'label'
-            ]
-        );
-    }
+foreach ($csv as $row) {
+    CustomerSegment::updateOrCreate(
+        ['customer_id' => $row['customer_id']],
+        [
+            'customers_email' => $row['customers_email'],
+            'order_amount' => $row['order_amount'],
+            'order_count' => $row['order_count'],
+            'cluster' => $row['cluster'],
+            'label' => $row['label'],
+        ]
+    );
+}
+
 
     $this->info('✅ Customer segments imported successfully.');
 }
