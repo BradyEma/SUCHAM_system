@@ -103,7 +103,7 @@
                             <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
                         </a>
                         
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="{{ route('logistics') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item nav-link {{ request()->is('admin/logistics*') ? 'active' : '' }}">
                             <i class="fas fa-truck w-5 text-center"></i>
                             <span>Logistics</span>
                         </a>

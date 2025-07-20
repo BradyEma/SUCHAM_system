@@ -216,6 +216,16 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
     });
 
+         Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    Route::resource('logistics', LogisticsController::class)->except(['index']);
+     Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    Route::get('/logistics/create', [LogisticsController::class, 'create'])->name('admin.logistics.create');
+    Route::post('/logistics', [LogisticsController::class, 'store'])->name('admin.logistics.store');
+    Route::get('/logistics/{logistic}', [LogisticsController::class, 'show'])->name('admin.logistics.show');
+    Route::get('/logistics/{logistic}/edit', [LogisticsController::class, 'edit'])->name('admin.logistics.edit');
+    Route::put('/logistics/{logistic}', [LogisticsController::class, 'update'])->name('admin.logistics.update');
+    Route::delete('/logistics/{logistic}', [LogisticsController::class, 'destroy'])->name('admin.logistics.destroy');
+});
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
