@@ -107,14 +107,41 @@
                 </button>
             </div>
 
-            {{-- Status Tabs --}}
-            <div class="flex space-x-6 mb-6">
-                @foreach(['Pending', 'On Delivery', 'Delivered', 'Cancelled'] as $status)
-                    <a href="#{{ str($status)->slug() }}" class="text-sm font-medium text-primary-700 hover:underline">
-                        {{ $status }}
-                    </a>
-                @endforeach
-            </div>
+            <!-- Enhanced Status Tabs Navigation -->
+<div class="mb-8">
+    <div class="flex flex-wrap gap-2 sm:gap-4 border-b border-gray-200 pb-1">
+        @foreach(['Pending', 'On Delivery', 'Delivered', 'Cancelled'] as $status)
+            <a href="#{{ str($status)->slug() }}" 
+               class="relative px-3 py-2.5 text-sm font-medium transition-all duration-200
+                      text-gray-600 hover:text-primary-600
+                      after:absolute after:bottom-[-3px] after:left-0 after:right-0 after:h-0.5 
+                      after:bg-transparent after:transition-all after:duration-200
+                      hover:after:bg-primary-500
+                      group flex items-center">
+                @switch($status)
+                    @case('Pending')
+                        <i class="fas fa-clock mr-2 text-yellow-500 group-hover:text-yellow-600"></i>
+                        @break
+                    @case('On Delivery')
+                        <i class="fas fa-truck mr-2 text-blue-500 group-hover:text-blue-600"></i>
+                        @break
+                    @case('Delivered')
+                        <i class="fas fa-check-circle mr-2 text-green-500 group-hover:text-green-600"></i>
+                        @break
+                    @case('Cancelled')
+                        <i class="fas fa-times-circle mr-2 text-red-500 group-hover:text-red-600"></i>
+                        @break
+                @endswitch
+                <span>{{ $status }}</span>
+                @if(isset($groupedOrders[strtolower($status)]) && $groupedOrders[strtolower($status)]->count() > 0)
+                    <span class="ml-2 bg-gray-100 group-hover:bg-primary-100 text-gray-600 group-hover:text-primary-800 text-xs px-2 py-0.5 rounded-full">
+                        {{ $groupedOrders[strtolower($status)]->count() }}
+                    </span>
+                @endif
+            </a>
+        @endforeach
+    </div>
+</div>
 
             {{-- Orders Section --}}
             <div class="space-y-4">
@@ -135,7 +162,43 @@
     @endphp
 
     <section id="{{ str($displayStatus)->slug() }}" class="mb-10 scroll-mt-20">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">{{ $displayStatus }} Orders</h2>
+        <div class="flex items-center gap-4 mb-6">
+    <div class="flex items-center">
+        @switch($displayStatus)
+            @case('Pending')
+                <div class="p-2.5 rounded-lg bg-yellow-50 text-yellow-600 mr-3">
+                    <i class="fas fa-clock text-lg"></i>
+                </div>
+                @break
+            @case('On Delivery')
+                <div class="p-2.5 rounded-lg bg-blue-50 text-blue-600 mr-3">
+                    <i class="fas fa-truck text-lg"></i>
+                </div>
+                @break
+            @case('Delivered')
+                <div class="p-2.5 rounded-lg bg-green-50 text-green-600 mr-3">
+                    <i class="fas fa-check-circle text-lg"></i>
+                </div>
+                @break
+            @case('Cancelled')
+                <div class="p-2.5 rounded-lg bg-red-50 text-red-600 mr-3">
+                    <i class="fas fa-times-circle text-lg"></i>
+                </div>
+                @break
+        @endswitch
+        
+        <h2 class="text-2xl font-semibold text-gray-800">
+            {{ $displayStatus }} Orders
+            @if(isset($groupedOrders[strtolower($displayStatus)]) && $groupedOrders[strtolower($displayStatus)]->count() > 0)
+                <span class="text-base font-normal text-gray-500 ml-2">
+                    ({{ $groupedOrders[strtolower($displayStatus)]->count() }})
+                </span>
+            @endif
+        </h2>
+    </div>
+    
+    <div class="flex-1 border-b border-gray-200"></div>
+</div>
 
         @forelse($ordersGroupedByTransaction as $transactionId => $orderGroup)
             @php
