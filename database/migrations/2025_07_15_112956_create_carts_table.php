@@ -9,21 +9,24 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+   public function up()
 {
-    Schema::create('wishlists', function (Blueprint $table) {
+    Schema::create('carts', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->unsignedBigInteger('user_id');
         $table->string('product_name');
-        $table->string('product_image');
+        $table->integer('quantity');
+        $table->decimal('price', 10, 2);
         $table->timestamps();
     });
 }
+
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('carts');
     }
 };

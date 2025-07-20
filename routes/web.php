@@ -8,6 +8,7 @@ use App\Livewire\Admin\Messages\Messages;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RetailerController;
+
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WholesalerController;
@@ -19,15 +20,24 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\SupportTicket;
 use App\Mail\SupportTicketReplyMail;
 
+use App\Http\Controllers\Retailer\RetailerInventoryController;
+use App\Http\Controllers\VendorValidationController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\Retailer\OrderController;
+use App\Http\Controllers\CustomerOrderController;
+
+
 
 Route::get('/', fn () => view('welcome'));
 
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\SupplierRegisterController;
-use App\Http\Controllers\VendorValidationController;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;  
+ 
 use App\Http\Controllers\ML\ForecastController;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\ML\ForecastExportController;
@@ -54,6 +64,24 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
     Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
 });
+
+
+
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('orders', [CustomerOrderController::class, 'index'])->name('orders');           // list orders
+    Route::get('orders/{transactionId}', [CustomerOrderController::class, 'show'])->name('orders.show');  // order details
+   Route::post('orders/{transactionId}/cancel', [CustomerOrderController::class, 'cancel'])->name('orders.cancel');
+
+
+});
+
+
+Route::get('/wishlist/count', function () {
+    return response()->json([
+        'count' => \App\Models\Wishlist::where('user_id', auth()->id())->count()
+    ]);
+})->middleware('auth');
+
 
 Route::prefix('retailer')
     ->middleware(['auth'])
@@ -113,9 +141,11 @@ Route::middleware(['auth'])->group(function () {
 
    //retailer
    Route::post('/retailer/profile', [RetailerController::class, 'storeProfile'])->name('retailer.profile.store');
-
    Route::get('/retailer/profile', [RetailerController::class, 'showProfileForm'])->name('retailer.profile')->middleware('auth');
-
+   Route::get('/retailer/orders', [OrderController::class, 'index'])->name('retailer.orders');
+   Route::post('/retailer/orders/{transactionId}/on-delivery', [OrderController::class, 'markAsOnDelivery'])->name('retailer.orders.onDelivery');
+   Route::post('/retailer/orders/{transactionId}/complete', [OrderController::class, 'markAsCompleted'])->name('retailer.orders.complete');
+   Route::get('/retailer/sales-chart-data', [OrderController::class, 'salesChartData'])->middleware('auth');
 
 
     // User profile routes
@@ -153,6 +183,25 @@ Route::middleware(['auth'])->group(function () {
      Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
       Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
+
+    //wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.remove');
+
+    //cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/customer/cart', [CustomerCartController::class, 'index'])->name('customer.cart');
+    Route::post('/customer/cart/add', [CustomerCartController::class, 'addToCart'])->name('customer.cart.add');
+    Route::post('/cart/decrease/{id}', [CustomerCartController::class, 'decreaseQuantity'])->name('cart.decrease');
+    Route::post('/cart/increase/{id}', [App\Http\Controllers\CustomerCartController::class, 'increaseQuantity'])->name('cart.increase');
+    Route::delete('/cart/remove/{id}', [App\Http\Controllers\CustomerCartController::class, 'removeItem'])->name('cart.remove');
+    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout')->middleware('auth');
+    Route::post('/cart/checkout', [CustomerCartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/retailer/orders/{transactionId}', [App\Http\Controllers\Retailer\OrderController::class, 'show'])
+    ->name('retailer.orders.show');
+
 });
 
  Route::patch('/admin/suppliers/{id}/activate', [AdminController::class, 'activateSupplier'])->name('admin.suppliers.activate');
@@ -204,10 +253,6 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     //     ->name('admin.send.promo');
 
 
-
-Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
-Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
-//support center
 
 
 Route::middleware(['auth'])->group(function () {

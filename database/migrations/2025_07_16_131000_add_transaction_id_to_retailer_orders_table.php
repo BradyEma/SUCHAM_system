@@ -9,21 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-       Schema::create('products', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('image'); // e.g., brown-sugar.jpg
-        $table->timestamps();
+   public function up()
+{
+    Schema::table('retailer_orders', function (Blueprint $table) {
+        $table->uuid('transaction_id')->nullable()->after('id');
     });
-    }
+}
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::table('retailer_orders', function (Blueprint $table) {
+            //
+        });
     }
 };

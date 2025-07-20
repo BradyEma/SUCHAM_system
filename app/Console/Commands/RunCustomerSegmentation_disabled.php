@@ -14,7 +14,9 @@ class RunCustomerSegmentation extends Command
         $scriptPath = base_path('ML/customer_segmentation.py');
         $exitCode = null;
 
-        exec("python \"$scriptPath\"", $output, $exitCode);
+        // exec("python \"$scriptPath\"", $output, $exitCode);
+        $this->info("Simulating segmentation script (python disabled).");
+        $exitCode = 0;
 
 
        if ($exitCode === 0) {

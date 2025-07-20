@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Retailer;
 use App\Models\RetailerInventory; 
 use Illuminate\Support\Facades\Auth;
+use App\Models\RetailerOrder;
 
 
 class RetailerInventoryController extends Controller
@@ -60,13 +61,20 @@ public function index(Request $request)
         ->selectRaw('SUM(quantity * unit_price) as total')
         ->value('total') ?? 0;
 
+    $pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
+
     return view('retailer.inventory.index', compact(
         'items',
         'totalProducts',
         'lowStockCount',
         'outOfStockCount',
         'totalAmount',
-        'user'
+        'user',
+        'pendingOrders'
     ));
 }
 

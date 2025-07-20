@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="wishlistComponent()" x-init="initWishlist()">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <title>Customer Dashboard | GoldenFields</title>
     <script src="https://cdn.tailwindcss.com"></script>
-     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
+    <link rel="icon" href="goldenfields.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script>
@@ -43,9 +45,6 @@
         }
     </script>
     <style>
-        .nav-item {
-            transition: all 0.3s ease;
-        }
         .nav-item:hover {
             background-color: rgba(255, 215, 0, 0.1);
         }
@@ -55,12 +54,7 @@
             font-weight: 600;
         }
         .stat-card {
-            transition: all 0.3s ease;
             border-left: 4px solid;
-        }
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         .product-card:hover .product-image {
             transform: scale(1.05);
@@ -68,6 +62,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
+
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 space-y-8 shadow-xl">
@@ -76,31 +71,55 @@
                 use Illuminate\Support\Str;
             @endphp
 
-<div class="flex items-center space-x-3"> 
-    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">
-        <img 
-            src="{{ asset('storage/' . auth()->user()->profile_picture) }}" 
-            alt="Profile Picture" 
-            class="h-14 w-14 rounded-full object-cover"
-        >
-    </div>
+           <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-leaf text-yellow-400 text-xl"></i>
+                <span class="text-xl font-bold">GoldenFields</span>
+                <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-2">Customer</span>
+            </div>
+        </div>
+
+
+        <div class="p-1 border-b border-primary-700 flex items-center space-x-3 -mt-5 ">
+    <img 
+        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+        alt="{{ $user->name }}" 
+        class="h-10 w-10 rounded-full border-2 border-yellow-400"
+    >
     <div>
-        <div class="text-xl font-bold text-white">GoldenFields</div>
-        <div class="text-xs text-primary-200">Customer Dashboard</div>
+        <p class="font-medium">{{ $user->name }}</p>
+        <p class="text-xs text-primary-200">Verified Account</p>
     </div>
 </div>
 
-            <nav class="space-y-1">
-                 <a href="{{ route('customer.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item active hover:bg-primary-700">
-                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                    <span class="text-black">Dashboard</span>
-                </a>
-               
-                <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
+        <nav class="space-y-1">
+            <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item active">
+                <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                <span class="text-black">Products</span>
+            </a>
+
+            <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
+                <i class="fas fa-heart w-5 text-center text-primary-200"></i>
+                <span class="text-white">My Wishlist</span>
+                <span x-show="wishlist.length > 0"
+                      class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+                      x-text="wishlist.length"></span>
+            </a>
+             <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
+    <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
+    <span class="text-white">My Cart</span>
+
+    @if(isset($cartCount) && $cartCount > 0)
+        <span class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {{ $cartCount }}
+        </span>
+    @endif
+</a>
+            <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                     <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
                     <span class="text-white">Orders</span>
-                </a>
-                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
+            </a>
+            <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
                     <i class="fas fa-comment-dots w-5 text-center text-primary-200"></i>
                     <span class="text-white">Chat</span>
                     @if($unreadCount > 0)
@@ -124,22 +143,76 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-8 overflow-auto">
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold text-primary-800">Welcome, {{ $user->name }}!</h1>
-                    <p class="text-primary-600">Here's what's happening with your account today</p>
+
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8 overflow-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-primary-800">Our Products</h2>
+            <div class="text-sm text-primary-600">
+                <span x-text="wishlist.length"></span> items in wishlist
+            </div>
+        </div>
+
+        <div x-data="cartComponent()">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+        <template x-for="product in products" :key="product.name">
+            <div class="product-card relative flex flex-col rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition-shadow duration-300">
+                <div class="relative w-full h-48 overflow-hidden rounded-xl mb-4">
+                    <img :src="product.img" :alt="product.name"
+                         class="w-full h-full object-cover product-image transition-transform duration-300">
+                    <button @click.prevent="openModal(product)"
+                            class="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-primary-100 text-primary-700 rounded-full w-8 h-8 flex items-center justify-center shadow transition z-10">
+                        <i class="fas fa-plus"></i>
+                    </button>
                 </div>
-                <div class="relative w-full md:w-64">
-                    <input type="text" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                <h3 class="text-lg font-bold text-gray-800 mb-1" x-text="product.name"></h3>
+                <p class="text-primary-600 font-semibold mb-3" x-text="'UGX ' + product.price"></p>
+                <div class="flex justify-between mt-auto">
+                    <button
+                      @click.prevent="addToCart(product)"
+                      class="bg-primary-600 hover:bg-primary-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
+                        Add to Cart
+                    </button>
+
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
+                        Order Now
+                    </button>
                 </div>
             </div>
-            
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        </template>
+    </div>
+</div>
+
+        <!-- Modal -->
+        <div x-show="showModal" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display: none;">
+            <div class="bg-white rounded-xl shadow-2xl p-8 w-96">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">Add to Wishlist</h3>
+                    <button @click="showModal = false" type="button" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <p class="mb-6 text-gray-600">
+                    Add <span class="font-semibold text-primary-700" x-text="modalProduct?.name"></span> to your wishlist?
+                </p>
+
+                <div class="flex justify-end gap-3">
+                    <button @click="showModal = false"
+                            class="px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition">
+                        Cancel
+                    </button>
+                    <button @click="addToWishlist(modalProduct)"
+                            class="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition">
+                        Add to Wishlist
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-8 mt-10">
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-4 border-primary-500">
                     <div class="flex justify-between items-start">
                         <div>
@@ -156,21 +229,7 @@
                     </p>
                 </div>
                 
-                <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-4 border-primary-500">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h2 class="text-lg font-semibold mb-2 text-gray-500">Total Spent</h2>
-                            <p class="text-3xl font-bold text-primary-700">UGX {{ number_format($stats['total_spent']) }}</p>
-                        </div>
-                        <div class="p-3 rounded-full text-primary-700 bg-primary-100">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                    </div>
-                    <p class="text-sm text-primary-600 mt-2 flex items-center">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        This month
-                    </p>
-                </div>
+               
                 
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-4 border-primary-500">
                     <div class="flex justify-between items-start">
@@ -204,129 +263,177 @@
                     </p>
                 </div>
             </div>
+    </main>
+ 
+</div>
 
-            <!-- Products Section -->
-            <div x-data="{
-                wishlist: [],
-                showModal: false,
-                modalProduct: null,
-                addToWishlist(product) {
-                    if (!this.wishlist.includes(product)) {
-                        this.wishlist.push(product);
-                    }
-                    this.showModal = false;
+
+
+
+<script>
+    function wishlistComponent() {
+        return {
+            wishlist: [],
+            showModal: false,
+            modalProduct: null,
+
+            products: [
+                {
+                    name: "Brown Sugar",
+                    price: 5000,
+                    img: "/product_images/brownsugar.jpg"
                 },
-                openModal(product) {
-                    this.modalProduct = product;
-                    this.showModal = true;
+                {
+                    name: "White Sugar",
+                    price: 5500,
+                    img: "/product_images/whitesugar.jpg"
+                },
+                {
+                    name: "Raw Sugar",
+                    price: 3500,
+                    img: "/product_images/raw-sugar.jpg"
+                },
+                {
+                    name: "Sugar Cubes",
+                    price: 6000,
+                    img: "/product_images/sugarcubes.png"
+                },
+                {
+                    name: "Molasses",
+                    price: 2000,
+                    img: "/product_images/molasses.jpg"
+                },
+                {
+                    name: "Bagase",
+                    price: 2500,
+                    img: "/product_images/bagase.png"
                 }
-            }">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-primary-800">Our Products</h2>
-                    <div class="text-sm text-primary-600">
-                        <span x-text="wishlist.length"></span> items in wishlist
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-                    <!-- Product Cards -->
-                    <template x-for="product in [
-                        {name: 'Granulated White Sugar', img: 'whitesugar.jpg', price: '25,000'},
-                        {name: 'Light Brown Sugar', img: 'brownsugar.jpg', price: '28,000'},
-                        {name: 'Dark Brown Sugar', img: 'darkbrownsugar.png', price: '30,000'},
-                        {name: 'Molasses', img: 'molasses.jpg', price: '35,000'},
-                        {name: 'Cube Sugar', img: 'sugarcubes.png', price: '32,000'},
-                        {name: 'Bagasse', img: 'bagase.png', price: '15,000'}
-                    ]" :key="product.name">
-                        <div class="product-card relative flex flex-col rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition-shadow duration-300">
-                            <div class="relative w-full h-48 overflow-hidden rounded-xl mb-4">
-                                <img :src="'{{ asset('') }}' + product.img" :alt="product.name" 
-                                     class="w-full h-full object-cover product-image transition-transform duration-300">
-                                <button @click.prevent="openModal(product)" 
-                                        class="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-primary-100 text-primary-700 rounded-full w-8 h-8 flex items-center justify-center shadow transition z-10">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mb-1" x-text="product.name"></h3>
-                            <p class="text-primary-600 font-semibold mb-3" x-text="'UGX ' + product.price"></p>
-                            <div class="flex justify-between mt-auto">
-                                <button class="bg-primary-600 hover:bg-primary-700 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
-                                    Add to Cart
-                                </button>
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white text-sm px-4 py-2 rounded-lg font-medium transition">
-                                    Order Now
-                                </button>
-                            </div>
-                        </div>
-                    </template>
-                </div>
+            ],
 
-                <!-- Wishlist Modal -->
-                <div x-show="showModal" x-transition class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" style="display: none;">
-                    <div class="bg-white rounded-xl shadow-2xl p-8 w-96">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-bold text-gray-800">Add to Wishlist</h3>
-                            <button @click="showModal = false" class="text-gray-400 hover:text-gray-600">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <p class="mb-6 text-gray-600">Add <span class="font-semibold text-primary-700" x-text="modalProduct?.name"></span> to your wishlist?</p>
-                        <div class="flex justify-end gap-3">
-                            <button @click="showModal = false" 
-                                    class="px-4 py-2 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-100 transition">
-                                Cancel
-                            </button>
-                            <button @click="addToWishlist(modalProduct)" 
-                                    class="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition">
-                                Add to Wishlist
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            openModal(product) {
+                this.modalProduct = product;
+                this.showModal = true;
+            },
 
-            <!-- Recent Conversations -->
-            @if($conversations->count() > 0)
-            <div class="mt-12 bg-white shadow-lg rounded-xl overflow-hidden">
-                <div class="p-6 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-800">Recent Conversations</h2>
-                </div>
-                <div class="divide-y divide-gray-100">
-                    @foreach($conversations->take(5) as $conversation)
-                        @php
-                            $otherUser = $conversation->sender_id == $user->id ? $conversation->receiver : $conversation->sender;
-                            $latestMessage = $conversation->messages->first();
-                        @endphp
-                        <a href="{{ route('chat.livewire') }}" class="flex items-center p-4 hover:bg-gray-50 transition">
-                            <div class="relative">
-                                <div class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-black font-bold shadow-sm">
-                                    {{ strtoupper(substr($otherUser->name, 0, 1)) }}
-                                </div>
-                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
-                            </div>
-                            <div class="ml-4 flex-1 min-w-0">
-                                <div class="flex justify-between">
-                                    <h4 class="font-semibold text-gray-800 truncate">{{ $otherUser->name }}</h4>
-                                    <span class="text-xs text-gray-500 whitespace-nowrap ml-2">
-                                        {{ $conversation->updated_at->diffForHumans() }}
-                                    </span>
-                                </div>
-                                <p class="text-sm text-gray-600 truncate">
-                                    {{ $latestMessage ? Str::limit($latestMessage->body, 60) : 'No messages yet' }}
-                                </p>
-                            </div>
-                            <i class="fas fa-chevron-right text-gray-400 ml-2"></i>
-                        </a>
-                    @endforeach
-                </div>
-                <div class="p-4 bg-gray-50 text-center">
-                    <a href="{{ route('chat.livewire') }}" class="text-primary-600 hover:text-primary-800 font-medium">
-                        View all conversations <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
-                </div>
-            </div>
-            @endif
-        </main>
-    </div>
+            initWishlist() {
+                fetch('/wishlist/count')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.wishlist = Array(data.count).fill({});
+                    });
+            },
+
+            addToWishlist(product) {
+                fetch('/wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        product_name: product.name,
+                        product_image: product.img,
+                        price: product.price
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error("Network response was not ok");
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    this.wishlist.push(product);
+                    this.showModal = false;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to add to wishlist.");
+                });
+            }
+        }
+    }
+
+    // ✅ MOVE THIS OUTSIDE
+    function cartComponent() {
+        return {
+           products: [
+    {
+        product_id: 1,
+        name: "Brown Sugar",
+        price: 5000,
+        img: "/product_images/brownsugar.jpg"
+    },
+    {
+        product_id: 2,
+        name: "White Sugar",
+        price: 5500,
+        img: "/product_images/whitesugar.jpg"
+    },
+    {
+        product_id: 3,
+        name: "Raw Sugar",
+        price: 3500,
+        img: "/product_images/raw-sugar.jpg"
+    },
+    {
+        product_id: 4,
+        name: "Sugar Cubes",
+        price: 6000,
+        img: "/product_images/sugarcubes.png"
+    },
+    {
+        product_id: 5,
+        name: "Molasses",
+        price: 2000,
+        img: "/product_images/molasses.jpg"
+    },
+    {
+        product_id: 6,
+        name: "Bagase",
+        price: 2500,
+        img: "/product_images/bagase.png"
+    }
+]
+,
+
+         addToCart(product) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const formData = new URLSearchParams();
+    formData.append('product_id', product.product_id);
+    formData.append('product_name', product.name);
+    formData.append('price', product.price);
+    formData.append('quantity', 1);
+    formData.append('product_image', product.img);
+
+    fetch('{{ route('customer.cart.add') }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json' // 👈 this tells Laravel to return JSON
+        },
+        body: formData.toString()
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Invalid server response');
+        return res.json();
+    })
+    .then(data => {
+        alert(data.message || 'Product added to cart!');
+    })
+    .catch(err => {
+        console.error('Fetch error:', err);
+        alert('Error adding to cart');
+    });
+}
+
+
+        }
+    }
+</script>
+
+
+
 </body>
 </html>

@@ -228,7 +228,9 @@
 
                 <!-- Charts Section -->
                 <!-- Demand Forecast Chart for Wholesaler -->
+                
                 <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-semibold text-gray-800">📈 Demand Forecast (Last 2 Years)</h2>
                         <div class="flex gap-4">
@@ -245,6 +247,7 @@
                         <canvas id="wh-forecastChart"></canvas>
                     </div>
                 </div>
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
                 <script>
                 let whChart;

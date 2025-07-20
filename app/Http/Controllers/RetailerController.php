@@ -7,12 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Retailer;
 use App\Models\RetailerInventory;
 use Illuminate\Support\Facades\Storage;
+use App\Models\RetailerOrder;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 
 
 class RetailerController extends Controller
 {
-    public function dashboard()
+  public function dashboard()
 {
     $user = auth()->user();
     $retailer = $user->retailer;
@@ -24,11 +27,80 @@ class RetailerController extends Controller
         ]);
     }
 
-    // Check if required fields are filled
+    $retailerId = $retailer->id;
+
+    $totalOrders = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+    
+    $pendingOrders = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
+    $monthlySales = \App\Models\RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'completed')
+        ->whereMonth('created_at', Carbon::now()->month)
+        ->whereYear('created_at', Carbon::now()->year)
+        ->sum('total');
+    
+   $recentOrders = RetailerOrder::select(
+        'transaction_id',
+        DB::raw('SUM(quantity) as total_quantity'),
+        DB::raw('SUM(total) as total_amount'),
+        'status',
+        'created_at'
+    )
+    ->where('retailer_id', $retailerId)
+    ->groupBy('transaction_id', 'status', 'created_at')  // group by transaction_id + fields you select
+    ->orderBy('created_at', 'desc')
+    ->limit(5)
+    ->get();
+    
+     $lowStockCount = RetailerInventory::where('retailer_id', $retailerId)
+        ->whereColumn('quantity', '<', 'minimum_stock_level')
+        ->count();
+
+    $pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
+
+    $totalProducts = \App\Models\RetailerInventory::where('retailer_id', $retailerId)->count();
+
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
-    return view('dashboard.retailer-dashboard', compact('user', 'retailer', 'profileIsComplete'));
+    // 🔽 Range selection logic for top products
+    $range = request('range', 'month'); // default to "month"
+
+    $query = DB::table('retailer_orders')
+        ->select('product_name', DB::raw('SUM(quantity) as total_quantity'))
+        ->where('retailer_id', $retailerId);
+
+    if ($range === 'week') {
+        $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+    } elseif ($range === 'year') {
+        $query->whereYear('created_at', now()->year);
+    } else {
+        $query->whereMonth('created_at', now()->month);
+    }
+
+    $topProducts = $query->groupBy('product_name')
+        ->orderByDesc('total_quantity')
+        ->limit(5)
+        ->get();
+
+   return view('dashboard.retailer-dashboard', compact(
+    'user', 'retailer', 'profileIsComplete', 'totalOrders',
+    'totalProducts', 'pendingOrders', 'monthlySales', 'topProducts', 'range',
+    'recentOrders', 'lowStockCount', 'pendingOrders'
+));
+
 }
+
+
+
 
 
 
@@ -47,10 +119,25 @@ class RetailerController extends Controller
         ]);
     }
 
+   $lowStockCount = 0;
+
+if ($retailer) {
+    $retailerId = $retailer->id;
+
+    $lowStockCount = RetailerInventory::where('retailer_id', $retailerId)
+        ->whereColumn('quantity', '<', 'minimum_stock_level')
+        ->count();
+}
+
+$pendingOrders = RetailerOrder::where('retailer_id', $retailerId)
+        ->where('status', 'pending')
+        ->distinct('transaction_id')
+        ->count('transaction_id');
+
     $profileIsComplete = $retailer->business_name && $retailer->location && $retailer->contact_number;
 
     
-    return view('dashboard.retailer-profile', compact('user', 'retailer', 'profileIsComplete'));
+    return view('dashboard.retailer-profile', compact('user', 'retailer', 'profileIsComplete', 'lowStockCount', 'pendingOrders'));
 }
 
 

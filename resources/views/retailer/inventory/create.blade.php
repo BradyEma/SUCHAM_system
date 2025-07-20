@@ -56,7 +56,7 @@
                             <h1 class="text-2xl font-bold text-gray-900">Add New Inventory Item</h1>
                             <p class="mt-1 text-gray-600">Fill in the details below to add a new product to your inventory</p>
                         </div>
-                        <a href="{{ route('admin.inventory.index') }}" class="flex items-center text-primary-600 hover:text-primary-800">
+                        <a href="{{ route('retailer.inventory.index') }}" class="flex items-center text-primary-600 hover:text-primary-800">
                             <i class="fas fa-arrow-left mr-2"></i> Back to Inventory
                         </a>
                     </div>
