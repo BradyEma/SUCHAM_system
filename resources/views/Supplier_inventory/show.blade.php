@@ -63,7 +63,7 @@
                     </div>
                     
                     <div class="mt-6 flex space-x-3">
-                        <a href="{{ route('supplier_inventory.edit', $product->id) }}" 
+                        <a href="{{ route('supplier_inventory.edit', $product) }}" 
                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
                             <i class="fas fa-edit mr-2"></i> Edit Product
                         </a>
