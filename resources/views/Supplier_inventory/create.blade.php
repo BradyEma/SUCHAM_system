@@ -5,8 +5,8 @@
   <title>Add Inventory</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-amber-50 min-h-screen flex flex-col items-center justify-center p-6">
-  <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
+<body class="bg-white min-h-screen flex flex-col items-center justify-center p-6">
+  <div class="w-full max-w-lg bg-white p-8 rounded-lg shadow-md border border-gray-200">
     <h1 class="text-3xl text-green-700 font-bold mb-6 text-center">Add Product</h1>
 
     <form action="{{ route('supplier_inventory.store') }}" method="POST" class="space-y-4">
@@ -56,7 +56,7 @@
         <option value="kg">Kilograms (kg)</option>
         <option value="g">Grams (g)</option>
         <option value="L">Liters (L)</option>
-        <option value="ml">Milliliters (ml)</option>
+        <option value="ml">Trucks</option>
         <option value="pcs">Pieces</option>
         <option value="bags">Bags</option>
         <option value="boxes">Boxes</option>

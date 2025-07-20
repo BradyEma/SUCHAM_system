@@ -8,31 +8,28 @@ use Illuminate\Support\Facades\Response;
 
 class WholesalerInventoryController extends Controller
 {
+    public function export()
+    {
+        $inventory = WholesalerInventory::all();
 
-public function export()
-{
-    $inventory = WholesalerInventory::all();
+        $csvData = "Product Name,Product ID,Stock,Unit Price,Measurements\n";
+        foreach ($inventory as $item) {
+            $csvData .= "{$item->product_name},{$item->product_id},{$item->stock},{$item->unit_price},{$item->units}\n";
+        }
 
-    $csvData = "Product Name,Product ID,Stock,Unit Price,Measurements\n";
-    foreach ($inventory as $item) {
-        $csvData .= "{$item->product_name},{$item->product_id},{$item->stock},{$item->unit_price},{$item->measurements}\n";
+        $filename = 'wholesaler_inventory_' . now()->format('Ymd_His') . '.csv';
+
+        return Response::make($csvData, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ]);
     }
 
-    $filename = 'wholesaler_inventory_' . now()->format('Ymd_His') . '.csv';
-
-    return Response::make($csvData, 200, [
-        'Content-Type' => 'text/csv',
-        'Content-Disposition' => "attachment; filename=\"$filename\"",
-    ]);
-}
-
-public function index()
-{
-    $products = WholesalerInventory::orderBy('created_at', 'desc')->paginate(10);
-
-    return view('wholesaler_inventory.index', compact('products'));
-}
-
+    public function index()
+    {
+        $products = WholesalerInventory::orderBy('created_at', 'desc')->paginate(10);
+        return view('wholesaler_inventory.index', compact('products'));
+    }
 
     public function create()
     {
@@ -42,7 +39,7 @@ public function index()
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,product_id|unique:wholesaler_inventories,product_id',
+            'product_id' => 'required|string|max:255|unique:wholesaler_inventories,product_id',
             'product_name' => 'required|string|max:255',
             'quantity' => 'required|integer|min:0',
             'units' => 'required|in:kg,litres,bags',
@@ -66,7 +63,7 @@ public function index()
         $inventory = WholesalerInventory::findOrFail($id);
 
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,product_id|unique:wholesaler_inventories,product_id,' . $id,
+            'product_id' => 'required|string|max:255|unique:wholesaler_inventories,product_id,' . $id,
             'product_name' => 'required|string|max:255',
             'quantity' => 'required|integer|min:0',
             'units' => 'required|in:kg,litres,bags',

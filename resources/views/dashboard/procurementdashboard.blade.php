@@ -134,10 +134,7 @@ primary: {
                 </a>
                 
                 <!-- Order Management -->
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                    <i class="fas fa-clipboard-list w-5 text-center"></i>
-                    <span>Order Management</span>
-                </a>
+               
                 
                 <!-- Procurement - Active when on any procurement page -->
                 <a href="{{ route('admin.procurement.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item {{ request()->routeIs('admin.procurement.*') ? 'active' : '' }}">

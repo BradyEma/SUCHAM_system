@@ -69,24 +69,36 @@
     <form action="{{ route('wholesaler_inventory.store') }}" method="POST">
         @csrf
 
+        @if ($errors->any())
+    <div class="error">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+
         <label for="product_name">Product Name</label>
         <input type="text" name="product_name" id="product_name" value="{{ old('product_name') }}" required>
-         @error('product_id')
+         @error('product_name')
             <div class="error">{{ $message }}</div>
         @enderror
 
 
         <label for="product_id">Product ID</label>
-        <input type="text" name="product_id" id="product_id" value="{{ old('product_id') }}" readonly required>
+        <input type="text" name="product_id" id="product_id" value="{{ old('product_id') }}" required>
         @error('product_id')
             <div class="error">{{ $message }}</div>
         @enderror
 
         <label for="stock">Stock</label>
-        <input type="number" name="stock" id="stock" value="{{ old('stock') }}" required>
-        @error('stock')
-            <div class="error">{{ $message }}</div>
-        @enderror
+        <input type="number" name="quantity" id="quantity" value="{{ old('quantity') }}" required>
+@error('quantity')
+    <div class="error">{{ $message }}</div>
+@enderror
+
 
         <label for="unit_price">Unit Price</label>
         <input type="number" name="unit_price" id="unit_price" value="{{ old('unit_price') }}" step="0.01" required>
@@ -94,10 +106,10 @@
             <div class="error">{{ $message }}</div>
         @enderror
 
-             <label for="unit" class="block font-medium mb-1">Measurements:</label>
+             <label for="units" class="block font-medium mb-1">units:</label>
       <select 
-        id="unit" 
-        name="Measurements" 
+        id="units" 
+        name="units" 
         required
         class="block w-full p-3 border border-green-300 rounded-lg focus:ring-green-500 focus:border-green-500"
       >
@@ -110,6 +122,21 @@
         <option value="bags">Bags</option>
         <option value="boxes">Boxes</option>
       </select>
+
+        @error('units')
+            <div class="error">{{ $message }}</div>
+        @enderror
+
+        <label for="status">Status</label>
+<select name="status" id="status" required>
+    <option value="" disabled {{ old('status') ? '' : 'selected' }}>Select status</option>
+    <option value="in_stock" {{ old('status') == 'in_stock' ? 'selected' : '' }}>In Stock</option>
+    <option value="out_of_stock" {{ old('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock</option>
+</select>
+@error('status')
+    <div class="error">{{ $message }}</div>
+@enderror
+
 
         <button type="submit" class="button">Save Product</button>
         <a href="{{ route('wholesaler_inventory.index') }}" class="back">← Back to Inventory</a>

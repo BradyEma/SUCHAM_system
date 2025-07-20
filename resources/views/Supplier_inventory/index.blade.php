@@ -94,22 +94,27 @@
                 </div>
             </div>
             <nav class="space-y-1">
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                     <i class="fas fa-tachometer-alt w-5 text-center"></i>
                     <span>Dashboard</span>
                 </a>
                 <a href="{{ route('supplier.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-clipboard-list w-5 text-center"></i>
                     <span>Orders</span>
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">3 new</span>
                 </a>
-                <a href="{{ route('supplier.products') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+
+               
+
+                <a href="{{ route('supplier_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-boxes w-5 text-center"></i>
                     <span>Inventory</span>
                 </a>
-                
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+               
+                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
                 </a>
                 <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                     <i class="fas fa-user w-5 text-center"></i>
@@ -198,20 +203,13 @@
                     </div>
                     
                    <div class="flex space-x-3">
-    <a href="{{ route('retailer_inventory.create') }}">
+    <a href="{{ route('supplier_inventory.create') }}">
         <button class="btn-primary flex items-center">
             <i class="fas fa-plus mr-2"></i> Add Product
         </button>
     </a>
 
-    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-        <i class="fas fa-filter mr-2"></i> Filter
-    </button>
-
-    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-       <a href="{{ route('retailer_inventory.export') }}">
-    <i class="fas fa-download mr-2"></i> Export
-    </button>
+  
 </div>
 
                 </div>
@@ -284,21 +282,20 @@
             
             <!-- Pagination -->
             <div class="mt-6 flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">24</span> results
-                </div>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="px-3 py-1 border rounded-lg bg-green-800 text-white">1</button>
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">2</button>
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">3</button>
-                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+    <div class="text-sm text-gray-700">
+        Showing 
+        <span class="font-medium">{{ $products->firstItem() }}</span> 
+        to 
+        <span class="font-medium">{{ $products->lastItem() }}</span> 
+        of 
+        <span class="font-medium">{{ $products->total() }}</span> 
+        results
+    </div>
+    <div>
+        {{ $products->links('pagination::tailwind') }}
+    </div>
+</div>
+
         </div>
     </div>
 </body>

@@ -12,11 +12,18 @@ class GoodsReceived extends Model
     protected $fillable = [
         'purchase_order_id',
         'received_date',
-        'notes'
+        'received_by',
+        'received_items',
+        'notes',
     ];
 
-    public function purchaseOrderItem()
+     public function purchaseOrder()
     {
-        return $this->belongsTo(PurchaseOrderItem::class);
+        return $this->belongsTo(PurchaseOrder::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(GoodsReceivedItem::class);
     }
 }

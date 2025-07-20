@@ -12,14 +12,19 @@ return new class extends Migration
     public function up(): void
     {
     
-           Schema::create('procurement_requests', function (Blueprint $table) {
+        Schema::create('procurement_requests', function (Blueprint $table) {
     $table->id();
-    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->string('product_name');
-    $table->integer('quantity');
-    $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+
+    $table->string('request_number')->unique(); // Request #
+    $table->date('request_date');               // Request Date
+    $table->string('department');               // Department
+    $table->enum('priority', ['low', 'medium', 'high'])->default('medium'); // Priority
+    $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status
+    $table->decimal('estimated_cost', 12, 2)->nullable(); // Estimated Cost
+
     $table->timestamps();
 });
+
 
 
     }

@@ -152,11 +152,11 @@
                 </div>
             </div>
            <nav class="space-y-1">
-                    <a href="#"  class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                    <a href="{{ route('wholesaler.dashboard') }}"  class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                         <i class="fas fa-boxes mr-3"></i>
                         Inventory
                     </a>
@@ -252,7 +252,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div
             
             <!-- Action Bar -->
             <div class="card bg-white p-4 mb-6">
@@ -269,14 +269,6 @@
         </button>
     </a>
 
-    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-        <i class="fas fa-filter mr-2"></i> Filter
-    </button>
-
-    <button class="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
-       <a href="{{ route('wholesaler_inventory.export') }}">
-    <i class="fas fa-download mr-2"></i> Export
-    </button>
 </div>
 
                 </div>
@@ -291,7 +283,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price (UGX)</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -314,7 +306,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->product_id }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $product->stock }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">${{ number_format($product->unit_price, 2) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">{{ number_format($product->unit_price, 2) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->measurements }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($product->stock > 20)
@@ -342,28 +334,60 @@
                                     <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No products found.</td>
                                 </tr>
                             @endforelse
+
+                            
                         </tbody>
                     </table>
                 </div>
             </div>
             
             <!-- Pagination -->
-            <div class="mt-6 flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">24</span> results
-                </div>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="px-3 py-1 border rounded-lg bg-green-800 text-white">1</button>
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">2</button>
-                    <button class="px-3 py-1 border rounded-lg hover:bg-gray-100">3</button>
-                    <button class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+          <div class="mt-6 flex items-center justify-between">
+    <div class="text-sm text-gray-700">
+        Showing 
+        <span class="font-medium">{{ $products->firstItem() }}</span> 
+        to 
+        <span class="font-medium">{{ $products->lastItem() }}</span> 
+        of 
+        <span class="font-medium">{{ $products->total() }}</span> 
+        results
+    </div>
+
+    <!-- Custom Pagination Styling -->
+    <div class="flex space-x-2">
+        {{-- Previous Page Link --}}
+        @if ($products->onFirstPage())
+            <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
+                <i class="fas fa-chevron-left"></i>
+            </span>
+        @else
+            <a href="{{ $products->previousPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+        @endif
+
+        {{-- Page Numbers --}}
+        @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+            @if ($page == $products->currentPage())
+                <span class="px-3 py-1 border rounded-lg bg-green-800 text-white">{{ $page }}</span>
+            @else
+                <a href="{{ $url }}" class="px-3 py-1 border rounded-lg hover:bg-gray-100">{{ $page }}</a>
+            @endif
+        @endforeach
+
+        {{-- Next Page Link --}}
+        @if ($products->hasMorePages())
+            <a href="{{ $products->nextPageUrl() }}" class="px-3 py-1 border rounded-lg text-gray-700 hover:bg-gray-100">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        @else
+            <span class="px-3 py-1 border rounded-lg text-gray-400 cursor-not-allowed">
+                <i class="fas fa-chevron-right"></i>
+            </span>
+        @endif
+    </div>
+</div>
+
         </div>
     </div>
 </body>

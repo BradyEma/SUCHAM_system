@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use App\Models\SupplierInventory;
 use Illuminate\Http\Request;
+use App\Models\Product; // ✅ Add this line
 
 class SupplierInventoryController extends Controller
 {
-   
-public function index()
-{
-    $products = SupplierInventory::all(); // or any other logic to get products
+    public function index()
+    {
+        // You had both lines, only keep the one you want
+        // $products = SupplierInventory::all();
+        $products = Product::paginate(10);
 
     return view('supplier_inventory.index', compact('products'));
 }
