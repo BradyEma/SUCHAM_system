@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <title>My Orders | GoldenFields</title>
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -12,61 +12,24 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            300: '#86efac',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
-                        },
-                        secondary: {
-                            50: '#fff7ed',
-                            100: '#ffedd5',
-                            200: '#fed7aa',
-                            300: '#fdba74',
-                            400: '#fb923c',
-                            500: '#f97316',
-                            600: '#ea580c',
-                            700: '#c2410c',
-                            800: '#9a3412',
-                            900: '#7c2d12',
-                        }
+                        primary: { 50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80', 500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d' },
+                        secondary: { 50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74', 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c', 800: '#9a3412', 900: '#7c2d12' }
                     }
                 }
             }
         }
     </script>
     <style>
-        .order-tab.active {
-            border-bottom: 3px solid #eab308;
-            color: #16a34a;
-            font-weight: 600;
-        }
-        .order-card:hover {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .nav-item {
-            transition: all 0.3s ease;
-        }
-         .nav-item:hover {
-            background-color: rgba(255, 215, 0, 0.1);
-        }
-        .nav-item.active {
-            background-color: #f0fdf4;
-            color: #14532d;
-            font-weight: 600;
-        }
+        .order-tab.active { border-bottom: 3px solid #eab308; color: #16a34a; font-weight: 600; }
+        .order-card:hover { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .nav-item { transition: all 0.3s ease; }
+        .nav-item:hover { background-color: rgba(255, 215, 0, 0.1); }
+        .nav-item.active { background-color: #f0fdf4; color: #14532d; font-weight: 600; }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div class="flex min-h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 pt-0 space-y-8 shadow-xl">
+<div class="flex min-h-screen">
+     <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 pt-0 space-y-8 shadow-xl">
         <div class="flex items-center justify-center h-16 px-4 border-b border-primary-700">
             <div class="flex items-center space-x-2">
                 <i class="fas fa-leaf text-yellow-400 text-xl"></i>
@@ -89,8 +52,8 @@
 
         <nav class="space-y-1">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item">
-                <i class="fas fa-tachometer-alt w-5 text-center text-primary-200"></i>
-                <span class="text-white">Products</span>
+                <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                <span class="text-black">Products</span>
             </a>
 
             <a href="{{ route('wishlist.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
@@ -100,13 +63,19 @@
                       class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full"
                       x-text="wishlist.length"></span>
             </a>
-             <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
-                    <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
-                    <span class="text-white">My Cart</span>
-            </a>
+             <a href="{{ route('customer.cart') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
+    <i class="fas fa-shopping-cart w-5 text-center text-primary-200"></i>
+    <span class="text-white">My Cart</span>
+
+    @if(isset($cartCount) && $cartCount > 0)
+        <span class="absolute top-3 right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            {{ $cartCount }}
+        </span>
+    @endif
+</a>
             <a href="{{ route('customer.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700  active">
-                    <i class="fas fa-clipboard-list w-5 text-center text-black"></i>
-                    <span class="text-black">Orders</span>
+                    <i class="fas fa-clipboard-list w-5 text-center text-primary-200"></i>
+                    <span class="text-white">Orders</span>
             </a>
             <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 relative">
                     <i class="fas fa-comment-dots w-5 text-center text-primary-200"></i>
@@ -129,146 +98,129 @@
         </nav>
     </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6">
-            <div class="max-w-6xl mx-auto">
-                <!-- Page Header -->
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-bold text-gray-800">My Orders</h1>
-                    <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg">
-                        <i class="fas fa-plus mr-2"></i> New Order
-                    </button>
-                </div>
+    <main class="flex-1 p-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">My Orders</h1>
+                <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-plus mr-2"></i> New Order
+                </button>
+            </div>
 
-                <!-- Order Tabs -->
-                <div class="mb-6 border-b border-gray-200">
-                    <div class="flex space-x-6">
-                        <button class="order-tab active py-3 px-1 text-sm font-medium">
-                            All Orders <span class="ml-1 bg-gray-200 text-gray-800 rounded-full px-2 py-0.5 text-xs">24</span>
-                        </button>
-                        <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
-                            Pending <span class="ml-1 bg-yellow-100 text-yellow-800 rounded-full px-2 py-0.5 text-xs">5</span>
-                        </button>
-                        
-                        <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
-                            On Delivery <span class="ml-1 bg-purple-100 text-purple-800 rounded-full px-2 py-0.5 text-xs">8</span>
-                        </button>
-                        <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
-                            Delivered <span class="ml-1 bg-green-100 text-green-800 rounded-full px-2 py-0.5 text-xs">7</span>
-                        </button>
-                    </div>
-                </div>
+            {{-- Status Tabs --}}
+            <div class="flex space-x-6 mb-6">
+                @foreach(['Pending', 'On Delivery', 'Delivered', 'Cancelled'] as $status)
+                    <a href="#{{ str($status)->slug() }}" class="text-sm font-medium text-primary-700 hover:underline">
+                        {{ $status }}
+                    </a>
+                @endforeach
+            </div>
 
-                <!-- Orders List -->
-                <div class="space-y-4">
-                   @foreach($groupedOrders as $transactionId => $groupedOrders)
+            {{-- Orders Section --}}
+            <div class="space-y-4">
+               
+@php
+    $statusMap = [
+        'Pending' => 'pending',
+        'On Delivery' => 'on delivery',
+        'Delivered' => 'completed', // your DB status for delivered orders
+        'Cancelled' => 'cancelled',
+    ];
+@endphp
 
+@foreach(['Pending', 'On Delivery', 'Delivered', 'Cancelled'] as $displayStatus)
     @php
-        $firstOrder = $groupedOrders->first();
-        $status = ucfirst($firstOrder->status);
-        $totalAmount = $groupedOrders->sum('total');
-        $date = \Carbon\Carbon::parse($firstOrder->created_at)->format('M d, Y');
-        $itemsCount = $groupedOrders->count();
+        $actualStatus = $statusMap[$displayStatus];
+        $ordersGroupedByTransaction = $groupedOrders[$actualStatus] ?? collect();
     @endphp
 
-    <div class="order-card bg-white p-4 rounded-lg border border-gray-200">
-        <div class="flex justify-between items-start mb-3">
-            <div>
-                <h3 class="font-medium text-gray-800">Order #{{ $transactionId }}</h3>
-                <p class="text-sm text-gray-500">Placed on {{ $date }}</p>
-            </div>
-            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
-                {{ $status }}
-            </span>
-        </div>
+    <section id="{{ str($displayStatus)->slug() }}" class="mb-10 scroll-mt-20">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{{ $displayStatus }} Orders</h2>
 
-        <div class="flex items-center mb-4">
-            <div class="flex -space-x-2">
-               @foreach($groupedOrders->take(3) as $order)
-    @if ($order->product)
-        <img src="{{ asset('storage/' . $order->product->product_image) }}"
-             alt="Product"
-             class="w-10 h-10 rounded-full border-2 border-white">
-    @else
-        <div class="w-10 h-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs text-gray-500">
-            N/A
-        </div>
-    @endif
-@endforeach
+        @forelse($ordersGroupedByTransaction as $transactionId => $orderGroup)
+            @php
+                $firstOrder = $orderGroup->first();
+                $totalAmount = $orderGroup->sum('total');
+                $date = \Carbon\Carbon::parse($firstOrder->created_at)->format('M d, Y');
+                $itemsCount = $orderGroup->count();
+            @endphp
 
-                @if($groupedOrders->count() > 3)
-                    <div class="w-10 h-10 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs text-gray-500">
-                        +{{ $groupedOrders->count() - 3 }}
+            <div class="order-card bg-white p-4 rounded-lg border border-gray-200 mb-4">
+                <!-- Order Summary -->
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <h3 class="font-medium text-gray-800">Order #{{ $transactionId }}</h3>
+                        <p class="text-sm text-gray-500">Placed on {{ $date }}</p>
                     </div>
-                @endif
-            </div>
-            <div class="ml-4">
-                <p class="text-sm text-gray-600">{{ $itemsCount }} item(s) • UGX {{ number_format($totalAmount) }}</p>
-            </div>
-        </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium
+                        {{ match($displayStatus) {
+                            'Pending' => 'bg-yellow-100 text-yellow-800',
+                            'On Delivery' => 'bg-purple-100 text-purple-800',
+                            'Delivered' => 'bg-green-100 text-green-800',
+                            'Cancelled' => 'bg-red-100 text-red-800',
+                            default => 'bg-gray-200 text-gray-800'
+                        } }}">
+                        {{ $displayStatus }}
+                    </span>
+                </div>
 
-        <div class="flex justify-between items-center">
-            <div class="text-sm text-gray-500">
-                <i class="fas fa-truck mr-1"></i> Standard Delivery
-            </div>
-            <div class="space-x-2">
-                <a href="{{ route('customer.orders.show', $order->transaction_id) }}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
-                    View Details
-                </a>
-                @if($status === 'Pending')
-                   <form method="POST" action="{{ route('customer.orders.cancel', ['transactionId' => $transactionId]) }}">
-    @csrf
-    <input 
-        type="password" 
-        name="password" 
-        class="border rounded px-2 py-1 text-sm mb-2" 
-        placeholder="Enter password to cancel" 
-        required
-    >
-    <button type="submit" class="text-sm text-red-600 hover:text-red-700 font-medium">
-        Cancel Order
-    </button>
-</form>
+                <!-- Product Images & Summary -->
+                <div class="flex items-center mb-4">
+                    <div class="flex -space-x-2">
+                        @foreach($orderGroup->take(3) as $order)
+                            <img src="{{ asset('storage/' . $order->product_image) }}"
+                                 alt="Product"
+                                 class="w-10 h-10 rounded-full border-2 border-white">
+                        @endforeach
+                        @if($orderGroup->count() > 3)
+                            <div class="w-10 h-10 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs text-gray-500">
+                                +{{ $orderGroup->count() - 3 }}
+                            </div>
+                        @endif
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm text-gray-600">{{ $itemsCount }} item(s) • UGX {{ number_format($totalAmount) }}</p>
+                    </div>
+                </div>
 
-@if(session('error'))
-    <p class="text-red-600 text-sm mt-1">{{ session('error') }}</p>
-@endif
-@if(session('success'))
-    <p class="text-green-600 text-sm mt-1">{{ session('success') }}</p>
-@endif
+                <!-- Actions -->
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-500">
+                        <i class="fas fa-truck mr-1"></i> Standard Delivery
+                    </div>
+                    <div class="space-x-2">
+                        <a href="{{ route('customer.orders.show', $transactionId) }}" class="text-sm text-primary-600 hover:text-primary-700 font-medium">
+                            View Details
+                        </a>
 
-                @endif
+                        @if($displayStatus === 'Pending')
+                            <form method="POST" action="{{ route('customer.orders.cancel', ['transactionId' => $transactionId]) }}">
+                                @csrf
+                                <input type="password" name="password" class="border rounded px-2 py-1 text-sm mb-2" placeholder="Enter password to cancel" required>
+                                <button type="submit" class="text-sm text-red-600 hover:text-red-700 font-medium">
+                                    Cancel Order
+                                </button>
+                            </form>
+                            @if(session('error'))
+                                <p class="text-red-600 text-sm mt-1">{{ session('error') }}</p>
+                            @endif
+                            @if(session('success'))
+                                <p class="text-green-600 text-sm mt-1">{{ session('success') }}</p>
+                            @endif
+                        @endif
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        @empty
+            <p class="text-gray-500 text-sm">No {{ strtolower($displayStatus) }} orders yet.</p>
+        @endforelse
+    </section>
 @endforeach
 
-                </div>
 
-                <!-- Pagination -->
-                <div class="mt-8 flex justify-center">
-                    <nav class="flex items-center space-x-2">
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-100">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-600 text-white font-medium">
-                            1
-                        </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
-                            2
-                        </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">
-                            3
-                        </button>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-100">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </nav>
-                </div>
             </div>
-        </main>
-    </div>
-
-
+        </div>
+    </main>
+</div>
 </body>
 </html>

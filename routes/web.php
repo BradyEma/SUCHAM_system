@@ -159,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
     //customer
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
-    Route::get('/customer/orders', [CustomerController::class, 'orders'])->name('customer.orders');
+Route::get('/customer/orders', [CustomerOrderController::class, 'index'])->name('customer.orders');
     Route::get('/customer/products', [CustomerController::class, 'products'])->name('customer.products');
     
     //admin

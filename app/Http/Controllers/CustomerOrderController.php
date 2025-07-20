@@ -12,17 +12,34 @@ use Illuminate\Support\Facades\Hash;
 class CustomerOrderController extends Controller
 {
     // Show list of orders for logged-in customer
-    public function index()
-    {
-        $user = Auth::user();
+  public function index()
+{
+    $userId = auth()->id();
 
-        // Assuming your orders table has user_id or customer_id
-        $orders = RetailerOrder::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+    $rawOrders = \App\Models\RetailerOrder::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        return view('dashboard.customer-orders', compact('orders'));
-    }
+    $groupedOrders = $rawOrders
+        ->groupBy(function ($order) {
+            return strtolower(trim($order->status));
+        })
+        ->map(function ($statusGroup) {
+            return $statusGroup->groupBy('transaction_id');
+        });
+
+    $unreadCount = 0;  // just set to zero
+
+    return view('dashboard.customer-orders', [
+        'groupedOrders' => $groupedOrders,
+        'user' => auth()->user(),
+        'unreadCount' => $unreadCount,
+    ]);
+}
+
+
+
+
 
     // Show detail page for a single order by transaction ID
     public function show($transactionId)
