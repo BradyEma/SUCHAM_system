@@ -1,46 +1,57 @@
 <?php
+use App\Models\SupportTicket;
 use Illuminate\Support\Facades\App;
+use App\Mail\SupportTicketReplyMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AdminController;
+
 use App\Livewire\Admin\Messages\Messages;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RetailerController;
-
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\LogisticsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WholesalerController;
+
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
-use App\Http\Controllers\Admin\CustomerSegmentController;
-use Illuminate\Support\Facades\Mail;
-use App\Models\SupportTicket;
-use App\Mail\SupportTicketReplyMail;
-
-use App\Http\Controllers\Retailer\RetailerInventoryController;
-use App\Http\Controllers\VendorValidationController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\CustomerCartController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\Retailer\OrderController;
-use App\Http\Controllers\CustomerOrderController;
 
 
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Login routes
+Route::get('/login', fn () => view('auth.login'))->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+
+// Supplier registration
+Route::get('/register/supplier', [SupplierRegisterController::class, 'showRegistrationForm'])->name('register.supplier');
+Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
 
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
 use App\Http\Controllers\SupplierRegisterController;
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\VendorValidationController;
  
-use App\Http\Controllers\ML\ForecastController;
-use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\ML\ForecastExportController;
+use App\Http\Controllers\Admin\CustomerSegmentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 
 
@@ -148,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
    Route::get('/retailer/sales-chart-data', [OrderController::class, 'salesChartData'])->middleware('auth');
 
 
-    // User profile routes
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -216,6 +227,17 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
     });
 
+         Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    Route::resource('logistics', LogisticsController::class)->except(['index']);
+     Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    // Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics.index');
+    Route::get('/logistics/create', [LogisticsController::class, 'create'])->name('admin.logistics.create');
+    Route::post('/logistics', [LogisticsController::class, 'store'])->name('admin.logistics.store');
+    Route::get('/logistics/{logistic}', [LogisticsController::class, 'show'])->name('admin.logistics.show');
+    Route::get('/logistics/{logistic}/edit', [LogisticsController::class, 'edit'])->name('admin.logistics.edit');
+    Route::put('/logistics/{logistic}', [LogisticsController::class, 'update'])->name('admin.logistics.update');
+    Route::delete('/logistics/{logistic}', [LogisticsController::class, 'destroy'])->name('admin.logistics.destroy');
+    Route::get('/logistics/{logistic}/shipments', [LogisticsController::class, 'shipments'])->name('admin.logistics.shipments');
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
