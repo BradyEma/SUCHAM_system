@@ -73,7 +73,7 @@
 </div>
                 
                 <!-- Main Navigation -->
-                <div class="flex-1 overflow-y-auto py-4">
+        <div class="flex-1 overflow-y-auto py-4">
                     <nav class="px-2 space-y-1">
                         <!-- Dashboard -->
                         <a href="{{ route('retailer.dashboard') }}" class="bg-white text-black group flex items-center px-4 py-3 text-sm font-medium rounded-md">
@@ -89,7 +89,7 @@
                         </a>
                         
                         <!-- Orders -->
-                        <a href="{{ route('retailer.orders') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('retailer_orders.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             My Orders
                             <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ $pendingOrders }}</span>
