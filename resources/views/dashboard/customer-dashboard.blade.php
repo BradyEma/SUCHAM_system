@@ -304,10 +304,17 @@
                     img: "/product_images/molasses.jpg"
                 },
                 {
-                    name: "Bagase",
-                    price: 2500,
-                    img: "/product_images/bagase.png"
-                }
+                    name: "Honey",
+                    price: 4000,
+                    img: "/product_images/honey.jpg"
+                },
+                 {
+        
+        name: "Caster Sugar",
+        price: 5000,
+        img: "/product_images/caster-sugar.png"
+    }
+    
             ],
 
             openModal(product) {
@@ -387,12 +394,20 @@
         price: 2000,
         img: "/product_images/molasses.jpg"
     },
+   
     {
-        product_id: 6,
-        name: "Bagase",
-        price: 2500,
-        img: "/product_images/bagase.png"
+        product_id: 7,
+                    name: "Honey",
+                    price: 4000,
+                    img: "/product_images/honey.jpg"
+    },
+    {
+        product_id: 8,
+        name: "Caster Sugar",
+        price: 5000,
+        img: "/product_images/caster-sugar.png"
     }
+    
 ]
 ,
 

@@ -252,7 +252,7 @@
     <!-- Retailer Selection -->
     <div class="mb-6">
         <label for="retailer_location" class="block text-sm font-medium text-gray-700 mb-2">
-            <i class="fas fa-store mr-2 text-primary-600"></i> Select Retailer Location
+            <i class="fas fa-store mr-2 text-primary-600"></i> Select Your Location
         </label>
         <select name="retailer_id" id="retailer_location" 
                 class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">

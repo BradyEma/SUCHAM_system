@@ -194,6 +194,10 @@ Route::get('/customer/orders', [CustomerOrderController::class, 'index'])->name(
      Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
       Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
+       Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('admin.inventory.edit');
+    Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('admin.inventory.update');
+    Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('admin.inventory.destroy');
+    Route::get('/inventory/{id}', [InventoryController::class, 'show'])->name('admin.inventory.show');
 
     //wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -206,12 +210,14 @@ Route::get('/customer/orders', [CustomerOrderController::class, 'index'])->name(
     Route::get('/customer/cart', [CustomerCartController::class, 'index'])->name('customer.cart');
     Route::post('/customer/cart/add', [CustomerCartController::class, 'addToCart'])->name('customer.cart.add');
     Route::post('/cart/decrease/{id}', [CustomerCartController::class, 'decreaseQuantity'])->name('cart.decrease');
-    Route::post('/cart/increase/{id}', [App\Http\Controllers\CustomerCartController::class, 'increaseQuantity'])->name('cart.increase');
-    Route::delete('/cart/remove/{id}', [App\Http\Controllers\CustomerCartController::class, 'removeItem'])->name('cart.remove');
+   
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout')->middleware('auth');
     Route::post('/cart/checkout', [CustomerCartController::class, 'checkout'])->name('cart.checkout');
-    Route::get('/retailer/orders/{transactionId}', [App\Http\Controllers\Retailer\OrderController::class, 'show'])
-    ->name('retailer.orders.show');
+    Route::get('/retailer/orders/{transactionId}', [OrderController::class, 'show'])->name('retailer.orders.show');
+
+    Route::post('/cart/increase/{id}', [CustomerCartController::class, 'increaseQuantity'])->name('cart.increase');
+Route::delete('/cart/remove/{id}', [CustomerCartController::class, 'removeItem'])->name('cart.remove');
+
 
 });
 

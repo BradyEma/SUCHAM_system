@@ -60,7 +60,7 @@ class InventoryController extends Controller
         'supplier_email' => 'nullable|email',
         'product_description' => 'nullable|string',
         'unit_of_measurement' => 'nullable|string',
-        'product_image' => 'nullable|image|max:5120',
+        'product_image' => 'nullable|image|max:10120',
     ]);
 
     // Handle the image upload
