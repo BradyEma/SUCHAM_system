@@ -44,10 +44,11 @@ Route::post('/register/supplier', [SupplierRegisterController::class, 'register'
 
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
-use App\Http\Controllers\SupplierRegisterController;
+use App\Http\Controllers\WholesalerOrderController;
 
-use App\Http\Controllers\VendorValidationController;
+use App\Http\Controllers\SupplierRegisterController;
  
+use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\ML\ForecastExportController;
 use App\Http\Controllers\Admin\CustomerSegmentController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -182,6 +183,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/wholesaler/orders', [WholesalerOrderController::class, 'index'])->name('wholesaler.orders');
+});
     
     //customer
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');

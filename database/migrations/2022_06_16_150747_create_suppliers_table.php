@@ -10,7 +10,7 @@ return new class extends Migration
      * Run the migrations.
      */
    public function up(): void
-{
+{if (!Schema::hasTable('suppliers')) {
     Schema::create('suppliers', function (Blueprint $table) {
        $table->unsignedBigInteger('user_id')->unique();
        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -29,6 +29,7 @@ return new class extends Migration
 
         $table->timestamps();
     });
+}
 }
 
 

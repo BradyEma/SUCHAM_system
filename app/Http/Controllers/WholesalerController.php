@@ -14,7 +14,7 @@ class WholesalerController extends Controller
     $user = Auth::user();
      $wholesaler = Wholesaler::where('user_id', $user->id)->first(); // assuming you have the relationship set
 
-    return view('dashboard.wholesaler-dashboard', compact('user', 'wholesaler'));
+    return view('dashboard.wholesaler-dashboard', compact('user'));
 }
   public function showProfileForm()
 {
