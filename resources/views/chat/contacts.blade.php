@@ -1,77 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-    <link rel="icon" href="favicon-sucham.png">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-sky-100 min-h-screen">
-
-    <div class="flex h-screen">
-
-        <!-- Sidebar -->
-        <div class="w-1/4 bg-blue overflow-y-auto shadow">
-            <div class="p-4 font-bold bg-sky-600 text-white text-lg border-b">Chat Contacts</div>
-            <!--to generate contact list-->
-
-            @foreach(App\Models\User::where('id', '!=', auth()->id())->get() as $contact)
-               <a href="{{ route('chat', ['receiver_id' => $contact->id]) }}"
-
-                   class="flex items-center p-3 hover:bg-sky-100 
-                          {{ request()->route('receiver_id') == $contact->id ? 'bg-sky-200' : '' }}">
-                    <div class="w-10 h-10 rounded-full bg-sky-300 text-white font-bold mr-3 flex items-center justify-center">
-                        {{ substr($contact->name, 0, 1) }}
-                    </div>
-                    <div>
-                        <div class="font-semibold">{{ $contact->name }}</div>
-                        <div class="text-xs text-gray-500">Last message...</div>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-
-        <!-- Chat Area -->
-        <div class="flex-1 flex flex-col bg-gray-300">
-
-            <!-- Messages -->
-            <div class="flex-1 overflow-y-auto p-4 space-y-2">
-                @isset($messages)
-                    @foreach($messages as $msg)
-                        <div class="flex {{ $msg->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
-                            <div class="max-w-[75%] p-3 rounded-lg 
-                                {{ $msg->sender_id === auth()->id() ? 'bg-sky-300 text-white' : 'bg-white' }}">
-                                <p>{{ $msg->message }}</p>
-                                <div class="text-xs text-gray-700 text-right mt-1">
-                                    {{ $msg->created_at->format('h:i A') }}
+<div class="container">
+    <div class="pt-2 row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Contacts</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="contacts-list">
+                        <li class="bg-warning">
+                            <a href="#">
+                                <img class="contacts-list-img" src="http://localhost:8000/noimage.png" alt="User Avatar">
+                                <div class="contacts-list-info">
+                                    <span class="contacts-list-name text-dark">
+                                        Rossie Hoeger
+                                        <small class="float-right contacts-list-date text-muted">16/11/2021</small>
+                                    </span>
+                                    <span class="contacts-list-msg text-secondary">Hi</span>
                                 </div>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <div class="h-full flex items-center justify-center text-gray-500">
-                        Select a contact to chat
-                    </div>
-                @endisset
-            </div>
+                                <!-- /.contacts-list-info -->
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="#">
+                                <img class="contacts-list-img" src="http://localhost:8000/noimage.png" alt="User Avatar">
 
-            <!-- Input -->
-            <div class="p-3 bg-white border-t">
-                <form wire:submit.prevent="sendMessage" class="flex gap-2">
-                    <input type="text" wire:model="messageText" placeholder="Type a message" 
-                           class="flex-1 px-4 py-2 border rounded-full focus:ring-2 focus:ring-sky-400" />
-                    <button type="submit" class="p-2 text-sky-600 hover:text-sky-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
-                             viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                        </svg>
-                    </button>
-                </form>
+                                <div class="contacts-list-info">
+                                    <span class="contacts-list-name text-dark">
+                                        Ashleigh Carter
+                                        <small class="float-right contacts-list-date text-muted">30/11/2021</small>
+                                    </span>
+                                    <span class="contacts-list-msg text-secondary">Hi</span>
+                                </div>
+                                <!-- /.contacts-list-info -->
+                            </a>
+                        </li>
+                        <!-- End Contact Item -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Chat with
+                        <span>
+                            Rossie Hoeger
+                        </span>
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <!-- Conversations are loaded here -->
+                    <div class="direct-chat-messages" id="conversation">
+                        <!-- Message. Default to the left -->
+                        <div class="direct-chat-msg right">
+                            <div class="clearfix direct-chat-infos">
+                                <span class="float-left direct-chat-name">You</span>
+                                <span class="float-right direct-chat-timestamp">16 Nov 11:52 pm</span>
+                            </div>
+                            <!-- /.direct-chat-infos -->
+                            <img class="direct-chat-img" src="http://localhost:8000/storage/avatars/24HCF7MiZIgETjLJ1PUddPPseAWDSJEW9jVRRiy1.png" alt="message user image">
+                            <!-- /.direct-chat-img -->
+                            <div class="direct-chat-text">
+                                Hi
+                            </div>
+                            <!-- /.direct-chat-text -->
+                        </div>
+                        <!-- /.direct-chat-msg -->
+                    </div>
+                    <!--/.direct-chat-messages-->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <form action="#">
+                        <div class="input-group">
+                            <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                            <span class="input-group-append">
+                                <button type="button" class="btn btn-primary">Send</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card-footer-->
             </div>
         </div>
     </div>
-
-</body>
-</html>
+</div>

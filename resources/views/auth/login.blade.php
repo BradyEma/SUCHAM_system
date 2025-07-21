@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Login | GoldenFields</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -25,7 +26,8 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-700 to-primary-900 flex items-center justify-center p-4 relative overflow-hidden">
+<body class="h-full overflow-y-auto flex items-center justify-center bg-gradient-to-br from-primary-700 to-primary-900 p-4 relative">
+
     <!-- Background pattern -->
     <div class="absolute inset-0 bg-pattern z-0"></div>
     <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-green-700 rounded-full opacity-10 mix-blend-overlay"></div>
@@ -39,7 +41,7 @@
         <div class="bg-gradient-to-r from-primary-700 to-primary-800 p-8 text-center">
             <div class="flex justify-center mb-4">
                 <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-md border-4 border-yellow-400">
-                    <img src="{{ asset('sucham.jpg') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-12 w-12 rounded-full">
                 </div>
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
@@ -64,10 +66,13 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-envelope text-green-800"></i>
                         </div>
-                        <input id="email" name="email" type="email" required autofocus
-                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400" 
+                        <input id="email" name="email" type="email" required autofocus value="{{ old('email') }}"
+                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 @error('email') border-red-500 @enderror" 
                                placeholder="your@email.com">
                     </div>
+                    @error('email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Password -->
@@ -78,12 +83,15 @@
                             <i class="fas fa-lock text-green-800"></i>
                         </div>
                         <input id="password" name="password" type="password" required
-                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400" 
+                               class="pl-10 input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 @error('password') border-red-500 @enderror" 
                                >
                         <span class="password-toggle" onclick="togglePassword('password')">
                             <i class="far fa-eye text-green-800"></i>
                         </span>
                     </div>
+                    @error('password')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Remember me & Forgot password -->

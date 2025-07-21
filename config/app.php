@@ -133,6 +133,10 @@ return [
     |
     */
 
+    'aliases' => [
+    'PDF' => Barryvdh\DomPDF\Facade::class,
+],
+
     'providers' => [
 
         /*
@@ -161,6 +165,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        Barryvdh\DomPDF\ServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -168,6 +174,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
 
     ],
 

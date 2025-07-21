@@ -1,58 +1,75 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Supplier Dashboard</title>
+    <title>Profile - GoldenFields Supplier Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+        }
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        .nav-item.active {
+            background-color: #f0fdf4;
+            color: #14532d;
+            font-weight: 600;
+        }
+        .profile-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #22c55e;
+        }
+        .danger-zone {
+            border-left: 4px solid #ef4444;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-black">
+<body class="bg-gray-50 text-gray-800">
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-sky-700 text-white p-6 space-y-6">
-            <div class="flex items-center space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                <div class="text-2xl font-bold">SUCHAM</div>
+        <aside class="w-64 sidebar text-white p-6 space-y-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
+                </div>
+                <div>
+                    <div class="text-xl font-bold">GoldenFields</div>
+                    <div class="text-xs text-green-200">Industries Ltd.</div>
+                </div>
             </div>
-            <nav class="space-y-2">
-                <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-3 py-3 rounded hover:bg-sky-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
+            <nav class="space-y-1">
+                <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('supplier.orders') }}" class="flex items-center space-x-3 px-3 py-3 rounded hover:bg-sky-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+                <a href="{{ route('supplier.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-clipboard-list w-5 text-center"></i>
                     <span>Orders</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-3 rounded hover:bg-sky-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
+                <a href="{{ route('supplier.products') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-boxes w-5 text-center"></i>
                     <span>Products</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-3 rounded hover:bg-sky-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span>Settings</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-3 rounded hover:bg-sky-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+               
+                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
                 </a>
-                <a href="#" class="flex items-center space-x-3 px-3 py-3 rounded bg-white text-sky-700 font-semibold">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
+                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <span>Support Center</span>
+                </a>
+                <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                    <i class="fas fa-user w-5 text-center"></i>
                     <span>Profile</span>
                 </a>
             </nav>
@@ -62,38 +79,80 @@
         <main class="flex-1 p-8 overflow-auto">
             <div class="flex justify-between items-start mb-8">
                 <div>
-                    <h1 class="text-3xl font-bold text-sky-700">Supplier Profile</h1>
-                    <p class="text-gray-600">Manage your account information and settings</p>
+                    <h1 class="text-3xl font-bold text-green-800">Supplier Profile</h1>
+                    @if(session('info'))
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-2 rounded">
+                            {{ session('info') }}
+                        </div>
+                    @endif
+
+                    @if(session('error'))
+                      <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                          {{ session('error') }}
+                      </div>
+                    @endif
+                    <!-- Vendor Validation Section -->
+@if(session('success'))
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-yellow-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-yellow-800">{{ session('success') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Profile Card -->
-                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <div class="profile-card bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                     <div class="flex flex-col items-center">
                         <div class="relative mb-4">
-                            <img class="h-32 w-32 rounded-full object-cover" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Supplier photo">
-                            <button class="absolute bottom-0 right-0 bg-sky-600 text-white p-2 rounded-full hover:bg-sky-700">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </button>
-                        </div>
-                        <h2 class="text-xl font-bold text-gray-800">Sweet Harvest Ltd</h2>
-                        <p class="text-gray-600 mb-4">Sugar Cane & Honey Supplier</p>
+   <img 
+    class="h-32 w-32 rounded-full object-cover border-4 border-yellow-400" 
+    src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('default-profile.png') }}" 
+    alt="Supplier photo"
+>
+    
+    <!-- Upload button -->
+    <form action="{{ route('supplier.profile.picture.update') }}" method="POST" enctype="multipart/form-data" class="absolute bottom-0 right-0">
+    @csrf
+    <label for="profile_picture" class="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600 cursor-pointer">
+        <i class="fas fa-camera"></i>
+    </label>
+    <input type="file" id="profile_picture" name="profile_picture" class="hidden" onchange="this.form.submit()">
+</form>
+</div>
+
+                        <h2 class="text-xl font-bold text-gray-800">{{ $supplier->business_name ?? 'Not Provided' }}</h2>
+                        <p class="text-gray-600 mb-4">{{ $supplier->business_type ?? 'Not Provided' }}</p>
                         <div class="flex space-x-4 mb-6">
-                            <button class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                Message
-                            </button>
+                            <a href="{{ route('chat.livewire') }}">
+                                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                                    <i class="fas fa-envelope mr-2"></i>Message
+                                </button>
+                            </a>
                             <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                Call
+                                <i class="fas fa-phone mr-2"></i>Call
                             </button>
                         </div>
                     </div>
@@ -102,46 +161,39 @@
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">Supplier Information</h3>
                         <div class="space-y-3">
                             <div class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                                <i class="fas fa-user text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Contact Person</p>
-                                    <p class="font-medium">John Kamau</p>
+                                    <p class="font-medium">{{ Auth::user()->name }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                                <i class="fas fa-envelope text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Email</p>
-                                    <p class="font-medium">john@sweetharvest.co.ug</p>
+                                    <p class="font-medium">{{ Auth::user()->email }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                <div>
-                                    <p class="text-sm text-gray-500">Phone</p>
-                                    <p class="font-medium">+256 752 123 456</p>
-                                </div>
-                            </div>
+    <i class="fas fa-phone text-gray-500 mr-3 mt-1"></i>
+    <div>
+        
+
+        <p class="text-sm text-gray-500">Phone</p>
+        <p class="font-medium">{{ $supplier->telNo ?? 'Not Provided' }}</p>
+
+    </div>
+</div>
+
                             <div class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
+                                <i class="fas fa-map-marker-alt text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Location</p>
-                                    <p class="font-medium">Kampala, Uganda</p>
+                                    <p class="font-medium">{{ $supplier->location ?? 'Not Provided' }}</p>
                                 </div>
                             </div>
                             <div class="flex items-start">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                                <i class="fas fa-briefcase text-gray-500 mr-3 mt-1"></i>
                                 <div>
                                     <p class="text-sm text-gray-500">Business Since</p>
                                     <p class="font-medium">2015</p>
@@ -153,105 +205,251 @@
 
                 <!-- Account Settings -->
                 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 lg:col-span-2">
-                    <h2 class="text-xl font-semibold text-sky-700 mb-6">Account Settings</h2>
+                    <h2 class="text-xl font-semibold text-green-800 mb-6">Account Settings</h2>
                     
                     <div class="space-y-6">
-                        <!-- Personal Information -->
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Personal Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                                    <input type="text" value="John" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                                    <input type="text" value="Kamau" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <input type="email" value="john@sweetharvest.co.ug" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                                    <input type="tel" value="+256752123456" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                            </div>
-                        </div>
+                                             
 
                         <!-- Business Information -->
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-800 mb-4">Business Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
-                                    <input type="text" value="Sweet Harvest Ltd" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Type</label>
-                                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                        <option>Sugar Cane Supplier</option>
-                                        <option>Honey Supplier</option>
-                                        <option selected>Sugar Cane & Honey Supplier</option>
-                                        <option>Other</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
-                                    <input type="text" value="TAX-UG-12345678" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
-                                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500" rows="2">123 Sugar Lane, Industrial Area, Kampala, Uganda</textarea>
-                                </div>
-                            </div>
-                        </div>
+                       <form action="{{ route('supplier.profile.update') }}" method="POST" enctype="multipart/form-data">
 
-                        <!-- Password Change -->
-                        <div>
-                            <form method="POST" action="{{ route('supplier.password.update') }}">
-    @csrf
-    <div class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-            <input type="password" name="current_password" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+
+                            @csrf
+                            @method('POST') {{-- Use PUT if you're updating an existing record --}}
+    
+                          <h3 class="text-lg font-medium text-gray-800 mb-4">Business Information</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="md:col-span-2">
+            <label for="business_name" class="block text-sm font-medium text-gray-700 mb-1">Business Name*</label>
+            <input type="text" name="business_name" id="business_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
         </div>
+
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-            <input type="password" name="new_password" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
-        </div>
+        <label for="telNo">Telephone Number*</label>
+         <input type="tel" id="telNo" name="telNo" placeholder="+256701234567" class="border rounded px-3 py-2" required>
+         </div>
+
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-            <input type="password" name="new_password_confirmation" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+            <label for="business_type" class="block text-sm font-medium text-gray-700 mb-1">Business Type*</label>
+            <select name="business_type" id="business_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                <option value="Sugar Cane Supplier">Sugar Cane Supplier</option>
+                <option value="Honey Supplier">Honey Supplier</option>
+                <option value="Sugar Cane & Honey Supplier" selected>Sugar Cane & Honey Supplier</option>
+                <option value="Molasses">Molasses</option>
+                <option value="Other">Sugar Beets</option>
+                <option value="Other">Packaging Materials</option>
+                <option value="Other">Other</option>
+            </select>
         </div>
-        <div class="flex justify-end pt-4">
-            <button type="submit" class="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700">
-                Update Password
+
+        <div>
+            <label for="Tax_ID" class="block text-sm font-medium text-gray-700 mb-1">Tax ID</label>
+            <input type="text" name="Tax_ID" id="Tax_ID" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
+            <textarea name="location" id="location" rows="2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="tin" class="block text-sm font-medium text-gray-700 mb-1">TIN*</label>
+            <input type="text" name="tin" id="tin" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+        </div>
+
+        <div class="md:col-span-2">
+            <label for="document" class="block text-sm font-medium text-gray-700 mb-1">Upload Certificate or License (PDF)</label>
+            <input type="file" name="document" id="document" accept="application/pdf" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+        </div>
+
+        <div class="md:col-span-2 text-right mt-4">
+            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded">
+                Save Business Info
             </button>
         </div>
     </div>
 </form>
 
-                        </div>
+<!-- Vendor Validation Section -->
+@if(session('success'))
+    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-check-circle text-yellow-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-yellow-800">{{ session('success') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-red-500"></i>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+            </div>
+        </div>
+    </div>
+@endif
+
+<form method="POST" action="{{ route('vendor.validation.submit') }}" class="bg-white shadow-md rounded-lg p-6">
+    @csrf
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Business Registration Number -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">BRN (Business Registration Number)</label>
+            <input type="text" name="brn" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="Enter your BRN">
+        </div>
+
+        <!-- Annual Revenue -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Annual Revenue (UGX)</label>
+            <div class="relative rounded-md shadow-sm">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span class="text-gray-500">UGX</span>
+                </div>
+                <input type="number" name="annual_revenue" class="block w-full pl-16 p-3 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500" required placeholder="0">
+            </div>
+        </div>
+
+        <!-- Net Profit Margin -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Net Profit Margin (%)</label>
+            <div class="relative rounded-md shadow-sm">
+                <input type="number" step="0.1" name="net_profit_margin" class="block w-full p-3 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500" required placeholder="0.0">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Years of Operation -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Years of Operation</label>
+            <input type="number" name="years_of_operation" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="Number of years">
+        </div>
+
+        <!-- Customer Rating -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Customer Rating (0-5)</label>
+            <input type="number" step="0.1" max="5" name="customer_rating" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required placeholder="0.0 to 5.0">
+        </div>
+
+        <!-- Tax Clearance -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Tax Clearance</label>
+            <select name="tax_clearance" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <!-- Background Check -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Background Check</label>
+            <select name="background_check" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Clear">Clear</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+            </select>
+        </div>
+
+        <!-- Financial Stability -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Financial Stability</label>
+            <select name="financial_stability" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select level</option>
+                <option value="Strong">Strong</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Weak">Weak</option>
+            </select>
+        </div>
+
+        <!-- Reputation -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Reputation</label>
+            <select name="reputation" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select rating</option>
+                <option value="Excellent">Excellent</option>
+                <option value="Average">Average</option>
+                <option value="Poor">Poor</option>
+            </select>
+        </div>
+
+        <!-- Regulatory Compliance -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Regulatory Compliance</label>
+            <select name="regulatory_compliance" class="block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500" required>
+                <option value="">Select status</option>
+                <option value="Compliant">Compliant</option>
+                <option value="Non-compliant">Non-compliant</option>
+            </select>
+        </div>
+    </div>
+
+   <div class="md:col-span-2 text-right mt-4">
+            <button type="submit" class="bg-green-500 hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded">
+                Submit for validation
+            </button>
+        </div>
+</form>
+
+
+
+                        <!-- Password Change -->
+                        <div>
+    <h3 class="text-lg font-medium text-gray-800 mb-4">Change Password</h3>
+    <form method="POST" action="{{ route('supplier.password.update') }}">
+        @csrf
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                <input name="current_password" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <input name="new_password" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input name="new_password_confirmation" type="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div class="flex justify-end pt-4">
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg" type="submit">
+                    Update Password
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 
                         <!-- Notification Preferences -->
                         <div>
                             <h3 class="text-lg font-medium text-gray-800 mb-4">Notification Preferences</h3>
                             <div class="space-y-3">
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="order-notifications" checked class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded">
+                                    <input type="checkbox" id="order-notifications" checked class="h-4 w-4 text-yellow-500 focus:ring-yellow-400 border-gray-300 rounded">
                                     <label for="order-notifications" class="ml-2 block text-sm text-gray-700">New order notifications</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="message-notifications" checked class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded">
+                                    <input type="checkbox" id="message-notifications" checked class="h-4 w-4 text-yellow-500 focus:ring-yellow-400 border-gray-300 rounded">
                                     <label for="message-notifications" class="ml-2 block text-sm text-gray-700">Message notifications</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="promo-notifications" class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded">
+                                    <input type="checkbox" id="promo-notifications" class="h-4 w-4 text-yellow-500 focus:ring-yellow-400 border-gray-300 rounded">
                                     <label for="promo-notifications" class="ml-2 block text-sm text-gray-700">Promotional offers</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input type="checkbox" id="system-notifications" checked class="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded">
+                                    <input type="checkbox" id="system-notifications" checked class="h-4 w-4 text-yellow-500 focus:ring-yellow-400 border-gray-300 rounded">
                                     <label for="system-notifications" class="ml-2 block text-sm text-gray-700">System updates</label>
                                 </div>
                             </div>
@@ -262,7 +460,7 @@
                             <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50">
                                 Cancel
                             </button>
-                            <button class="bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700">
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
                                 Save Changes
                             </button>
                         </div>
@@ -271,16 +469,33 @@
             </div>
 
             <!-- Danger Zone -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+            <div class="danger-zone bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <h2 class="text-xl font-semibold text-red-600 mb-4">Danger Zone</h2>
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div>
                         <h3 class="font-medium text-gray-800">Delete Account</h3>
                         <p class="text-sm text-gray-600">Once you delete your account, there is no going back. Please be certain.</p>
                     </div>
-                    <button class="mt-3 md:mt-0 bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200">
-                        Delete Account
-                    </button>
+                    <!-- Delete Account Form -->
+<form method="POST" action="{{ route('supplier.account.delete') }}" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+    @csrf
+    @method('DELETE')
+
+    <div class="mb-3">
+        @if ($errors->has('password'))
+    <p class="text-red-500 text-sm mb-2">{{ $errors->first('password') }}</p>
+@endif
+
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Enter your password to confirm</label>
+        <input type="password" name="password" id="password" required class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400">
+    </div>
+
+    <button type="submit" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200">
+        Delete Account
+    </button>
+</form>
+
+
                 </div>
 
                 <div class="mt-6 pt-6 border-t border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between">
@@ -290,10 +505,8 @@
                     </div>
                     <form method="POST" action="{{ route('logout') }}" class="mt-3 md:mt-0">
                         @csrf
-                        <button type="submit" class="flex items-center bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                            </svg>
+                        <button type="submit" class="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
                             Log Out
                         </button>
                     </form>
