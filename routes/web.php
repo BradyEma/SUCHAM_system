@@ -26,10 +26,31 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\GoodsReceivedController;
 use App\Http\Controllers\ProcurementDashboardController;
 use App\Http\Controllers\RetailerOrderController;
+use App\Models\SupportTicket;
+use Illuminate\Support\Facades\App;
+use App\Mail\SupportTicketReplyMail;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\SupportTicketController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
 Route::get('/admin/procurement/dashboard', [ProcurementDashboardController::class, 'index'])->name('admin.procurement.dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+    Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
+
+    // ✅ THIS route must exist
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'reply'])->name('support.reply');
+
+    // For user replies
+    Route::post('/support/{ticket}/reply/user', [SupportTicketController::class, 'storeReply'])->name('support.reply.store');
+
+    Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+    Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
+});
+
 
 // Procurement routes without authentication
 Route::prefix('procurement')->name('procurement.')->group(function () {
