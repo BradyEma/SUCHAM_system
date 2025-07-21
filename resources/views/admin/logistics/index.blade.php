@@ -139,6 +139,12 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                @if(session('success'))
+    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded">
+        {{ session('success') }}
+    </div>
+@endif
+
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
