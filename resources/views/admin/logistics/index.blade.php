@@ -8,6 +8,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -256,6 +261,8 @@
                         {{ $logistics->links() }}
                     </div>
                 </div>
+                <div id="map" style="height: 400px; width: 100%;"></div>
+                
             </main>
         </div>
     </div>
@@ -271,6 +278,25 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Logistics dashboard loaded');
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        var map = L.map('map').setView([0.3476, 32.5825], 13); // Kampala coords
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Add a sample marker
+        L.marker([0.3476, 32.5825]).addTo(map)
+            .bindPopup('Kampala - Logistics Base')
+            .openPopup();
+    });
+
+        // User menu toggle
+        document.getElementById('user-menu-button').addEventListener('click', function() {
+            // Toggle user menu visibility
+            console.log('User menu clicked');
+        }); 
     </script>
 </body>
 </html>

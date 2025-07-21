@@ -30,7 +30,17 @@ use App\Http\Controllers\Retailer\OrderController;
 
 
 
-Route::get('/', fn () => view('welcome'));
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Login routes
+Route::get('/login', fn () => view('auth.login'))->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+
+// Supplier registration
+Route::get('/register/supplier', [SupplierRegisterController::class, 'showRegistrationForm'])->name('register.supplier');
+Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
 
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
@@ -149,7 +159,7 @@ Route::middleware(['auth'])->group(function () {
    Route::get('/retailer/sales-chart-data', [OrderController::class, 'salesChartData'])->middleware('auth');
 
 
-    // User profile routes
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -227,7 +237,7 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::get('/logistics/{logistic}/edit', [LogisticsController::class, 'edit'])->name('admin.logistics.edit');
     Route::put('/logistics/{logistic}', [LogisticsController::class, 'update'])->name('admin.logistics.update');
     Route::delete('/logistics/{logistic}', [LogisticsController::class, 'destroy'])->name('admin.logistics.destroy');
-
+    Route::get('/logistics/{logistic}/shipments', [LogisticsController::class, 'shipments'])->name('admin.logistics.shipments');
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
