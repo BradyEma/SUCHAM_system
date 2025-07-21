@@ -137,8 +137,10 @@
 
                 <form method="POST" action="{{ route('logout') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700 cursor-pointer">
                     @csrf
-                    <i class="fas fa-sign-out-alt w-5 text-center text-primary-200"></i>
-                    <span class="text-white">Logout</span>
+                    <button type="submit">
+                        <i class="fas fa-sign-out-alt w-5 text-center text-primary-200"></i>
+                        <span class="text-white">Logout</span>
+                    </button>
                 </form>
             </nav>
         </aside>
