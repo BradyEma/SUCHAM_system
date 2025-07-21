@@ -64,6 +64,10 @@
                     <i class="fas fa-comment-dots w-5 text-center"></i>
                     <span>Chat</span>
                 </a>
+                <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <span>Support Center</span>
+                </a>
                 <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                     <i class="fas fa-user w-5 text-center"></i>
                     <span>Profile</span>

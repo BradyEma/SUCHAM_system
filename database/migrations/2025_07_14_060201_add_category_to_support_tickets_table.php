@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('products', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('image'); // e.g., brown-sugar.jpg
-        $table->timestamps();
-    });
+        Schema::table('support_tickets', function (Blueprint $table) {
+            $table->enum('category', ['complaint', 'inquiry', 'general'])->default('general');
+        });
+
     }
 
     /**
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::table('support_tickets', function (Blueprint $table) {
+            //
+        });
     }
 };

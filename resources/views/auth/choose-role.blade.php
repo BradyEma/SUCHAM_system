@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Choose Your Role | GoldenFields</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -113,8 +114,8 @@
                                     <i class="fas fa-user-tie text-xl"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-800 mb-1">Industrial Customer</h3>
-                                    <p class="text-gray-600 text-sm">Food manufacturers and processors</p>
+                                    <h3 class="text-lg font-bold text-gray-800 mb-1">Customer</h3>
+                                    <p class="text-gray-600 text-sm">Food manufacturers, processors and daily customers</p>
                                 </div>
                             </div>
                         </div>

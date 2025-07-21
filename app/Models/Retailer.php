@@ -28,5 +28,8 @@ class Retailer extends Model
 {
     return $this->belongsTo(User::class);
 }
+// app/Models/RetailerOrder.php
+
+
 
 }
