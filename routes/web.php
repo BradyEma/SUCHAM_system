@@ -25,8 +25,9 @@ use App\Http\Controllers\ProcurementRequestController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\GoodsReceivedController;
 use App\Http\Controllers\ProcurementDashboardController;
+use App\Http\Controllers\RetailerOrderController;
 
-
+Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
 Route::get('/admin/procurement/dashboard', [ProcurementDashboardController::class, 'index'])->name('admin.procurement.dashboard');
 
