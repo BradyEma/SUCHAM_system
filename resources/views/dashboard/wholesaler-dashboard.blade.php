@@ -52,11 +52,11 @@
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-boxes mr-3"></i>
                         Inventory
                     </a>
-                    <a href="{{ route('wholesaler.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-shopping-cart mr-3"></i>
                         Orders
                         <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
@@ -66,7 +66,7 @@
                         Deliveries
                     </a>
                    
-                    <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-chart-line mr-3"></i>
                         Messages
                         <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>
@@ -129,7 +129,7 @@
                 <div class="bg-gradient-to-r from-green-600 to-green-700 rounded-xl shadow-lg p-6 mb-6 text-white">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                        <div>
-                           <h1 class="text-2xl font-bold">Welcome back, {{ auth()->user()->name }}!</h1>
+                           <h1 class="text-2xl font-bold">Welcome back, {{ $user->name }}!</h1>
                            <p class="mt-1 opacity-90">Here's what's happening with your business today</p>
                        </div>
 

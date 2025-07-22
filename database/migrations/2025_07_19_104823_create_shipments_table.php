@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('shipments', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+             $table->id();
+    $table->unsignedBigInteger('order_id');
+    $table->enum('status', ['pending', 'in_transit', 'delivered', 'failed'])->default('pending');
+    $table->date('scheduled_date')->nullable();
+    $table->string('driver_name')->nullable();
+    $table->string('vehicle_number')->nullable();
+    $table->timestamps();
+
+    $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 

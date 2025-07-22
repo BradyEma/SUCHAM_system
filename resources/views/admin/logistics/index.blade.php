@@ -178,6 +178,18 @@
     </div>
 @endif
 
+<form method="POST" action="{{ route('logistics.updateStatus', $logistic->id) }}">
+    @csrf
+    <select name="status" onchange="this.form.submit()" class="border rounded px-2 py-1">
+        @foreach(['pending', 'processing', 'shipped', 'completed', 'canceled'] as $status)
+            <option value="{{ $status }}" {{ $logistic->status === $status ? 'selected' : '' }}>
+                {{ ucfirst($status) }}
+            </option>
+        @endforeach
+    </select>
+</form>
+
+
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -185,7 +197,7 @@
                             <h2 class="text-2xl font-bold">Logistics Dashboard</h2>
                             <p class="opacity-90">Manage your transportation and delivery operations</p>
                         </div>
-                        <a href="{{ route('admin.logistics.create') }}" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
+                        <a href="{{ route('logistics.shipments.create') }}" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-primary-800 bg-white hover:bg-gray-100">
                             <i class="fas fa-plus mr-2"></i> Add New Entry
                         </a>
                     </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldenFields - Wholesaler Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -64,7 +65,7 @@
                         <i class="fas fa-boxes mr-3"></i>
                         Inventory
                     </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('wholesaler.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-shopping-cart mr-3"></i>
                         Orders
                         <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
@@ -74,7 +75,7 @@
                         Deliveries
                     </a>
                    
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-comments mr-3"></i>
                         Messages
                         <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>

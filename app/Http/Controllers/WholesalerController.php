@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Wholesaler;
+use Illuminate\Http\Request;
+use App\Models\WholesalerOrder;
+use Illuminate\Support\Facades\Auth;
 
 
 class WholesalerController extends Controller
@@ -15,6 +16,21 @@ class WholesalerController extends Controller
      $wholesaler = Wholesaler::where('user_id', $user->id)->first(); // assuming you have the relationship set
 
     return view('dashboard.wholesaler-dashboard', compact('user'));
+
+    // Count pending logistics orders for the wholesaler
+     $pendingCount = WholesalerOrder::where('status', 'pending')->count();
+    $processingCount = WholesalerOrder::where('status', 'processing')->count();
+    $shippedCount = WholesalerOrder::where('status', 'shipped')->count();
+    $completedCount = WholesalerOrder::where('status', 'completed')->count();
+    $canceledCount = WholesalerOrder::where('status', 'canceled')->count();
+
+    return view('dashboard.wholesaler-dashboard', compact(
+        'pendingCount',
+        'processingCount',
+        'shippedCount',
+        'completedCount',
+        'canceledCount'
+    ));
 }
   public function showProfileForm()
 {

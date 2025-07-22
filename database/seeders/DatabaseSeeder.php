@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Product;
 use Database\Seeders\FaqSeeder;
 use Illuminate\Database\Seeder;
+use App\Models\WholesalerOrder;
+use App\Models\Logistics;
 use Illuminate\Support\Facades\Hash;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -19,21 +21,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(FaqSeeder::class);
-        // Create admin user
-        User::Create([
-            'name' => 'Admin User',
-            'email' => 'admin@sucham.com',
-            'password' => bcrypt('Rubangakene'),
-            'role' => 'admin',
-        ]);
 
-        // Create supplier users
-        User::create([
-            'name' => 'John Supplier',
-            'email' => 'john.supplier@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'supplier',
-        ]);
+
+       
+// Create products
 
          Product::create([
         'name' => 'Light Brown Sugar',
@@ -45,86 +36,42 @@ class DatabaseSeeder extends Seeder
         'image' => 'white-sugar.jpg',
     ]);
 
-        User::create([
-            'name' => 'Sarah Supplier',
-            'email' => 'sarah.supplier@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'supplier',
-        ]);
+    Product::create([
+        'name' => 'Raw Sugar',
+        'image' => 'raw-sugar.jpg',
+    ]);
+    Product::create([
+        'name' => 'Sugar Cubes',
+        'image' => 'sugarcubes.png',
+    ]);
+    Product::create([
+        'name' => 'Molasses',
+        'image' => 'molasses.jpg',
+    ]);
+    Product::create([
+        'name' => 'Bagase',
+        'image' => 'bagase.png',
+    ]);
+    Product::create([
+        'name' => 'Sugar Syrup',
+        'image' => 'sugar-syrup.jpg',
+    ]);
 
-        User::create([
-            'name' => 'Mike Supplier',
-            'email' => 'mike.supplier@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'supplier',
-        ]);
+// Example: Create 10 delivery records for existing orders
+    $orders = WholesalerOrder::limit(10)->get();
 
-        // Create retailer users
-        User::create([
-            'name' => 'Lisa Retailer',
-            'email' => 'lisa.retailer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'retailer',
-        ]);
+    // Retrieve a logistics admin user (adjust the query as needed for your app)
+    $admin = User::where('role', 'logistics_admin')->first();
 
-        User::create([
-            'name' => 'David Retailer',
-            'email' => 'david.retailer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'retailer',
-        ]);
-
-        // Create wholesaler users
-        User::create([
-            'name' => 'Emma Wholesaler',
-            'email' => 'emma.wholesaler@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'wholesaler',
-        ]);
-
-        User::create([
-            'name' => 'Tom Wholesaler',
-            'email' => 'tom.wholesaler@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'wholesaler',
-        ]);
-
-        // Create customer users
-        User::create([
-            'name' => 'Anna Customer',
-            'email' => 'anna.customer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-        ]);
-
-        User::create([
-            'name' => 'James Customer',
-            'email' => 'james.customer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-        ]);
-
-        User::create([
-            'name' => 'Maria Customer',
-            'email' => 'maria.customer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-        ]);
-
-        User::create([
-            'name' => 'Robert Customer',
-            'email' => 'robert.customer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-        ]);
-
-        User::create([
-            'name' => 'Jennifer Customer',
-            'email' => 'jennifer.customer@sucham.com',
-            'password' => Hash::make('password'),
-            'role' => 'customer',
-        ]);
-
-     
+    foreach ($orders as $order) {
+        // Only add a delivery if one doesn't already exist
+        if (!$order->delivery && $admin) {
+            Logistics::create([
+                'order_id' => $order->id,
+                'status' => 'pending',
+                'assigned_to' => $admin->id, // Assigned to logistics admin
+            ]);
+        }
     }
+}
 }

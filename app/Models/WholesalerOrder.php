@@ -47,4 +47,13 @@ class WholesalerOrder extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    
+    /**
+     * The logistics associated with this order
+     */
+    public function logistics()
+    {
+        return $this->hasMany(Logistics::class, 'order_id');
+    }
 }
