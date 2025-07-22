@@ -115,13 +115,16 @@ Route::prefix('retailer')
     ->name('retailer.')
     ->group(function () {
         Route::get('/dashboard', [RetailerDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/orders', [RetailerOrderController::class, 'index'])->name('orders'); // 👈 ADD THIS LINE
+
         Route::get('/inventory', [RetailerInventoryController::class, 'index'])->name('inventory.index');
         Route::get('/inventory/create', [RetailerInventoryController::class, 'create'])->name('inventory.create');
         Route::post('/inventory', [RetailerInventoryController::class, 'store'])->name('inventory.store');
         Route::get('/inventory/{id}/edit', [RetailerInventoryController::class, 'edit'])->name('inventory.edit');
         Route::put('/inventory/{id}', [RetailerInventoryController::class, 'update'])->name('inventory.update');
         Route::delete('/inventory/{id}', [RetailerInventoryController::class, 'destroy'])->name('inventory.destroy');
-        Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show'); // 👈 add this
+        Route::get('/inventory/{id}', [RetailerInventoryController::class, 'show'])->name('inventory.show');
     });
 
 
