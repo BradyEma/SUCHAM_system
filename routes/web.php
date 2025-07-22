@@ -36,6 +36,7 @@ use App\Http\Controllers\ML\ForecastController;
 use App\Http\Controllers\ML\ForecastExportController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\CustomerOrderController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
@@ -278,5 +279,11 @@ Route::get('/login', fn () => view('auth.login'))->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 // Supplier registration
 Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
+
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders');
+    Route::get('/orders/{transactionId}', [CustomerOrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{transactionId}/cancel', [CustomerOrderController::class, 'cancel'])->name('orders.cancel');
+});
 
 require __DIR__.'/auth.php';
