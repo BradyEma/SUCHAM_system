@@ -34,6 +34,8 @@ use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\LogisticsController;
 use App\Http\Controllers\ML\ForecastController;
 use App\Http\Controllers\ML\ForecastExportController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CustomerCartController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
@@ -264,9 +266,11 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         ->middleware(['auth', 'role:admin'])
         ->name('admin.send.promo');
 
-Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
-Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
-
+Route::get('/wishlist/count', function () {
+    return response()->json([
+        'count' => \App\Models\Wishlist::where('user_id', auth()->id())->count()
+    ]);
+})->middleware('auth');
 
 
 // Auth routes

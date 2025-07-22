@@ -65,7 +65,7 @@
 
     <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 space-y-8 shadow-xl">
+        <aside class="w-64 bg-gradient-to-b from-primary-800 to-primary-900 text-white p-6 pt-0 space-y-8 shadow-xl">
             @php
                 $user = auth()->user();
                 use Illuminate\Support\Str;
@@ -127,7 +127,7 @@
                     @endif
                 </a>
                 <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-question-circle w-5 text-center"></i>
+                    <i class="fas fa-question-circle w-5 text-center text-primary-200"></i>
                     <span>Support Center</span>
                 </a>
                 <a href="{{ route('customer.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">

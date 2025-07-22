@@ -92,6 +92,10 @@
                         <span class="absolute right-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadCount }}</span>
                     @endif
             </a>
+            <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-question-circle w-5 text-center text-primary-200"></i>
+                    <span>Support Center</span>
+                </a>
              <a href="{{ route('customer.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded-lg nav-item hover:bg-primary-700">
                     <i class="fas fa-user w-5 text-center text-primary-200"></i>
                     <span class="text-white">Profile</span>
