@@ -31,6 +31,9 @@ Route::resource('retailer_orders', RetailerOrderController::class)->middleware('
 
 Route::get('/admin/procurement/dashboard', [ProcurementDashboardController::class, 'index'])->name('admin.procurement.dashboard');
 
+
+Route::get('/revenue-data', [DashboardController::class, 'getRevenueData'])->name('revenue.data');
+
 // Procurement routes without authentication
 Route::prefix('procurement')->name('procurement.')->group(function () {
     Route::get('/dashboard', [ProcurementDashboardController::class, 'index'])

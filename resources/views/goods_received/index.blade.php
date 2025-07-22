@@ -1,144 +1,81 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-gray-50 min-h-screen">
+<div class="bg-green-50 min-h-screen">
     <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-semibold text-gray-700">Goods Received Details</h1>
-            <a href="{{ route('goods-received.create') }}" 
-               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center gap-2 transition-colors">
-                <i class="fas fa-plus"></i>
-                <span>Create goods received Note</span>
-            </a>
+        <!-- Green Header Section -->
+        <div class="bg-green-600 rounded-lg shadow-md mb-8 p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-semibold text-white">Goods Received Details</h1>
+                    <p class="text-green-100 mt-1">Manage and track all incoming goods</p>
+                </div>
+                <a href="{{ route('goods-received.create') }}" 
+                   class="bg-white hover:bg-green-50 text-green-600 px-4 py-2 rounded-md flex items-center gap-2 transition-colors font-medium">
+                    <i class="fas fa-plus"></i>
+                    <span>Create GRN</span>
+                </a>
+            </div>
         </div>
 
         <!-- Recent Goods Received Table -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-            <div class="flex justify-between items-center p-6 border-b">
-                <h2 class="text-lg font-semibold text-green-700">Goods Received</h2>
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-green-200">
+            <div class="flex justify-between items-center p-6 border-b border-green-100 bg-green-50">
+                <h2 class="text-lg font-semibold text-green-800">Recent Goods Received</h2>
                 <div class="flex gap-3">
                     <div class="relative">
-                        <input type="text" placeholder="Search..." class="pl-8 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-gray-50">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+                        <input type="text" placeholder="Search..." class="pl-8 pr-4 py-2 border border-green-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-green-800 placeholder-green-400">
+                        <i class="fas fa-search absolute left-3 top-3 text-green-500"></i>
                     </div>
-                    <button class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md transition-colors">
-                        <i class="fas fa-filter text-gray-600"></i>
+                    <button class="bg-green-100 hover:bg-green-200 px-4 py-2 rounded-md transition-colors text-green-700">
+                        <i class="fas fa-filter"></i>
                     </button>
                 </div>
             </div>
             
-            <div class="divide-y divide-gray-200">
-                <!-- Item 1 -->
-                <div class="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors">
-                    <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                        <i class="fas fa-seedling"></i>
+            @foreach ($receipts as $goods)
+            <div class="flex items-center gap-4 p-6 hover:bg-green-50 transition-colors border-b border-green-100 last:border-0">
+                <div class="w-12 h-12 rounded bg-green-100 flex items-center justify-center text-green-600">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-medium text-green-900">{{ $goods->item_name ?? 'Unknown Item' }}</h4>
+                        <span class="text-xs px-2 py-1 rounded-full 
+                            {{ $goods->status == 'Damaged' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }}">
+                            {{ ucfirst($goods->status) }}
+                        </span>
                     </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-medium text-gray-700">Packing bags</h4>
-                            <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">Completed</span>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1">Supplier: AgroSupplies | Qty: 50 bags</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <p class="text-xs text-gray-500">GRN #GRN-2024-001</p>
-                            <p class="text-xs text-gray-500">PO #PO-2024-045</p>
-                            <p class="text-xs text-gray-500">Received: 15-Jul-2024</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <button class="text-green-600 hover:text-green-800">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        <button class="text-gray-600 hover:text-gray-800">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <p class="text-sm text-green-700 mt-1">
+                        Supplier: {{ $goods->supplier->name ?? 'N/A' }} | 
+                        Qty: {{ $goods->quantity }} {{ $goods->unit ?? '' }}
+                    </p>
+                    <div class="flex items-center gap-3 mt-2">
+                        <p class="text-xs text-green-600">GRN #{{ $goods->grn_number }}</p>
+                        <p class="text-xs text-green-600">PO #{{ $goods->purchaseOrder->po_number ?? 'N/A' }}</p>
+                        <p class="text-xs text-green-600">Received: {{ \Carbon\Carbon::parse($goods->created_at)->format('d-M-Y') }}</p>
                     </div>
                 </div>
-                
-                <!-- Item 2 -->
-                <div class="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors">
-                    <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                        <i class="fas fa-tractor"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-medium text-gray-700">Sugarcane</h4>
-                            <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800">Completed</span>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1">Supplier: GreenHarvest | Qty: 12 items</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <p class="text-xs text-gray-500">GRN #GRN-2024-002</p>
-                            <p class="text-xs text-gray-500">PO #PO-2024-046</p>
-                            <p class="text-xs text-gray-500">Received: 14-Jul-2024</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <button class="text-green-600 hover:text-green-800">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        <button class="text-gray-600 hover:text-gray-800">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Item 3 -->
-                <div class="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors">
-                    <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                        <i class="fas fa-spray-can"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-medium text-gray-700">Molasses</h4>
-                            <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">Damaged</span>
-                        </div>
-                        <p class="text-sm text-gray-600 mt-1">Supplier: FieldMasters | Qty: 25 liters</p>
-                        <div class="flex items-center gap-3 mt-2">
-                            <p class="text-xs text-gray-500">GRN #GRN-2024-003</p>
-                            <p class="text-xs text-gray-500">PO #PO-2024-047</p>
-                            <p class="text-xs text-gray-500">Received: 12-Jul-2024</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <button class="text-green-600 hover:text-green-800">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-blue-600 hover:text-blue-800">
-                            <i class="fas fa-print"></i>
-                        </button>
-                        <button class="text-gray-600 hover:text-gray-800">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
-                    </div>
+                <div class="flex gap-3">
+                    <a href="{{ route('goods-received.show', $goods->id) }}" class="text-green-600 hover:text-green-800" title="View">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a href="{{ route('goods-received.print', $goods->id) }}" class="text-green-500 hover:text-green-700" title="Print">
+                        <i class="fas fa-print"></i>
+                    </a>
+                    <button class="text-green-600 hover:text-green-800" title="More options">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
                 </div>
             </div>
+            @endforeach
             
-            <div class="p-4 border-t flex justify-between items-center bg-white">
-                <div class="text-sm text-gray-600">
-                    Showing 1 to 3 of 15 entries
+            <div class="p-4 border-t border-green-100 flex justify-between items-center bg-green-50">
+                <div class="text-sm text-green-700">
+                    Showing {{ $receipts->firstItem() }} to {{ $receipts->lastItem() }} of {{ $receipts->total() }} entries
                 </div>
-                <div class="flex gap-2">
-                    <button class="px-3 py-1 border rounded-md hover:bg-gray-100 text-gray-600">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="px-3 py-1 border rounded-md bg-green-600 text-white">
-                        1
-                    </button>
-                    <button class="px-3 py-1 border rounded-md hover:bg-gray-100 text-gray-600">
-                        2
-                    </button>
-                    <button class="px-3 py-1 border rounded-md hover:bg-gray-100 text-gray-600">
-                        3
-                    </button>
-                    <button class="px-3 py-1 border rounded-md hover:bg-gray-100 text-gray-600">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                <div>
+                    {{ $receipts->links('pagination::tailwind') }}
                 </div>
             </div>
         </div>
@@ -148,15 +85,19 @@
 
 @push('styles')
 <style>
-    .fa-seedling, .fa-tractor, .fa-spray-can {
+    .fa-box-open, .fa-tractor, .fa-spray-can {
         font-size: 1.25rem;
     }
-    body {
-        background-color: #f9fafb; /* Slightly lighter than bg-gray-50 */
+    .pagination .page-item.active .page-link {
+        background-color: #059669; /* green-600 */
+        border-color: #059669;
+        color: white;
     }
-    .header {
-        background-color: transparent;
-        box-shadow: none;
+    .pagination .page-link {
+        color: #059669; /* green-600 */
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #9CA3AF; /* gray-400 */
     }
 </style>
 @endpush

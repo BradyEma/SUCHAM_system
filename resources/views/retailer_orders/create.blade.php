@@ -16,7 +16,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-amber-50">
+<body class="bg-white">
     <div class="min-h-screen" x-data="orderForm()" x-cloak>
         <!-- Header -->
         <header class="gold-gradient shadow-md">
@@ -26,7 +26,7 @@
                         <span class="inline-block mr-2">🌾</span>
                         Create New Order
                     </h1>
-                    <a href="{{ route('retailer_orders.index') }}" class="bg-green-800 hover:bg-green-900 text-amber-100 px-4 py-2 rounded-lg flex items-center">
+                    <a href="{{ route('retailer_orders.index') }}" class="bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded-lg flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                         </svg>
@@ -38,38 +38,38 @@
 
         <!-- Main Form -->
         <main class="container mx-auto px-4 py-8">
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
                 <!-- Form Header -->
                 <div class="green-gradient px-6 py-4">
-                    <h2 class="text-xl font-bold text-amber-100">Order Details</h2>
+                    <h2 class="text-xl font-bold text-white">Order Details</h2>
                 </div>
 
                 <!-- Customer Selection -->
-                <div class="p-6 border-b border-amber-200">
+                <div class="p-6 border-b border-gray-200">
                     <label class="block text-green-800 font-medium mb-2">Retailer Information</label>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-amber-800 text-sm mb-1">Your Business Name</label>
+                            <label class="block text-gray-700 text-sm mb-1">Your Business Name</label>
                             <input type="text" value="Golden Harvest Market" readonly 
-                                   class="w-full px-4 py-2 border border-amber-300 rounded-lg bg-amber-50">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                         </div>
                         <div>
-                            <label class="block text-amber-800 text-sm mb-1">Account ID</label>
+                            <label class="block text-gray-700 text-sm mb-1">Account ID</label>
                             <input type="text" value="GF-RTL-2048" readonly 
-                                   class="w-full px-4 py-2 border border-amber-300 rounded-lg bg-amber-50">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50">
                         </div>
                     </div>
                 </div>
 
                 <!-- Product Selection -->
-                <div class="p-6 border-b border-amber-200">
+                <div class="p-6 border-b border-gray-200">
                     <label class="block text-green-800 font-medium mb-2">Add Products</label>
                     
                     <div class="flex flex-col md:flex-row gap-4 mb-4">
                         <div class="flex-1">
-                            <label class="block text-amber-800 text-sm mb-1">Product</label>
+                            <label class="block text-gray-700 text-sm mb-1">Product</label>
                             <select x-model="selectedProduct" @change="updateProductInfo()" 
-                                    class="w-full px-4 py-2 border border-amber-300 rounded-lg focus:ring-2 focus:ring-green-600">
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600">
                                 <option value="">Select a product</option>
                                 <template x-for="product in availableProducts" :key="product.id">
                                     <option :value="product.id" 
@@ -82,9 +82,9 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-amber-800 text-sm mb-1">Quantity</label>
+                            <label class="block text-gray-700 text-sm mb-1">Quantity</label>
                             <input type="number" x-model="quantity" min="1" 
-                                   class="w-24 px-4 py-2 border border-amber-300 rounded-lg">
+                                   class="w-24 px-4 py-2 border border-gray-300 rounded-lg">
                         </div>
                         <div class="flex items-end">
                             <button @click="addProduct()" 
@@ -101,18 +101,18 @@
                 </div>
 
                 <!-- Order Items Table -->
-                <div class="p-6 border-b border-amber-200">
+                <div class="p-6 border-b border-gray-200">
                     <h3 class="text-green-800 font-medium mb-4">Order Items</h3>
                     
                     <template x-if="orderItems.length === 0">
-                        <div class="bg-amber-50 text-amber-800 p-4 rounded-lg text-center">
+                        <div class="bg-gray-50 text-gray-700 p-4 rounded-lg text-center">
                             No products added yet. Select products above to begin.
                         </div>
                     </template>
 
                     <template x-if="orderItems.length > 0">
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-amber-200">
+                            <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-green-50">
                                     <tr>
                                         <th class="px-4 py-3 text-left text-xs font-medium text-green-800 uppercase">Product</th>
@@ -122,7 +122,7 @@
                                         <th class="px-4 py-3 text-left text-xs font-medium text-green-800 uppercase">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-amber-200">
+                                <tbody class="divide-y divide-gray-200">
                                     <template x-for="(item, index) in orderItems" :key="index">
                                         <tr>
                                             <td class="px-4 py-3 whitespace-nowrap" x-text="item.name"></td>
@@ -162,17 +162,17 @@
                 </div>
 
                 <!-- Delivery & Notes -->
-                <div class="p-6 border-b border-amber-200">
+                <div class="p-6 border-b border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-green-800 font-medium mb-2">Delivery Date</label>
                             <input type="date" x-model="deliveryDate" 
-                                   class="w-full px-4 py-2 border border-amber-300 rounded-lg">
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                         </div>
                         <div>
                             <label class="block text-green-800 font-medium mb-2">Delivery Address</label>
                             <select x-model="deliveryAddress" 
-                                    class="w-full px-4 py-2 border border-amber-300 rounded-lg">
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                                 <option value="main_store">Main Store: 123 Farm Rd, Golden Valley</option>
                                 <option value="warehouse">Warehouse: 456 Harvest Ave, Greenfield</option>
                             </select>
@@ -181,25 +181,25 @@
                     <div class="mt-4">
                         <label class="block text-green-800 font-medium mb-2">Notes</label>
                         <textarea x-model="notes" rows="3" 
-                                  class="w-full px-4 py-2 border border-amber-300 rounded-lg" 
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg" 
                                   placeholder="Special instructions..."></textarea>
                     </div>
                 </div>
 
                 <!-- Submit Section -->
-                <div class="bg-amber-50 p-6 flex flex-col md:flex-row justify-between items-center">
+                <div class="bg-gray-50 p-6 flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-4 md:mb-0">
                         <label class="inline-flex items-center">
                             <input type="checkbox" x-model="termsAccepted" 
-                                   class="rounded border-amber-300 text-green-600 focus:ring-green-500">
-                            <span class="ml-2 text-amber-800">I confirm this order is correct</span>
+                                   class="rounded border-gray-300 text-green-600 focus:ring-green-500">
+                            <span class="ml-2 text-gray-700">I confirm this order is correct</span>
                         </label>
                     </div>
                     <button @click="submitOrder()" 
                             :disabled="orderItems.length === 0 || !termsAccepted"
                             :class="{'bg-gray-400 cursor-not-allowed': orderItems.length === 0 || !termsAccepted, 
                                      'green-gradient hover:bg-green-800': orderItems.length > 0 && termsAccepted}"
-                            class="text-amber-100 font-bold py-3 px-8 rounded-lg shadow-md transition">
+                            class="text-white font-bold py-3 px-8 rounded-lg shadow-md transition">
                         Submit Order
                     </button>
                 </div>
@@ -217,7 +217,7 @@
                     </div>
                     <h3 class="text-lg font-medium text-green-800 mt-3">Order Submitted Successfully!</h3>
                     <div class="mt-2">
-                        <p class="text-sm text-amber-800">
+                        <p class="text-sm text-gray-700">
                             Your order #<span x-text="newOrderId"></span> has been placed. 
                             A confirmation has been sent to your email.
                         </p>

@@ -1,21 +1,25 @@
 <div class="gf-container" style="background: #FFFFFF; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; border: 1px solid #EAEAEA;">
     <div class="gf-header" style="border-bottom: 2px solid #FFD700; padding-bottom: 15px; margin-bottom: 20px;">
-        <h2 style="color: #006400; font-weight: 600;">Goods Received Note</h2>
+        <h2 style="color: #348834ff; font-weight: 600;">Goods Received Note</h2>
     </div>
     
     <form method="POST" action="{{ route('goods-received.store') }}">
     @csrf
         <div class="gf-form-section" style="margin-bottom: 25px;">
-            <h3 style="color: #006400; border-left: 4px solid #FFD700; padding-left: 10px; font-weight: 500;">Basic Information</h3>
+            <h3 style="color: #1d701dff; border-left: 4px solid #f7d40dff; padding-left: 10px; font-weight: 500;">Basic Information</h3>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
                 <div class="gf-form-group">
                     <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">PO Reference</label>
-                    <select style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;">
-                        <option>Select Purchase Order</option>
-                        <option>PO-2023-045 - ABC Suppliers</option>
-                        <option>PO-2023-046 - XYZ Corporation</option>
-                    </select>
+<select name="purchase_order_id" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;" required>
+    <option value="">Select Purchase Order</option>
+    @foreach ($purchaseOrders as $order)
+        <option value="{{ $order->id }}">
+            {{ $order->reference_number }} - {{ $order->supplier->name }}
+        </option>
+    @endforeach
+</select>
+
                 </div>
                 
                 <div class="gf-form-group">

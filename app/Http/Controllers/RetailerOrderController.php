@@ -102,4 +102,28 @@ class RetailerOrderController extends Controller
         $retailerOrder->delete();
         return back()->with('success', 'Order cancelled');
     }
+
+    public function getRevenueData(Request $request)
+{
+    $period = $request->input('period', '7days');
+    $labels = [];
+    $data = [];
+
+    if ($period == '7days') {
+        $labels = collect(range(0, 6))->map(fn($i) => now()->subDays($i)->format('D'))->reverse()->values();
+        $data = collect(range(0, 6))->map(fn($i) => rand(100, 500))->reverse()->values(); // replace with actual DB logic
+    } elseif ($period == '30days') {
+        $labels = collect(range(0, 29))->map(fn($i) => now()->subDays($i)->format('M d'))->reverse()->values();
+        $data = collect(range(0, 29))->map(fn($i) => rand(100, 500))->reverse()->values();
+    } else {
+        $labels = collect(range(1, 12))->map(fn($m) => date('M', mktime(0, 0, 0, $m, 1)));
+        $data = collect(range(1, 12))->map(fn($i) => rand(1000, 5000)); // replace with actual logic
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $data,
+    ]);
+}
+
 }

@@ -7,18 +7,24 @@ use App\Models\GoodsReceived;
 use App\Models\PurchaseOrder;
 
 class GoodsReceivedController extends Controller
+{public function index()
 {
-    public function index()
-    {
-        $receipts = GoodsReceived::with('purchaseOrder')->get();
-        return view('goods_received.index', compact('receipts'));
-    }
+    // Fetch all goods received records along with their related supplier and purchase order
+    $receipts = GoodsReceived::with(['supplier', 'purchaseOrder'])->paginate(10);
+
+    // Return the view with the data
+    return view('goods_received.index', compact('receipts'));
+}
+
 
     public function create()
-    {
-        $orders = PurchaseOrder::where('status', 'sent')->get();
-        return view('goods_received.create', compact('orders'));
-    }
+{
+    // Only get 'sent' orders and include their suppliers
+    $purchaseOrders = PurchaseOrder::where('status', 'sent')->with('supplier')->get();
+
+    return view('goods_received.create', compact('purchaseOrders'));
+}
+
 
     public function store(Request $request)
     {

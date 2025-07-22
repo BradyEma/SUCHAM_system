@@ -228,31 +228,32 @@ primary: {
                 </div>
                 
                 <!-- Key Metrics -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
-                        <i class="fas fa-clock text-2xl mb-2"></i>
-                        <h3 class="text-lg mb-1">Pending PRs</h3>
-                        <div class="text-3xl font-bold" id="pending-prs">{{ $requests }}</div>
-                    </div>
-                    
-                    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
-                        <i class="fas fa-file-invoice text-2xl mb-2"></i>
-                        <h3 class="text-lg mb-1">Active POs</h3>
-                        <div class="text-3xl font-bold" id="active-pos">{{ $orders }}</div>
-                    </div>
-                    
-                    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
-                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
-                        <h3 class="text-lg mb-1">Late Deliveries</h3>
-                        <div class="text-3xl font-bold" id="late-deliveries">{{ $requests }}</div>
-                    </div>
-                    
-                    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
-                        <i class="fas fa-user-plus text-2xl mb-2"></i>
-                        <h3 class="text-lg mb-1">New Suppliers</h3>
-                        <div class="text-3xl font-bold" id="new-suppliers">{{ $suppliers }}</div>
-                    </div>
-                </div>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
+        <i class="fas fa-clock text-2xl mb-2"></i>
+        <h3 class="text-lg mb-1">Pending PRs</h3>
+        <div class="text-3xl font-bold" id="pending-prs">{{ $pendingPRs }}</div>
+    </div>
+
+    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
+        <i class="fas fa-file-invoice text-2xl mb-2"></i>
+        <h3 class="text-lg mb-1">Active POs</h3>
+        <div class="text-3xl font-bold" id="active-pos">{{ $activePOs }}</div>
+    </div>
+
+    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
+        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+        <h3 class="text-lg mb-1">Late Deliveries</h3>
+        <div class="text-3xl font-bold" id="late-deliveries">{{ $lateDeliveries }}</div>
+    </div>
+
+    <div class="bg-green-600 text-gold-500 rounded-lg p-6 text-center shadow-md">
+        <i class="fas fa-user-plus text-2xl mb-2"></i>
+        <h3 class="text-lg mb-1">New Suppliers</h3>
+        <div class="text-3xl font-bold" id="new-suppliers">{{ $newSuppliers }}</div>
+    </div>
+</div>
+
                 
                 <!-- Charts Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -312,136 +313,59 @@ primary: {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onclick="window.location.href='#'">
-                                    <td class="px-4 py-3">PO-101</td>
-                                    <td class="px-4 py-3">AgroSupplies</td>
-                                    <td class="px-4 py-3">$5,200</td>
-                                    <td class="px-4 py-3 status-delivered">✅ Delivered</td>
-                                    <td class="px-4 py-3">15-Jul-2024</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onclick="window.location.href='#'">
-                                    <td class="px-4 py-3">PO-102</td>
-                                    <td class="px-4 py-3">GreenHarvest</td>
-                                    <td class="px-4 py-3">$3,800</td>
-                                    <td class="px-4 py-3 status-intransit">🚛 In Transit</td>
-                                    <td class="px-4 py-3">20-Jul-2024</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onclick="window.location.href='#'">
-                                    <td class="px-4 py-3">PO-103</td>
-                                    <td class="px-4 py-3">GoldenSeeds</td>
-                                    <td class="px-4 py-3">$2,450</td>
-                                    <td class="px-4 py-3 status-delivered">✅ Delivered</td>
-                                    <td class="px-4 py-3">10-Jul-2024</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onclick="window.location.href='#'">
-                                    <td class="px-4 py-3">PO-104</td>
-                                    <td class="px-4 py-3">FieldMasters</td>
-                                    <td class="px-4 py-3">$7,600</td>
-                                    <td class="px-4 py-3 status-pending">⏳ Pending</td>
-                                    <td class="px-4 py-3">25-Jul-2024</td>
-                                </tr>
-                            </tbody>
+    @foreach($orders as $order)
+        <tr class="border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onclick="window.location.href='{{ route('purchase-orders.show', $order->id) }}'">
+            <td class="px-4 py-3">PO-{{ $order->id }}</td>
+            <td class="px-4 py-3">{{ $order->supplier_name }}</td>
+            <td class="px-4 py-3">UG shs{{ number_format($order->total_amount, 2) }}</td>
+            <td class="px-4 py-3 
+                @if($order->status == 'delivered') status-delivered
+                @elseif($order->status == 'in transit') status-intransit
+                @elseif($order->status == 'pending') status-pending
+                @endif">
+                @if($order->status == 'delivered') ✅ Delivered
+                @elseif($order->status == 'in transit') 🚛 In Transit
+                @elseif($order->status == 'pending') ⏳ Pending
+                @else ❓ Unknown
+                @endif
+            </td>
+            <td class="px-4 py-3">{{ \Carbon\Carbon::parse($order->expected_delivery_date)->format('d-M-Y') }}</td>
+        </tr>
+    @endforeach
+
+    @forelse($orders as $order)
+    
+@empty
+    <tr>
+        <td colspan="5" class="text-center py-4 text-gray-500">No purchase orders found.</td>
+    </tr>
+@endforelse
+
+</tbody>
+
                         </table>
                     </div>
                 </div>
-                
-                <!-- Supplier Performance -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-green-700 mb-4">Top Suppliers</h3>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-lg">AG</div>
-                            <div>
-                                <h4 class="font-medium">AgroSupplies</h4>
-                                <div class="text-gold-500 mb-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600 mb-1">On-Time Delivery</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                                <div class="bg-gold-500 h-2 rounded-full" style="width: 98%"></div>
-                            </div>
-                            <p class="text-sm">Quality Rating: 4.9/5</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-green-700 mb-4">Supplier Performance</h3>
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-lg">GH</div>
-                            <div>
-                                <h4 class="font-medium">GreenHarvest</h4>
-                                <div class="text-gold-500 mb-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600 mb-1">On-Time Delivery</p>
-                            <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                                <div class="bg-gold-500 h-2 rounded-full" style="width: 92%"></div>
-                            </div>
-                            <p class="text-sm">Quality Rating: 4.6/5</p>
-                        </div>
-                    </div>
-                </div>
-                
+
                 <!-- Recent Goods Received -->
-                <div class="bg-white rounded-lg p-6 shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-green-700">Recent Goods Received</h3>
-                        <button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
-                            View All
-                        </button>
-                    </div>
-                    <div class="space-y-4 max-h-96 overflow-y-auto">
-                        <div class="flex items-center gap-4 py-3 border-b border-gray-200">
-                            <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                                <i class="fas fa-seedling"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Packing bags</h4>
-                                <p class="text-sm text-gray-600">Supplier: AgroSupplies | Qty: 50 bags</p>
-                                <p class="text-xs text-gray-500">Received: 15-Jul-2024</p>
-                            </div>
-                            <div class="w-5 h-5 rounded-full bg-green-500"></div>
-                        </div>
-                        
-                        <div class="flex items-center gap-4 py-3 border-b border-gray-200">
-                            <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                                <i class="fas fa-tractor"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">Sugarcane</h4>
-                                <p class="text-sm text-gray-600">Supplier: GreenHarvest | Qty: 12 items</p>
-                                <p class="text-xs text-gray-500">Received: 14-Jul-2024</p>
-                            </div>
-                            <div class="w-5 h-5 rounded-full bg-green-500"></div>
-                        </div>
-                        
-                        <div class="flex items-center gap-4 py-3">
-                            <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
-                                <i class="fas fa-spray-can"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-medium">molases</h4>
-                                <p class="text-sm text-gray-600">Supplier: FieldMasters | Qty: 25 liters</p>
-                                <p class="text-xs text-gray-500">Received: 12-Jul-2024</p>
-                            </div>
-                            <div class="w-5 h-5 rounded-full bg-red-500"></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="space-y-4 max-h-96 overflow-y-auto">
+    @foreach($recentGoodsReceived as $goods)
+        <div class="flex items-center gap-4 py-3 border-b border-gray-200">
+            <div class="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-green-600">
+                <i class="fas fa-seedling"></i> {{-- You can customize icon based on product type --}}
+            </div>
+            <div class="flex-1">
+                <h4 class="font-medium">{{ $goods->product_name ?? 'N/A' }}</h4>
+                <p class="text-sm text-gray-600">
+                    Supplier: {{ $goods->supplier->name ?? 'Unknown' }} | Qty: {{ $goods->quantity }} {{ $goods->unit ?? '' }}
+                </p>
+                <p class="text-xs text-gray-500">Received: {{ $goods->received_at->format('d-M-Y') }}</p>
+            </div>
+            <div class="w-5 h-5 rounded-full {{ $goods->status == 'pending' ? 'bg-red-500' : 'bg-green-500' }}"></div>
+        </div>
+    @endforeach
+</div>
+
             </main>
         </div>
     </div>

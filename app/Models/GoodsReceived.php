@@ -26,4 +26,10 @@ class GoodsReceived extends Model
     {
         return $this->hasMany(GoodsReceivedItem::class);
     }
+
+    public function supplier()
+{
+    return $this->belongsTo(Supplier::class);
+}
+
 }
