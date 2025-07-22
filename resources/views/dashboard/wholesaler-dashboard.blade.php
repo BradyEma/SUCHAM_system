@@ -52,11 +52,11 @@
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-boxes mr-3"></i>
                         Inventory
                     </a>
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-shopping-cart mr-3"></i>
                         Orders
                         <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>

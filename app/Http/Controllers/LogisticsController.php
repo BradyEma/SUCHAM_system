@@ -50,11 +50,14 @@ class LogisticsController extends Controller
     public function update(Request $request, Logistic $logistic)
 {
     // Update logic...
-    
-    // Broadcast update
-    event(new LogisticsUpdated($logistic));
-    
-    return redirect()->route('admin.logistics.index');
+ $request->validate([
+        'status' => 'required|in:pending,processing,shipped,completed,canceled',
+    ]);
+
+    $logistics = Logistics::findOrFail($id);
+    $logistics->status = $request->status;
+    $logistics->save();
+ return back()->with('success', 'Status updated successfully.');
 }
 
     public function destroy(Logistic $logistic)

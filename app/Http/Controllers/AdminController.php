@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Supplier;
+use App\Models\Logistics;
 use Illuminate\Http\Request;
 use App\Models\DemandPrediction;
 use App\Models\VendorValidation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Illuminate\Support\Facades\Log;
 
 
 class AdminController extends Controller
@@ -41,6 +42,19 @@ class AdminController extends Controller
         return view('dashboard.admin-dashboard', compact(
             'forecastLabels', 'forecastData', 'suppliers', 'validations'
         ));
+ $statusCounts = [
+        'pending' => Logistics::where('status', 'pending')->count(),
+        'processing' => Logistics::where('status', 'processing')->count(),
+        'shipped' => Logistics::where('status', 'shipped')->count(),
+        'completed' => Logistics::where('status', 'completed')->count(),
+        'canceled' => Logistics::where('status', 'canceled')->count(),
+    ];
+
+    return view('admin.dashboard', compact('statusCounts'));
+
+
+
+
     }
 
 

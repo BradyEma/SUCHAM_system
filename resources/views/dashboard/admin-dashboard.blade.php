@@ -100,6 +100,8 @@
                         
                         <a href="{{ route('logistics') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item nav-link {{ request()->is('admin/logistics*') ? 'active' : '' }}">
                             <i class="fas fa-truck w-5 text-center"></i>
+                            @livewire('order-status-badge', [], key('badge'))
+
                             <span>Logistics</span>
                         </a>
 
@@ -515,7 +517,7 @@
                         </div>
                         
                         <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                            <form method="POST" action="{{ route('generate.forecast') }}" class="w-full sm:w-auto">
+                            <form method="POST" action="{{ route('ml.forecast.generate') }}" class="w-full sm:w-auto">
                                 @csrf
                                 <button type="submit" class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -525,7 +527,7 @@
                                 </button>
                             </form>
                             
-                            <a href="{{ route('forecast.pdf') }}" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
+                            <a href="{{ route('admin.run.demand') }}" target="_blank" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
                                 </svg>

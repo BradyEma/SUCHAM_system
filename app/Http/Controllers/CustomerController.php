@@ -111,8 +111,8 @@ public function getWishlist()
     }
     public function products()
 {
-    // Replace this with your actual logic
-    return view('dashboard.customer-products');
+    $products = Product::paginate(10); 
+    return view('dashboard.customer-products', compact('products'));
 }
 public function wishlist()
 {

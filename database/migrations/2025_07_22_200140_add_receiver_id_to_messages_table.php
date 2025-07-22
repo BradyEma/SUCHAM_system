@@ -9,12 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->boolean('read')->default(0);
-        });
-    }
+    public function up()
+{
+    Schema::table('messages', function (Blueprint $table) {
+        $table->unsignedBigInteger('receiver_id')->nullable()->after('sender_id'); // or wherever fits
+    });
+}
+
 
     /**
      * Reverse the migrations.
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('messages', function (Blueprint $table) {
-            $table->dropColumn('read');
+            //
         });
     }
 };

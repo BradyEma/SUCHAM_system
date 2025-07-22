@@ -24,8 +24,20 @@ class Logistics extends Model
         'estimated_arrival',
     ];
 
+
+    const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_SHIPPED = 'shipped';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELED = 'canceled';
+
     public function shipments()
     {
         return $this->hasMany(Shipment::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(WholesalerOrder::class);
     }
 }

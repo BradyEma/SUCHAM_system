@@ -1,31 +1,37 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SupplierRegisterController;
-use App\Http\Controllers\SupplierProfileController;
-use App\Http\Controllers\RoleSelectionController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\AdminController;
 use App\Livewire\Admin\Messages\Messages;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\RetailerController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\LogisticsController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\WholesalerController;
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\GoodsReceivedController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\RetailerOrderController;
+use App\Http\Controllers\RoleSelectionController;
+use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Admin\InventoryController;
-use App\Http\Controllers\RetailerController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;
+use App\Http\Controllers\SupplierProfileController;
+use App\Http\Controllers\WholesalerOrderController;
+use App\Http\Controllers\SupplierRegisterController;
 use App\Http\Controllers\VendorValidationController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\WholesalerController;
-use App\Http\Controllers\Admin\CustomerSegmentController;
-use Illuminate\Support\Facades\Artisan;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierInventoryController;
-use App\Http\Controllers\WholesalerInventoryController;
 use App\Http\Controllers\ProcurementRequestController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\GoodsReceivedController;
+use App\Http\Controllers\WholesalerInventoryController;
 use App\Http\Controllers\ProcurementDashboardController;
-use App\Http\Controllers\RetailerOrderController;
+use App\Http\Controllers\Admin\CustomerSegmentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
@@ -156,6 +162,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wholesaler/dashboard', [WholesalerController::class, 'dashboard'])->name('wholesaler.dashboard');
      Route::get('/wholesaler/profile', [WholesalerController::class, 'showProfileForm'])->name('wholesaler.profile');
     Route::post('/wholesaler/profile', [WholesalerController::class, 'storeProfile'])->name('wholesaler.profile.store');
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/wholesaler/orders', [WholesalerOrderController::class, 'index'])->name('wholesaler.orders');
+     Route::get('/wholesaler/products', [WholesalerOrderController::class, 'create'])->name('wholesaler.products');
+    Route::post('/wholesaler/orders', [WholesalerOrderController::class, 'store'])->name('wholesaler.orders.store');
+});
     
     //customer
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
@@ -181,6 +192,33 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
     Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/customer-segments', [CustomerSegmentController::class, 'index'])->name('admin.customer.segments');
     });
+
+    //Support Ticket routes
+
+    Route::middleware(['auth'])->group(function () {
+    Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
+    Route::get('/support/create', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportTicketController::class, 'store'])->name('support.store');
+    Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
+    Route::post('/support/{ticket}/reply', [SupportTicketController::class, 'storeReply'])->name('support.reply');
+    Route::post('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.status');
+
+    // Optional: Admin-only reply route
+    Route::post('/support/{ticket}/admin-reply', [SupportTicketController::class, 'reply'])->name('support.admin.reply');
+});
+
+
+//Logistics routes
+Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+Route::get('/logistics/shipments', [LogisticsController::class, 'shipments'])->name('logistics.shipments');
+Route::get('/logistics/shipments/create', [LogisticsController::class, 'createShipment'])->name('logistics.shipments.create');
+Route::post('/logistics/shipments', [LogisticsController::class, 'storeShipment'])->name('logistics.shipments.store');
+Route::get('/logistics/shipments/{id}', [LogisticsController::class, 'showShipment'])->name('logistics.shipments.show');
+Route::get('/logistics/shipments/{id}/edit', [LogisticsController::class, 'editShipment'])->name('logistics.shipments.edit');
+Route::put('/logistics/shipments/{id}', [LogisticsController::class, 'updateShipment'])->name('logistics.shipments.update');
+Route::delete('/logistics/shipments/{id}', [LogisticsController::class, 'destroyShipment'])->name('logistics.shipments.destroy'); 
+  Route::post('/logistics/{id}/status', [LogisticsController::class, 'updateStatus'])->name('logistics.updateStatus');
+Route::get('/logistics/{id}', [LogisticsController::class, 'show'])->name('logistics.show');
 //extra ML
     Route::post('/admin/refresh-segments', function () {
         Artisan::call('ml:run-customer-segmentation');
@@ -198,8 +236,13 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
 
 Route::post('/wishlist/add', [CustomerController::class, 'addToWishlist'])->name('wishlist.add');
 Route::get('/wishlist', [CustomerController::class, 'getWishlist'])->name('wishlist.get');
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
+Route::get('/customer/cart', [CustomerCartController::class, 'index'])->name('customer.cart');
+Route::post('/customer/cart/add', [CustomerCartController::class, 'add'])->name('customer.cart.add');
 
+//Forecast
+Route::get('/ml/forecast', [ForecastController::class, 'generate'])->name('ml.forecast.generate');
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
