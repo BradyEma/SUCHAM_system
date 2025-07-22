@@ -1,3 +1,7 @@
+import sys
+print("Python used:", sys.executable)
+
+
 import pandas as pd
 import pickle
 import os

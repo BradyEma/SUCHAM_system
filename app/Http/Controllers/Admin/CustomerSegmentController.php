@@ -13,26 +13,43 @@ use App\Jobs\SendPromoEmailJob;
 
 class CustomerSegmentController extends Controller
 {
-    public function index(Request $request)
-    {
-        $filter = $request->input('label');
+   public function index(Request $request)
+{
+    $filter = $request->input('cluster'); // filter by cluster now
 
-        $query = CustomerSegment::query();
+    $clusterLabels = [
+        1 => 'High Value',
+        2 => 'Medium Value',
+        3 => 'Low Value',
+        // add more clusters if any
+    ];
 
-        if ($filter) {
-            $query->where('label', $filter);
-        }
+    $query = CustomerSegment::query();
 
-        $segments = $query->paginate(10); // Show 10 per page
-
-        $grouped = CustomerSegment::selectRaw('label, COUNT(*) as count')
-            ->groupBy('label')
-            ->pluck('count', 'label');
-
-        $allLabels = $grouped->keys();
-
-        return view('admin.customer-segments.index', compact('segments', 'grouped', 'filter', 'allLabels'));
+    if ($filter) {
+        $query->where('cluster', $filter);
     }
+
+    $segments = $query->paginate(10); // Paginate raw segments
+
+    // Get counts grouped by cluster
+    $grouped = CustomerSegment::selectRaw('cluster, COUNT(*) as count')
+        ->groupBy('cluster')
+        ->pluck('count', 'cluster');
+
+    // Convert keys (cluster numbers) to labels for the UI
+    $allLabels = collect($grouped->keys())->mapWithKeys(fn($cluster) => [
+        $cluster => $clusterLabels[$cluster] ?? 'Unknown'
+    ]);
+
+    // Add label property to each segment for display
+    foreach ($segments as $segment) {
+        $segment->label = $clusterLabels[$segment->cluster] ?? 'Unknown';
+    }
+
+    return view('admin.customer-segments.index', compact('segments', 'grouped', 'filter', 'allLabels'));
+}
+
     public function refresh()
     {
         // Call the ML segmentation script

@@ -91,12 +91,8 @@
                     <nav class="flex-1 p-4 space-y-2">
                         <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-tachometer-alt w-5 text-center"></i>
-                            <span>Dashboard</span>
-                        </a>
+                            <span>Activity</span>
                         
-                        <a href="{{ route('logistics') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-                            <i class="fas fa-truck w-5 text-center"></i>
-                            <span>Logistics</span>
                         </a>
                         
                         <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
@@ -104,12 +100,44 @@
                             <span>Inventory</span>
                         </a>
                         
-                       
-                        <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-clipboard-list w-5 text-center"></i>
+                            <span>Order Management</span>
+                        </a>
+                        
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-shopping-cart w-5 text-center"></i>
+                            <span>Procurement</span>
+                        </a>
+                        
+                       <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-comment-dots w-5 text-center"></i>
                             <span>Chat</span>
+                            <span class="bg-yellow-500 text-black text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
                         </a>
-                    </nav>
+                        
+                        <a href="{{ route('logistics') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item nav-link {{ request()->is('admin/logistics*') ? 'active' : '' }}  active">
+                            <i class="fas fa-truck w-5 text-center"></i>
+                            <span>Logistics</span>
+                        </a>
+
+                        {{-- Customer Segments for machine learning --}}
+                        <a href="{{ route('admin.customer.segments') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-chart-pie w-5 text-center"></i>
+                            <span>Customer Segments</span>
+                        </a>
+                        <a href="{{ route('support.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-question-circle w-5 text-center"></i>
+                            <span>Support Center</span>
+                        </a>
+
+
+                        <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                            <i class="fas fa-user w-5 text-center"></i>
+
+                            <span>Profile</span>
+                        </a>
+    </nav>
                 </div>
             </div>
         </div>
@@ -144,6 +172,12 @@
 
             <!-- Main Content Area -->
             <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+                @if(session('success'))
+    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-800 rounded">
+        {{ session('success') }}
+    </div>
+@endif
+
                 <!-- Welcome Banner -->
                 <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg shadow-md p-6 text-white mb-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">

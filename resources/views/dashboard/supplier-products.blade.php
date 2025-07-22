@@ -69,7 +69,7 @@
                 </a>
                 <a href="{{ route('supplier.products') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                     <i class="fas fa-boxes w-5 text-center"></i>
-                    <span>Products</span>
+                    <span>Inventory</span>
                 </a>
                 
                 <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
@@ -105,45 +105,7 @@
             </div>
 
             <!-- Filters and Search -->
-            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Product Category</label>
-                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <option>All Categories</option>
-                            <option>Sugar Cane</option>
-                            <option>Honey</option>
-                            <option>Molasses</option>
-                            <option>By-products</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Stock Status</label>
-                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <option>All Statuses</option>
-                            <option>In Stock</option>
-                            <option>Low Stock</option>
-                            <option>Out of Stock</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Price Range</label>
-                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <option>All Prices</option>
-                            <option>UGX 0 - 50,000</option>
-                            <option>UGX 50,000 - 200,000</option>
-                            <option>UGX 200,000+</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                        <div class="relative">
-                            <input type="text" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Products Summary -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

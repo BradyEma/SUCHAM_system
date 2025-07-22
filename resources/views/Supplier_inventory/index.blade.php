@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - GoldenFields Supplier Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background: linear-gradient(180deg, #166534 0%, #14532d 100%);
+        }
+        .nav-item {
+            transition: all 0.3s ease;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        .nav-item.active {
+            background-color: #f0fdf4;
+            color: #14532d;
+            font-weight: 600;
+        }
+        .product-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #22c55e;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .btn-primary {
+            background-color: #d4af37;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #b8860b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(90deg, #d4af37, #fbbf24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        @media (max-width: 768px) {
+            .table-header {
+                display: none;
+            }
+            .table-row {
+                display: flex;
+                flex-direction: column;
+                padding: 1rem;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            .table-cell {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.5rem 0;
+            }
+            .table-cell:before {
+                content: attr(data-label);
+                font-weight: 600;
+                margin-right: 1rem;
+                color: #4b5563;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 sidebar text-white p-6 space-y-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
+                </div>
+                <div>
+                    <div class="text-xl font-bold">GoldenFields</div>
+                    <div class="text-xs text-green-200">Industries Ltd.</div>
+                </div>
+            </div>
+            <nav class="space-y-1">
+                <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                    <i class="fas fa-tachometer-alt w-5 text-center"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('supplier.orders') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-clipboard-list w-5 text-center"></i>
+                    <span>Orders</span>
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">3 new</span>
+                </a>
+                <a href="{{ route('supplier_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-boxes w-5 text-center"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="{{ route('chat.livewire') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-comment-dots w-5 text-center"></i>
+                    <span>Chat</span>
+                    <span class="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full ml-auto">2 unread</span>
+                </a>
+                <a href="{{ route('supplier.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <i class="fas fa-user w-5 text-center"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">
+                        <span class="gold-gradient-text">Inventory Management</span>
+                    </h1>
+                    <p class="text-gray-600">Manage your product listings and inventory</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-bell text-gray-400"></i>
+                            <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="card bg-white p-5 border-l-4 border-green-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Total Products</h3>
+                            <div class="text-2xl font-bold text-green-800">{{ $totalProducts }}</div>
+                        </div>
+                        <div class="bg-green-100 p-2 rounded-lg">
+                            <i class="fas fa-boxes text-green-600"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-5 border-l-4 border-blue-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">In Stock</h3>
+                            <div class="text-2xl font-bold text-blue-800">{{ $inStock }}</div>
+                        </div>
+                        <div class="bg-blue-100 p-2 rounded-lg">
+                            <i class="fas fa-check-circle text-blue-600"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-5 border-l-4 border-amber-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Low Stock</h3>
+                            <div class="text-2xl font-bold text-amber-800">{{ $lowStock }}</div>
+                        </div>
+                        <div class="bg-amber-100 p-2 rounded-lg">
+                            <i class="fas fa-exclamation-triangle text-amber-600"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-white p-5 border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-1">Out of Stock</h3>
+                            <div class="text-2xl font-bold text-red-800">{{ $outOfStock }}</div>
+                        </div>
+                        <div class="bg-red-100 p-2 rounded-lg">
+                            <i class="fas fa-times-circle text-red-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Bar -->
+            <div class="card bg-white p-4 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+                    <div class="relative w-full md:w-64">
+                        <input type="text" placeholder="Search products..." class="search-input w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-yellow-500">
+                        <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <a href="{{ route('supplier_inventory.create') }}">
+                            <button class="btn-primary flex items-center">
+                                <i class="fas fa-plus mr-2"></i> Add Product
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Inventory Table -->
+            <div class="card bg-white overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price (UGshs)</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Measurements</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse ($products as $product)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-box text-green-600"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">{{ $product->product_name }}</div>
+                                                <div class="text-sm text-gray-500">Category</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->product_id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $product->quantity }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                                        {{ number_format($product->unit_price, 2) }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->unit_of_measurement }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($product->quantity > 20)
+                                            <span class="badge badge-success px-3 py-1 rounded-full text-xs">
+                                                <i class="fas fa-check-circle mr-1"></i> In Stock
+                                            </span>
+                                        @elseif($product->quantity > 0)
+                                            <span class="badge badge-warning px-3 py-1 rounded-full text-xs">
+                                                <i class="fas fa-exclamation-triangle mr-1"></i> Low Stock
+                                            </span>
+                                        @else
+                                            <span class="badge badge-danger px-3 py-1 rounded-full text-xs">
+                                                <i class="fas fa-times-circle mr-1"></i> Out of Stock
+                                            </span>
+                                        @endif
+                                    </td>
+                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+    <div class="flex items-center space-x-4">
+<a href="{{ route('supplier_inventory.show', $product) }}" 
+   class="text-green-600 hover:text-green-900">
+   <i class="fas fa-eye"></i>
+</a>
+        <a href="{{ route('supplier_inventory.edit', $product) }}" class="text-amber-600 hover:text-amber-900" title="Edit">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form action="{{ route('supplier_inventory.destroy', $product) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="text-red-600 hover:text-red-900" title="Delete">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </form>
+    </div>
+</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No products found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="mt-6 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
+                <div class="text-sm text-gray-700">
+                    Showing 
+                    <span class="font-medium">{{ $products->firstItem() }}</span> 
+                    to 
+                    <span class="font-medium">{{ $products->lastItem() }}</span> 
+                    of 
+                    <span class="font-medium">{{ $products->total() }}</span> 
+                    results
+                </div>
+                <div>
+                    {{ $products->links('pagination::tailwind') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

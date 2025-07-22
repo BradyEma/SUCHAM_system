@@ -76,7 +76,7 @@
                 <div class="flex-1 overflow-y-auto py-4">
 
                     <nav class="flex-1 p-4 space-y-2">
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                        <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                             <i class="fas fa-tachometer-alt w-5 text-center"></i>
                             <span>Activity</span>
                         
@@ -85,14 +85,9 @@
                         <a href="{{ route('admin.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-boxes w-5 text-center"></i>
                             <span>Inventory</span>
-                        </a>
+                     </a>
                         
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                            <i class="fas fa-clipboard-list w-5 text-center"></i>
-                            <span>Order Management</span>
-                        </a>
-                        
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="{{ route('admin.procurement.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-shopping-cart w-5 text-center"></i>
                             <span>Procurement</span>
                         </a>
@@ -120,10 +115,11 @@
 
 
                         <a href="{{ route('admin.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                            <i class="fas fa-truck w-5 text-center"></i>
+                            <i class="fas fa-user w-5 text-center"></i>
+
                             <span>Profile</span>
                         </a>
-
+    </nav>
                        
                
             </div>

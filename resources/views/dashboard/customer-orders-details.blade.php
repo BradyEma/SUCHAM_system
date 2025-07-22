@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Retailer Order Details</title>
+    <title>Customer Order Details</title>
     <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="icon" href="{{ asset('goldenfields.ico') }}" type="image/x-icon">
@@ -29,7 +29,7 @@
     </div>
 
     <div class="mb-8">
-        <h3 class="text-md font-semibold text-gray-700 mb-3">My Information</h3>
+        <h3 class="text-2xl font-bold mb-0 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 flex items-center">My Information</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
             <div><strong>Name:</strong> {{ $orderItems->first()->customer->name ?? 'N/A' }}</div>
             <div><strong>Email:</strong> {{ $orderItems->first()->customer->email ?? 'N/A' }}</div>
@@ -38,6 +38,25 @@
             @endif
         </div>
     </div>
+
+    <div class="mb-8">
+    <h3 class="text-2xl font-bold mb-0 text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600 flex items-center -ml-8">
+    <span class="mr-3">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+    </span>
+    Retailer Information
+    <span class="ml-3 text-green-400 animate-pulse">✦</span>
+</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-600">
+        <div><strong>Business Name:</strong> {{ $retailer->business_name ?? 'N/A' }}</div>
+        <div><strong>Location:</strong> {{ $retailer->location ?? 'N/A' }}</div>
+        <div><strong>Contact Number:</strong> {{ $retailer->contact_number ?? 'N/A' }}</div>
+        <div><strong>Email:</strong> {{ $retailer->user->email ?? 'N/A' }}</div>
+    </div>
+</div>
+
 
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200 text-sm">

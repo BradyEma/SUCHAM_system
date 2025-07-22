@@ -7,42 +7,82 @@ use App\Models\RetailerOrder;  // or your actual model name for orders
 use Illuminate\Support\Facades\Auth;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Wishlist;
+use App\Models\Cart;
+
 
 
 class CustomerOrderController extends Controller
 {
     // Show list of orders for logged-in customer
-    public function index()
-    {
-        $user = Auth::user();
+  public function index()
+{
+    $userId = auth()->id();
 
-        // Assuming your orders table has user_id or customer_id
-        $orders = RetailerOrder::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+    $rawOrders = \App\Models\RetailerOrder::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        return view('dashboard.customer-orders', compact('orders'));
-    }
+    $groupedOrders = $rawOrders
+        ->groupBy(function ($order) {
+            return strtolower(trim($order->status));
+        })
+        ->map(function ($statusGroup) {
+            return $statusGroup->groupBy('transaction_id');
+        });
+
+    $unreadCount = 0;  // just set to zero
+
+    $wishlistItems = Wishlist::where('user_id', $userId)->get();
+    $wishlistCount = $wishlistItems->count();
+
+    $cartCount = Cart::where('user_id', $userId)->count();
+
+    $pendingOrdersCount = \App\Models\RetailerOrder::where('user_id', $userId)
+    ->where('status', 'Pending')
+    ->count();
+
+
+    return view('dashboard.customer-orders', [
+    'groupedOrders' => $groupedOrders,
+    'user' => auth()->user(),
+    'unreadCount' => $unreadCount,
+    'wishlistCount' => $wishlistCount,
+    'cartCount' => $cartCount,
+    'pendingOrdersCount' => $pendingOrdersCount,
+]);
+
+}
+
+
+
+
 
     // Show detail page for a single order by transaction ID
-    public function show($transactionId)
-    {
-        $user = Auth::user();
+   public function show($transactionId)
+{
+    $user = Auth::user();
 
-        // Fetch all items with this transaction ID belonging to this user
-        $orderItems = RetailerOrder::where('transaction_id', $transactionId)
-            ->where('user_id', $user->id)
-            ->get();
+    // Fetch all order items with this transaction ID for this user, with retailer and user info eager loaded
+    $orderItems = RetailerOrder::where('transaction_id', $transactionId)
+        ->where('user_id', $user->id)
+        ->with(['retailer.user']) // eager load retailer and the user linked to the retailer
+        ->get();
 
-        if ($orderItems->isEmpty()) {
-            abort(404, 'Order not found');
-        }
-
-        return view('dashboard.customer-orders-details', [
-            'orderItems' => $orderItems,
-            'transactionId' => $transactionId,
-        ]);
+    if ($orderItems->isEmpty()) {
+        abort(404, 'Order not found');
     }
+
+    // Get the retailer info from first order item (assuming same retailer for all items in this transaction)
+    $retailer = $orderItems->first()->retailer;
+
+    return view('dashboard.customer-orders-details', [
+        'orderItems' => $orderItems,
+        'transactionId' => $transactionId,
+        'retailer' => $retailer,
+    ]);
+}
+
 
    public function cancel(Request $request, $transactionId)
 {

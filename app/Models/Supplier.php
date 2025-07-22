@@ -32,4 +32,14 @@ class Supplier extends Authenticatable
     
 
     protected $hidden = ['password'];
+
+    public function inventories()
+{
+    return $this->hasMany(SupplierInventory::class, 'supplier_id', 'user_id');
+}
+
+public function purchaseOrders() {
+    return $this->hasMany(PurchaseOrder::class);
+}
+
 }
