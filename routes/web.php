@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\App;
 use App\Mail\SupportTicketReplyMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SupportTicketController;
+use App\Http\Controllers\LogisticsController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
@@ -50,6 +51,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
 });
+
+Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    Route::resource('logistics', LogisticsController::class)->except(['index']);
+     Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics');
+    // Route::get('/logistics', [LogisticsController::class, 'index'])->name('logistics.index');
+    Route::get('/logistics/create', [LogisticsController::class, 'create'])->name('admin.logistics.create');
+    Route::post('/logistics', [LogisticsController::class, 'store'])->name('admin.logistics.store');
+    Route::get('/logistics/{logistic}', [LogisticsController::class, 'show'])->name('admin.logistics.show');
+    Route::get('/logistics/{logistic}/edit', [LogisticsController::class, 'edit'])->name('admin.logistics.edit');
+    Route::put('/logistics/{logistic}', [LogisticsController::class, 'update'])->name('admin.logistics.update');
+    Route::delete('/logistics/{logistic}', [LogisticsController::class, 'destroy'])->name('admin.logistics.destroy');
+    Route::get('/logistics/{logistic}/shipments', [LogisticsController::class, 'shipments'])->name('admin.logistics.shipments');
+
 
 
 // Procurement routes without authentication
