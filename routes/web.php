@@ -32,6 +32,8 @@ use App\Mail\SupportTicketReplyMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\LogisticsController;
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Controllers\ML\ForecastExportController;
 
 Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
 
@@ -251,6 +253,12 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
         Artisan::call('ml:run-demand-prediction');
         return redirect()->back()->with('success', 'Demand forecast updated successfully.');
     })->middleware(['auth', 'role:admin'])->name('admin.run.demand');
+
+    Route::post('/generate-forecast', [ForecastController::class, 'generate'])->name('generate.forecast');
+
+        // route for the export button of forecast predictions
+        Route::get('/forecast-pdf', [ForecastExportController::class, 'download'])->name('forecast.pdf');
+
 //promo email button
     Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
         ->middleware(['auth', 'role:admin'])
