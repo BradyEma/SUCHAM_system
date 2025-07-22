@@ -52,7 +52,7 @@
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('wholesaler_inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('wholesaler.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-boxes mr-3"></i>
                         Inventory
                     </a>
