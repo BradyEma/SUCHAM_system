@@ -149,11 +149,9 @@
                         <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
                             Pending <span class="ml-1 bg-yellow-100 text-yellow-800 rounded-full px-2 py-0.5 text-xs">5</span>
                         </button>
+                        
                         <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
-                            Processing <span class="ml-1 bg-blue-100 text-blue-800 rounded-full px-2 py-0.5 text-xs">3</span>
-                        </button>
-                        <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
-                            Shipped <span class="ml-1 bg-purple-100 text-purple-800 rounded-full px-2 py-0.5 text-xs">8</span>
+                            On Delivery <span class="ml-1 bg-purple-100 text-purple-800 rounded-full px-2 py-0.5 text-xs">8</span>
                         </button>
                         <button class="order-tab py-3 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
                             Delivered <span class="ml-1 bg-green-100 text-green-800 rounded-full px-2 py-0.5 text-xs">7</span>
