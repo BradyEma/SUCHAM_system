@@ -7,6 +7,7 @@ use App\Models\SupplierInventory;
 use Illuminate\Http\Request;
 use App\Models\Product; // ✅ Add this line
 
+
 class SupplierInventoryController extends Controller
 {
 public function index()

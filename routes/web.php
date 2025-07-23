@@ -28,7 +28,7 @@ use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Retailer\OrderController;
 use App\Http\Controllers\WholesalerInventoryController;
-
+use App\Http\Controllers\SupplierInventoryController;
 
 
 
@@ -308,6 +308,9 @@ Route::name('wholesaler.')->prefix('wholesaler')->group(function () {
 Route::get('/wholesaler/inventory/create', [WholesalerInventoryController::class, 'create'])->name('wholesaler_inventory.create');
 Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
 
+Route::get('/supplier/inventory', [SupplierInventoryController::class, 'index'])->name('supplier_inventory.index');
+Route::get('/supplier/inventory/create', [SupplierInventoryController::class, 'create'])->name('supplier_inventory.create');
+Route::resource('supplier/inventory', SupplierInventoryController::class)->names('supplier_inventory');
 
 
 

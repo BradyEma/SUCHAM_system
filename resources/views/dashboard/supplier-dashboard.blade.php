@@ -1,4 +1,5 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
+@php $user = Auth::user(); @endphp
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +52,17 @@
                     <div class="text-xs text-green-200">Industries Ltd.</div>
                 </div>
             </div>
+            <div class="p-4 border-b border-t border-primary-700 flex items-center space-x-3">
+    <img 
+        src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+        alt="{{ $user->name }}" 
+        class="h-10 w-10 rounded-full border-2 border-yellow-400"
+    >
+    <div>
+        <p class="font-medium">{{ $user->name }}</p>
+        <p class="text-xs text-primary-200">Verified Account</p>
+    </div>
+</div>
             <nav class="space-y-1">
                 <a href="{{ route('supplier.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
                     <i class="fas fa-tachometer-alt w-5 text-center"></i>
@@ -135,7 +147,7 @@
 
             <div class="flex justify-between items-start mb-8">
                 <div>
-                    <h1 class="text-3xl font-bold text-green-800">Welcome, {{ Auth::user()->name }}!</h1>
+                    <h1 class="text-3xl font-bold text-black">Welcome, {{ Auth::user()->name }}!</h1>
                     <p class="text-gray-600">Here's your GoldenFields supplier dashboard overview</p>
                 </div>
                 <div class="relative">
@@ -149,14 +161,14 @@
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-green-500">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2 text-gray-500">Active Orders</h2>
+                            <h2 class="text-lg font-semibold mb-2 text-black">Active Orders</h2>
                             <p class="text-3xl font-bold text-green-700">5</p>
                         </div>
                         <div class="p-3 rounded-full text-black bg-green-100">
                             <i class="fas fa-clipboard-list"></i>
                         </div>
                     </div>
-                    <p class="text-sm text-green-600 mt-2 flex items-center">
+                    <p class="text-sm text-yellow-600 mt-2 flex items-center">
                         <i class="fas fa-arrow-up mr-1"></i>
                         12% from last month
                     </p>
@@ -165,48 +177,49 @@
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-green-500">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2 text-gray-500">Total Sales</h2>
-                            <p class="text-3xl font-bold text-green-700">UGX 3,500,000</p>
+                            <h2 class="text-lg font-semibold mb-2 text-black">Total Sales</h2>
+                            <p class="text-3xl font-bold text-green-700">3,500,000</p>
                         </div>
-                        <div class="p-3 rounded-full text-black bg-green-100">
-                            <i class="fas fa-money-bill-wave"></i>
+                        <div class="p-3 rounded-full text-black bg-green-100 text-xs">
+                            UGX
                         </div>
                     </div>
-                    <p class="text-sm text-green-600 mt-2 flex items-center">
-                        <i class="fas fa-arrow-up mr-1"></i>
-                        24% from last month
+                    <p class="text-sm text-yellow-600 mt-2 flex items-center">
+                        <i class="fas fa-star mr-1"></i>
+                        Accurate Sales
                     </p>
                 </div>
 
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-green-500">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2 text-gray-500">Messages</h2>
-                            <p class="text-3xl font-bold text-green-700">2</p>
+                            <h2 class="text-lg font-semibold mb-2 text-black">Rating</h2>
+                            <p class="text-3xl font-bold text-green-700">4.3</p>
                         </div>
                         <div class="p-3 rounded-full  text-black bg-green-100">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <p class="text-sm text-red-600 mt-2 flex items-center">
-                        <i class="fas fa-exclamation-circle mr-1"></i>
-                        1 new since yesterday
+                    <p class="text-sm text-yellow-600 mt-2 flex items-center">
+                        <i class="fas fa-star mr-1"></i>
+                        Certified Supplier
                     </p>
                 </div>
 
                 <div class="stat-card bg-white shadow-lg rounded-xl p-6 border-l-green-500">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h2 class="text-lg font-semibold mb-2 text-gray-500">Inventory</h2>
-                            <p class="text-3xl font-bold text-green-700">87 items</p>
+                            <h2 class="text-lg font-semibold mb-2 text-black">Inventory</h2>
+                            <p class="text-3xl font-bold text-green-700">13 items</p>
+
                         </div>
                         <div class="p-3 rounded-full text-black bg-green-100">
                             <i class="fas fa-boxes "></i>
                         </div>
                     </div>
-                    <p class="text-sm text-red-600 mt-2 flex items-center">
-                        <i class="fas fa-exclamation-triangle mr-1"></i>
-                        5 items low stock
+                    <p class="text-sm text-yellow-600 mt-2 flex items-center">
+                        <i class="fas fa-star mr-1"></i>
+                        Certified Products
                     </p>
                 </div>
             </div>

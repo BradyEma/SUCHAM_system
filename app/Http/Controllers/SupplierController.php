@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SupplierInventory;
 
 class SupplierController extends Controller
 {
@@ -16,7 +17,6 @@ class SupplierController extends Controller
     {
         $user = Auth::user();
         $supplier = $user->supplier;
-
         $alert = null;
 
         if (!$supplier) {
