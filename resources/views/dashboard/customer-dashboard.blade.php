@@ -281,41 +281,48 @@
 
             products: [
                 {
+                    product_id: 1,
                     name: "Brown Sugar",
                     price: 5000,
                     img: "/product_images/brownsugar.jpg"
                 },
                 {
+                    product_id: 2,
                     name: "White Sugar",
                     price: 5500,
                     img: "/product_images/whitesugar.jpg"
                 },
                 {
+                    product_id: 3,
                     name: "Raw Sugar",
                     price: 3500,
                     img: "/product_images/raw-sugar.jpg"
                 },
                 {
+                    product_id: 4,
                     name: "Sugar Cubes",
                     price: 6000,
                     img: "/product_images/sugarcubes.png"
                 },
                 {
+                    product_id: 5,
                     name: "Molasses",
                     price: 2000,
                     img: "/product_images/molasses.jpg"
                 },
-                {
+                 {
+        product_id: 6,
                     name: "Honey",
                     price: 4000,
                     img: "/product_images/honey.jpg"
-                },
-                 {
-        
+    },
+    {
+        product_id: 7,
         name: "Caster Sugar",
         price: 5000,
         img: "/product_images/caster-sugar.png"
     }
+    
     
             ],
 
@@ -340,10 +347,12 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        product_name: product.name,
-                        product_image: product.img,
-                        price: product.price
-                    })
+            product_id: product.product_id, // ✅ this is important
+            product_name: product.name,
+            price: product.price,
+            product_image: product.img,
+            quantity: 1
+        })
                 })
                 .then(response => {
                     if (!response.ok) throw new Error("Network response was not ok");
@@ -398,13 +407,13 @@
     },
    
     {
-        product_id: 7,
+        product_id: 6,
                     name: "Honey",
                     price: 4000,
                     img: "/product_images/honey.jpg"
     },
     {
-        product_id: 8,
+        product_id: 7,
         name: "Caster Sugar",
         price: 5000,
         img: "/product_images/caster-sugar.png"

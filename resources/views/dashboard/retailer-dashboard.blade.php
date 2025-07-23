@@ -89,7 +89,7 @@
                         </a>
                         
                         <!-- Orders -->
-                        <a href="{{ route('retailer_orders.index') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                        <a href="{{ route('retailer.orders') }}" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                             <i class="fas fa-shopping-cart mr-3"></i>
                             My Orders
                             <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">{{ $pendingOrders }}</span>

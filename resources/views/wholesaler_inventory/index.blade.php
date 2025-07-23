@@ -136,50 +136,58 @@
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <div class="flex">
+<body>
+    <div class="flex min-h-screen">
         <!-- Sidebar -->
-        <aside class="w-64 sidebar text-white p-6 space-y-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
-                    <img src="{{ asset('goldenfields.png') }}" alt="GoldenFields Logo" class="h-8 w-8 rounded-full">
-                </div>
-                <div>
-                    <div class="text-xl font-bold">GoldenFields</div>
-                    <div class="text-xs text-green-200">Industries Ltd.</div>
+        <div class="sidebar text-white w-64 flex-shrink-0 hidden md:flex md:flex-col">
+            <div class="flex items-center justify-center p-6 border-b border-yellow-500">
+                <div class="flex items-center">
+                    <i class="fas fa-store-alt text-yellow-400 text-2xl mr-3"></i>
+                    <span class="text-xl font-bold">GoldenFields</span>
                 </div>
             </div>
-            <nav class="space-y-1">
-                <a href="{{ route('wholesaler.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-tachometer-alt mr-3"></i>
-                    Dashboard
-                </a>
-                <a href="{{ route('wholesaler.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
-                    <i class="fas fa-boxes mr-3"></i>
-                    Inventory
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-shopping-cart mr-3"></i>
-                    Orders
-                    <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
-                </a>
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-truck mr-3"></i>
-                    Deliveries
-                </a>
-               
-                <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-chart-line mr-3"></i>
-                    Messages
-                    <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>
-                </a>
+            <div class="flex-grow p-4 overflow-y-auto">
+                <nav class="space-y-1">
+                    <a href="{{ route('wholesaler.dashboard') }}"   class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="{{ route('wholesaler.inventory.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item active">
+                        <i class="fas fa-boxes mr-3"></i>
+                        Inventory
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-shopping-cart mr-3"></i>
+                        Orders
+                        <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">3</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-truck mr-3"></i>
+                        Deliveries
+                    </a>
+                   
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        Messages
+                        <span class="ml-auto bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">5</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-question-circle w-5 text-center"></i>
+                        <span>Support Center</span>
+                    </a>
+                    
+                    <a href="{{ route('wholesaler.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <i class="fas fa-comments mr-3"></i>
+                        Profile
+                        
+                    </a>
+                </nav>
                 
-                <a href="{{ route('wholesaler.profile') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
-                    <i class="fas fa-comments mr-3"></i>
-                    Profile
-                </a>
-            </nav>
-        </aside>
+                <div class="mt-auto p-4">
+                    
+                </div>
+            </div>
+        </div>
         <!-- Main Content -->
         <div class="flex-1 p-6">
             <!-- Header -->

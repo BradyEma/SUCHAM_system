@@ -27,6 +27,8 @@ use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Retailer\OrderController;
+use App\Http\Controllers\WholesalerInventoryController;
+
 
 
 
@@ -277,10 +279,11 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
 
 //promo email button
     // Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
-    //     ->middleware(['auth', 'role:admin'])
+    //     ->middleware(['auth', 'role:admin'])s
     //     ->name('admin.send.promo');
 
 
+Route::post('/wholesaler/update-profile-picture', [WholesalerController::class, 'updateProfilePicture'])->name('wholesaler.profile-picture.update');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -301,6 +304,10 @@ Route::middleware(['auth'])->group(function () {
 Route::name('wholesaler.')->prefix('wholesaler')->group(function () {
     Route::get('/inventory', [WholesalerInventoryController::class, 'index'])->name('inventory.index');
 });
+
+Route::get('/wholesaler/inventory/create', [WholesalerInventoryController::class, 'create'])->name('wholesaler_inventory.create');
+Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
+
 
 
 

@@ -115,7 +115,10 @@
                         <div class="ml-3 relative">
                             <div class="flex items-center">
                                 <button class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                                    <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User profile">
+                                    <img class="h-8 w-8 rounded-full" 
+     src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+     alt="User profile">
+
                                 </button>
                             </div>
                         </div>

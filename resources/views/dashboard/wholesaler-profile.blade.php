@@ -56,7 +56,7 @@
             </div>
             <div class="flex-grow p-4 overflow-y-auto">
                 <nav class="space-y-1">
-                    <a  href="{{ route('wholesaler.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('wholesaler.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-tachometer-alt mr-3"></i>
                         Dashboard
                     </a>
@@ -123,7 +123,10 @@
                             <div class="ml-3 relative">
                                 <div>
                                     <button class="flex text-sm rounded-full focus:outline-none" id="user-menu">
-                                        <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User profile">
+                                        <img class="h-8 w-8 rounded-full" 
+     src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('images/default-avatar.png') }}" 
+     alt="User profile">
+
                                     </button>
                                 </div>
                                 
@@ -158,6 +161,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- Profile Picture Upload Section -->
+<div class="mt-10 bg-white shadow rounded-lg p-6">
+    <h2 class="text-lg font-semibold mb-4">Update Profile Picture</h2>
+
+    @if(session('profile_success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('profile_success') }}
+        </div>
+    @endif
+
+    @if(auth()->user()->profile_picture)
+        <div class="mb-4">
+            <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="Profile Picture"
+                 class="w-32 h-32 rounded-full object-cover border border-gray-300 shadow">
+        </div>
+    @endif
+
+    <form action="{{ route('wholesaler.profile-picture.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('POST')
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-1">Choose New Profile Picture</label>
+            <input type="file" name="profile_picture"
+                   class="border border-gray-300 rounded px-3 py-2 w-full @error('profile_picture') border-red-500 @enderror">
+            @error('profile_picture')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded">
+            Update Picture
+        </button>
+    </form>
+</div>
+
 
         <!-- Current Profile Data -->
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 mb-8">
