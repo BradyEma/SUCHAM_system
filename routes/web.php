@@ -28,38 +28,58 @@ use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
 use App\Http\Controllers\Retailer\OrderController;
 use App\Http\Controllers\WholesalerInventoryController;
+use App\Http\Controllers\ProcurementRequestController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\GoodsReceivedController;
+use App\Http\Controllers\ProcurementDashboardController;
+use App\Http\Controllers\RetailerWholesalerOrderController;
 
+Route::get('/purchase-orders/{id}/items', function ($id) {
+    $items = \App\Models\PurchaseOrderItem::where('purchase_order_id', $id)
+        ->with('product') // make sure the relationship exists
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'product_name' => $item->product->name ?? 'N/A',
+                'quantity_ordered' => $item->quantity,
+            ];
+        });
 
-
-
-Route::get('/', function () {
-    return view('welcome');
+    return response()->json($items);
 });
 
-// Login routes
-Route::get('/login', fn () => view('auth.login'))->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::resource('retailer_wholesaler_orders', RetailerWholesalerOrderController::class)->middleware('auth');
+Route::get('/retailer-wholesaler-orders/charts-data', [RetailerWholesalerOrderController::class, 'chartsData'])->name('retailer_wholesaler_orders.chartsData');
 
-// Supplier registration
-Route::get('/register/supplier', [SupplierRegisterController::class, 'showRegistrationForm'])->name('register.supplier');
-Route::post('/register/supplier', [SupplierRegisterController::class, 'register'])->name('register.supplier.submit');
 
-use App\Http\Controllers\Admin\InventoryController;
-use App\Http\Controllers\SupplierProfileController;
-use App\Http\Controllers\SupplierRegisterController;
 
-use App\Http\Controllers\VendorValidationController;
+Route::get('/admin/procurement/dashboard', [ProcurementDashboardController::class, 'index'])->name('admin.procurement.dashboard');
+
+
+Route::get('/revenue-data', [DashboardController::class, 'getRevenueData'])->name('revenue.data');
+
+// Procurement routes without authentication
+Route::prefix('procurement')->name('procurement.')->group(function () {
+    Route::get('/dashboard', [ProcurementDashboardController::class, 'index'])
+        ->name('dashboard');
+        
+    Route::get('/metrics', [ProcurementDashboardController::class, 'metrics'])
+        ->name('metrics');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('procurement-requests', ProcurementRequestController::class);
+    Route::resource('purchase-orders', PurchaseOrderController::class);
+    Route::resource('goods-received', GoodsReceivedController::class);
+});
+
+Route::resource('wholesaler_inventory', WholesalerInventoryController::class);
+Route::get('wholesaler_inventory/export', [WholesalerInventoryController::class, 'export'])->name('wholesaler_inventory.export');
+
+
+Route::resource('supplier_inventory', SupplierInventoryController::class);
  
-use App\Http\Controllers\ML\ForecastExportController;
-use App\Http\Controllers\Admin\CustomerSegmentController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Retailer\RetailerInventoryController;
-
-
-
-
-
-
 Route::get('/', fn () => view('welcome'));
 
 Route::middleware(['auth', 'supplier.complete'])->group(function () {

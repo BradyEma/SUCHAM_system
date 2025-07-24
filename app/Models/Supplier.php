@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\GoodsReceived;
+
 
 class Supplier extends Authenticatable
 {
@@ -42,4 +44,19 @@ public function purchaseOrders() {
     return $this->hasMany(PurchaseOrder::class);
 }
 
+
+    public function deliveries()
+    {
+        return $this->hasMany(GoodsReceived::class, 'supplier_id');
+    }
+
+    public function getDeliveryCountAttribute()
+{
+    return $this->deliveries()->count();
 }
+
+
+}
+
+
+

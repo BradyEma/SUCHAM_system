@@ -12,7 +12,18 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $purchaseOrders = PurchaseOrder::orderBy('created_at', 'desc')->paginate(10);
-        return view('purchase_orders.index', compact('purchaseOrders'));
+      
+    $approvedCount = PurchaseOrder::where('status', 'approved')->count();
+    $pendingCount = PurchaseOrder::where('status', 'pending')->count();
+    $rejectedCount = PurchaseOrder::where('status', 'rejected')->count();
+    $totalValue = PurchaseOrder::sum('total_cost'); // adjust if you use a different column
+
+    return view('purchase_orders.index', [
+        'approvedCount' => $approvedCount,
+        'pendingCount' => $pendingCount,
+        'rejectedCount' => $rejectedCount,
+        'totalValue' => $totalValue
+    ])->with('purchaseOrders', $purchaseOrders);
     }
 
     public function create()
@@ -102,4 +113,11 @@ public function store(Request $request)
         return redirect()->route('purchase-orders.index')
             ->with('success', 'Purchase order deleted successfully.');
     }
+
+    public function getItems($id)
+{
+    $po = PurchaseOrder::with('items.product')->findOrFail($id);
+    return response()->json($po->items);
+}
+
 }

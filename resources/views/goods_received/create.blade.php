@@ -1,4 +1,4 @@
-<div class="gf-container" style="background: #FFFFFF; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; border: 1px solid #EAEAEA;">
+<div class="gf-container" style="background: #f5f5f5; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); max-width: 900px; margin: 0 auto; border: 1px solid #EAEAEA;">
     <div class="gf-header" style="border-bottom: 2px solid #FFD700; padding-bottom: 15px; margin-bottom: 20px;">
         <h2 style="color: #006400; font-weight: 600;">Goods Received Note</h2>
     </div>
@@ -19,17 +19,19 @@
                 </div>
                 
                 <div class="gf-form-group">
-                    <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">Received Date</label>
+                    <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">Ordered Date</label>
                     <input type="date" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;">
                 </div>
             </div>
             
             <div class="gf-form-group" style="margin-top: 15px;">
                 <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">Received By</label>
-                <input type="text" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: #F8F8F8; font-size: 14px;  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); /* Added subtle inset shadow */
-                  transition: border-color 0.3s ease;" /* Added transition */
-           placeholder="Enter your name and position" 
-           required>
+                <input type="text" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: #F8F8F8; font-size: 14px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); transition: border-color 0.3s ease;" placeholder="Enter your name and position" required>
+            </div>
+            
+            <div class="gf-form-group" style="margin-top: 15px;">
+                <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">Delivered At (optional)</label>
+                <input type="date" style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;">
             </div>
         </div>
         
@@ -40,7 +42,8 @@
                 <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                     <thead style="background-color: #F8F8F8;">
                         <tr>
-                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;"> Purchase order Item</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;">Purchase Order Item id</th>
+                            <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;">Purchase Order Item</th>
                             <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;">Ordered Qty</th>
                             <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;">Received Qty</th>
                             <th style="padding: 12px; text-align: left; border-bottom: 2px solid #FFD700; font-weight: 500;">Unit
@@ -83,8 +86,6 @@
                 <label style="display: block; margin-bottom: 5px; color: #555; font-weight: 500;">Notes</label>
                 <textarea style="width: 100%; padding: 10px; border: 1px solid #E0E0E0; border-radius: 4px; min-height: 100px; background-color: white; font-size: 14px;" placeholder="Any additional notes about the received goods..."></textarea>
             </div>
-            
-    
         </div>
         
         <div class="gf-form-actions" style="text-align: right; border-top: 1px solid #EEE; padding-top: 20px;">
@@ -109,6 +110,9 @@ function addNewItemRow() {
     
     // Set the HTML for the new row
     newRow.innerHTML = `
+        <td style="padding: 12px;">
+            <input type="number" style="width: 100%; padding: 8px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;" placeholder="Item id">
+        </td>
         <td style="padding: 12px;">
             <input type="text" style="width: 100%; padding: 8px; border: 1px solid #E0E0E0; border-radius: 4px; background-color: white; font-size: 14px;" placeholder="Item name">
         </td>
