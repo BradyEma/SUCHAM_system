@@ -80,10 +80,12 @@ class VendorValidationController extends Controller
     $user = User::find(Auth::id());
 
     Mail::to($user->email)->send(new VendorValidationResultMail(
-        $user->name,
-        $responseData['success'],
-        $responseData['failedCriteria'] ?? []
-    ));
+    $user->name,
+    $responseData['success'],
+    $responseData['failedCriteria'] ?? [],
+    $validation->visit_date // <-- add this
+));
+
 } else {
     // In case the Java server returns an error
     $validation->validation_result = 'Failed: ' . $response->body();

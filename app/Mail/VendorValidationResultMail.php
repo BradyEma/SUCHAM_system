@@ -13,12 +13,14 @@ class VendorValidationResultMail extends Mailable
     public $supplierName;
     public $result;
     public $criteria;
+    public $visitDate; // <-- add this
 
-    public function __construct($supplierName, $result, $criteria = [])
+    public function __construct($supplierName, $result, $criteria = [], $visitDate = null)
     {
         $this->supplierName = $supplierName;
         $this->result = $result;
         $this->criteria = $criteria;
+        $this->visitDate = $visitDate;
     }
 
     public function build()
@@ -27,3 +29,4 @@ class VendorValidationResultMail extends Mailable
                     ->view('emails.vendor-validation-result');
     }
 }
+

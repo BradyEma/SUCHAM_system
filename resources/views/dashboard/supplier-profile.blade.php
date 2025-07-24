@@ -300,7 +300,10 @@
 
 <form method="POST" action="{{ route('vendor.validation.submit') }}" class="bg-white shadow-md rounded-lg p-6">
     @csrf
+     <h3 class="text-lg font-medium text-gray-800 mb-4">Business Information</h3>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
         <!-- Business Registration Number -->
         <div class="space-y-2">
             <label class="block text-sm font-medium text-gray-700">BRN (Business Registration Number)</label>

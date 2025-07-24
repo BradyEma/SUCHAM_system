@@ -87,7 +87,7 @@
                             <span>Inventory</span>
                      </a>
                         
-                        <a href="{{ route('admin.procurement.dashboard') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-shopping-cart w-5 text-center"></i>
                             <span>Procurement</span>
                         </a>
