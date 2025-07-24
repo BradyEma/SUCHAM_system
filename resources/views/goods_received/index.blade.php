@@ -27,9 +27,7 @@
                         <input type="text" placeholder="Search..." class="pl-8 pr-4 py-2 border border-green-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-green-800 placeholder-green-400">
                         <i class="fas fa-search absolute left-3 top-3 text-green-500"></i>
                     </div>
-                    <button class="bg-green-100 hover:bg-green-200 px-4 py-2 rounded-md transition-colors text-green-700">
-                        <i class="fas fa-filter"></i>
-                    </button>
+                    
                 </div>
             </div>
             

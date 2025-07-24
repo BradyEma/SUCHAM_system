@@ -25,9 +25,27 @@ use App\Http\Controllers\ProcurementRequestController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\GoodsReceivedController;
 use App\Http\Controllers\ProcurementDashboardController;
-use App\Http\Controllers\RetailerOrderController;
+use App\Http\Controllers\RetailerWholesalerOrderController;
 
-Route::resource('retailer_orders', RetailerOrderController::class)->middleware('auth');
+Route::get('/purchase-orders/{id}/items', function ($id) {
+    $items = \App\Models\PurchaseOrderItem::where('purchase_order_id', $id)
+        ->with('product') // make sure the relationship exists
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'product_name' => $item->product->name ?? 'N/A',
+                'quantity_ordered' => $item->quantity,
+            ];
+        });
+
+    return response()->json($items);
+});
+
+Route::resource('retailer_wholesaler_orders', RetailerWholesalerOrderController::class)->middleware('auth');
+Route::get('/retailer-wholesaler-orders/charts-data', [RetailerWholesalerOrderController::class, 'chartsData'])->name('retailer_wholesaler_orders.chartsData');
+
+
 
 Route::get('/admin/procurement/dashboard', [ProcurementDashboardController::class, 'index'])->name('admin.procurement.dashboard');
 

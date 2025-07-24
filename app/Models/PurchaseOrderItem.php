@@ -21,4 +21,9 @@ public function goodsReceived() {
     return $this->hasMany(GoodsReceived::class);
 }
 
+public function product()
+{
+    return $this->belongsTo(Product::class);
+}
+
 }

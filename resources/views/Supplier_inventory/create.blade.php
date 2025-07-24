@@ -92,7 +92,7 @@
             <option value="kg" {{ old('unit_of_measurement') == 'kg' ? 'selected' : '' }}>Kilograms (kg)</option>
             <option value="g" {{ old('unit_of_measurement') == 'g' ? 'selected' : '' }}>Grams (g)</option>
             <option value="L" {{ old('unit_of_measurement') == 'L' ? 'selected' : '' }}>Liters (L)</option>
-            <option value="ml" {{ old('unit_of_measurement') == 'ml' ? 'selected' : '' }}>Milliliters (ml)</option>
+            <option value="ml" {{ old('unit_of_measurement') == 'ml' ? 'selected' : '' }}>Trucks</option>
             <option value="pcs" {{ old('unit_of_measurement') == 'pcs' ? 'selected' : '' }}>Pieces</option>
             <option value="bags" {{ old('unit_of_measurement') == 'bags' ? 'selected' : '' }}>Bags</option>
             <option value="boxes" {{ old('unit_of_measurement') == 'boxes' ? 'selected' : '' }}>Boxes</option>

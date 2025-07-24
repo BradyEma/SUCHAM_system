@@ -307,7 +307,7 @@ primary: {
                                 <tr class="bg-green-600 text-gold-500">
                                     <th class="px-4 py-3 text-left">PO #</th>
                                     <th class="px-4 py-3 text-left">Supplier</th>
-                                    <th class="px-4 py-3 text-left">Amount ($)</th>
+                                    <th class="px-4 py-3 text-left">Amount (UG shs)</th>
                                     <th class="px-4 py-3 text-left">Status</th>
                                     <th class="px-4 py-3 text-left">Due Date</th>
                                 </tr>

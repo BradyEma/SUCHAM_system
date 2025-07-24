@@ -9,13 +9,14 @@ class GoodsReceived extends Model
     // 🔧 Tell Laravel the correct table name
     protected $table = 'goods_received';
 
-    protected $fillable = [
-        'purchase_order_id',
-        'received_date',
-        'received_by',
-        'received_items',
-        'notes',
-    ];
+   protected $fillable = [
+    'purchase_order_item_id',
+    'quantity_received',
+    'received_date',
+    'delivered_at',
+    'purchase_order_reference',
+];
+
 
      public function purchaseOrder()
     {

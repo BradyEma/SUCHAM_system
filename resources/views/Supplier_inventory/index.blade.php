@@ -249,11 +249,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $product->unit_of_measurement }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($product->quantity > 20)
+                                        @if($product->quantity > 30)
                                             <span class="badge badge-success px-3 py-1 rounded-full text-xs">
                                                 <i class="fas fa-check-circle mr-1"></i> In Stock
                                             </span>
-                                        @elseif($product->quantity > 0)
+                                        @elseif($product->quantity < 30 && $product->quantity > 10)
                                             <span class="badge badge-warning px-3 py-1 rounded-full text-xs">
                                                 <i class="fas fa-exclamation-triangle mr-1"></i> Low Stock
                                             </span>

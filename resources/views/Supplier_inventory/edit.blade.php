@@ -8,7 +8,9 @@
 <body class="bg-white p-6">
   <h1 class="text-3xl text-green-700 font-bold mb-6">Edit Inventory</h1>
 
-  <form action="/supplier_inventory/{{ $product->id }}" method="POST" class="space-y-4 max-w-lg">
+  <form action="{{ route('supplier_inventory.update', $product->product_id) }}" method="POST">
+    @csrf
+    @method('PUT')
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <input type="hidden" name="_method" value="PUT">
 

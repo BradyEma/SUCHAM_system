@@ -7,33 +7,43 @@ use App\Models\GoodsReceived;
 use App\Models\PurchaseOrder;
 
 class GoodsReceivedController extends Controller
-{public function index()
 {
-    // Fetch all goods received records along with their related supplier and purchase order
-    $receipts = GoodsReceived::with(['supplier', 'purchaseOrder'])->paginate(10);
-
-    // Return the view with the data
-    return view('goods_received.index', compact('receipts'));
-}
-
+    public function index()
+    {
+        // Fetch all goods received records along with their related supplier and purchase order
+        $receipts = GoodsReceived::with(['supplier', 'purchaseOrder'])->paginate(10);
+        return view('goods_received.index', compact('receipts'));
+    }
 
     public function create()
-{
-    // Only get 'sent' orders and include their suppliers
-    $purchaseOrders = PurchaseOrder::where('status', 'sent')->with('supplier')->get();
-
-    return view('goods_received.create', compact('purchaseOrders'));
-}
-
+    {
+        // Only get 'sent' orders and include their suppliers
+        $purchaseOrders = PurchaseOrder::where('status', 'sent')->with('supplier')->get();
+        return view('goods_received.create', compact('purchaseOrders'));
+    }
 
     public function store(Request $request)
     {
-        GoodsReceived::create($request->all());
+        $validated = $request->validate([
+            'purchase_order_id' => 'required|exists:purchase_orders,id',
+            'received_date' => 'required|date',
+            'delivered_at' => 'nullable|date',
+            'items' => 'required|array',
+            'items.*.purchase_order_item_id' => 'required|exists:purchase_order_items,id',
+            'items.*.quantity_received' => 'required|numeric|min:0',
+        ]);
 
-        $order = PurchaseOrder::find($request->purchase_order_id);
-        $order->update(['status' => 'received']);
+        foreach ($validated['items'] as $item) {
+            GoodsReceived::create([
+                'purchase_order_item_id' => $item['purchase_order_item_id'],
+                'quantity_received' => $item['quantity_received'],
+                'received_date' => $validated['received_date'],
+                'delivered_at' => $request->delivered_at,
+                'purchase_order_reference' => $request->purchase_order_id, // or real reference string
+            ]);
+        }
 
-        return redirect()->route('goods-received.index')->with('success', 'Goods marked as received');
+        return redirect()->route('goods-received.index')->with('success', 'Goods received saved successfully.');
     }
 
     public function destroy($id)

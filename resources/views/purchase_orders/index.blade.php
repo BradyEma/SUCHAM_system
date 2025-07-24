@@ -223,16 +223,13 @@
                         <input type="text" class="form-control search-input" placeholder="Search POs...">
                     </div>
                     <div class="dropdown me-2">
-                        <button class="btn btn-outline-light dropdown-toggle gold-border" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-filter me-1"></i> Filter
-                        </button>
+                        
                         <ul class="dropdown-menu" aria-labelledby="filterDropdown">
                             <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle text-success me-2"></i>Approved</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-clock text-warning me-2"></i>Pending</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-times-circle text-danger me-2"></i>Rejected</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Custom Filter</a></li>
-                        </ul>
+                         </ul>
                     </div>
                     <a href="{{ route('purchase-orders.create') }}" class="btn btn-gold">
                         <i class="fas fa-plus me-1"></i> New PO
@@ -242,68 +239,72 @@
         </div>
 
         <!-- Stats Cards -->
-        <div class="row mb-4 animate__animated animate__fadeIn">
-            <div class="col-md-3">
-                <div class="card card-shadow hover-scale">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-success bg-opacity-10 p-3 rounded me-3">
-                                <i class="fas fa-check-circle fs-3 text-success"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-muted">Approved POs</h6>
-                                <h4 class="mb-0 fw-bold text-success">0</h4>
-                            </div>
-                        </div>
+       <div class="row mb-4 animate__animated animate__fadeIn">
+    <div class="col-md-3">
+        <div class="card card-shadow hover-scale">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                        <i class="fas fa-check-circle fs-3 text-success"></i>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-shadow hover-scale">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
-                                <i class="fas fa-clock fs-3 text-warning"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-muted">Pending POs</h6>
-                                <h4 class="mb-0 fw-bold text-warning">0</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-shadow hover-scale">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-danger bg-opacity-10 p-3 rounded me-3">
-                                <i class="fas fa-times-circle fs-3 text-danger"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-muted">Rejected POs</h6>
-                                <h4 class="mb-0 fw-bold text-danger">0</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card card-shadow hover-scale">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                                <i class="fas fa-dollar-sign fs-3 text-primary"></i>
-                            </div>
-                            <div>
-                                <h6 class="mb-1 text-muted">Total Value</h6>
-                                <h4 class="mb-0 fw-bold text-primary">UG shs0</h4>
-                            </div>
-                        </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Approved POs</h6>
+                        <h4 class="mb-0 fw-bold text-success">{{ $approvedCount }}</h4>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-shadow hover-scale">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                        <i class="fas fa-clock fs-3 text-warning"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Pending POs</h6>
+                        <h4 class="mb-0 fw-bold text-warning">{{ $pendingCount }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-shadow hover-scale">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="bg-danger bg-opacity-10 p-3 rounded me-3">
+                        <i class="fas fa-times-circle fs-3 text-danger"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Rejected POs</h6>
+                        <h4 class="mb-0 fw-bold text-danger">{{ $rejectedCount }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-shadow hover-scale">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                        <i class="fas fa-dollar-sign fs-3 text-primary"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-muted">Total Value</h6>
+                        <h4 class="mb-0 fw-bold text-primary">UG shs{{ number_format($totalValue,2) }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <!-- Purchase Orders Table -->
         <div class="card card-shadow animate__animated animate__fadeInUp">

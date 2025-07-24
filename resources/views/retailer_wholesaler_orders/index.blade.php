@@ -87,7 +87,7 @@
                             </a>
                             
                             <!-- Orders -->
-                            <a href="#" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
+                            <a href="retailer_wholesaler_orders.index" class="text-primary-200 hover:bg-primary-700 hover:text-white group flex items-center px-4 py-3 text-sm font-medium rounded-md">
                                 <i class="fas fa-shopping-cart mr-3"></i>
                                 My Orders
                                 <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-0.5 rounded-full ml-auto">3</span>
@@ -139,35 +139,35 @@
                         <div class="bg-white rounded-lg shadow-md border-l-4 border-green-700 p-6">
                             <div class="text-green-800 text-3xl font-bold">{{ $pendingOrders }}</div>
                             <div class="text-amber-700">Pending Orders</div>
-                            <div class="mt-2 text-sm text-green-600">+2 from yesterday</div>
+                            
                         </div>
                         <div class="bg-white rounded-lg shadow-md border-l-4 border-amber-500 p-6">
                             <div class="text-green-800 text-3xl font-bold">{{ $processedToday }}</div>
                             <div class="text-amber-700">Processed Today</div>
-                            <div class="mt-2 text-sm text-green-600">80% completion</div>
+                           
                         </div>
                         <div class="bg-white rounded-lg shadow-md border-l-4 border-green-600 p-6">
                             <div class="text-green-800 text-3xl font-bold">UG shs{{ number_format($todaysRevenue, 2) }}</div>
                             <div class="text-amber-700">Today's Revenue</div>
-                            <div class="mt-2 text-sm text-green-600">15% from target</div>
+                            
                         </div>
                         <div class="bg-white rounded-lg shadow-md border-l-4 border-amber-600 p-6">
                             <div class="text-green-800 text-3xl font-bold">{{ $lowStockItems }}</div>
                             <div class="text-amber-700">Low Stock Items</div>
-                            <div class="mt-2 text-sm text-green-600">Need replenishment</div>
+                           
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex flex-wrap gap-4 mb-8">
-                        <a href="{{ route('retailer_orders.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 flex items-center">
+                        <a href="{{ route('retailer_wholesaler_orders.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                             </svg>
                             Place New Order
                         </a>
                        
-<form method="GET" action="{{ route('retailer_orders.index') }}" class="flex space-x-2 items-center">
+<form method="GET" action="{{ route('retailer_wholesaler_orders.index') }}" class="flex space-x-2 items-center">
     <select name="status" class="border border-green-700 rounded px-2 py-1 text-green-800">
         <option value="">All</option>
         <option value="Processing" {{ request('status') == 'Processing' ? 'selected' : '' }}>Processing</option>
@@ -220,8 +220,8 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <a href="{{ route('retailer_orders.show', $order->id) }}" class="text-green-600 hover:text-green-900 mr-3">View</a>
-                                            <a href="{{ route('retailer_orders.edit', $order->id) }}" class="text-amber-600 hover:text-amber-900">Edit</a>
+                                            <a href="{{ route('retailer_wholesaler_orders.show', $order->id) }}" class="text-green-600 hover:text-green-900 mr-3">View</a>
+                                            <a href="{{ route('retailer_wholesaler_orders.edit', $order->id) }}" class="text-amber-600 hover:text-amber-900">Edit</a>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -294,16 +294,24 @@
             </div>
         </div>
 
-        <script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+
+            // Orders Chart
+           <script>
+document.addEventListener('DOMContentLoaded', function () {
+    axios.get("{{ route('retailer_wholesaler_orders.chartsData') }}")
+        .then(response => {
+            const { orders, revenue } = response.data;
+
             // Orders Chart
             const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-            const ordersChart = new Chart(ordersCtx, {
+            new Chart(ordersCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    labels: orders.labels,
                     datasets: [{
                         label: 'Orders',
-                        data: [12, 19, 15, 24, 18, 10, 8],
+                        data: orders.data,
                         backgroundColor: 'rgba(255, 215, 0, 0.7)',
                         borderColor: 'rgba(0, 100, 0, 1)',
                         borderWidth: 1
@@ -313,28 +321,22 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 100, 0, 0.1)'
-                            }
+                            grid: { color: 'rgba(0, 100, 0, 0.1)' }
                         },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+                        x: { grid: { display: false } }
                     }
                 }
             });
 
             // Revenue Chart
             const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(revenueCtx, {
+            new Chart(revenueCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    labels: revenue.labels,
                     datasets: [{
-                        label: 'Revenue ($)',
-                        data: [12500, 14200, 13800, 15600, 18200, 17500, 19200],
+                        label: 'Revenue (UGX)',
+                        data: revenue.data,
                         fill: false,
                         backgroundColor: 'rgba(0, 100, 0, 1)',
                         borderColor: 'rgba(255, 215, 0, 1)',
@@ -346,19 +348,20 @@
                     scales: {
                         y: {
                             beginAtZero: false,
-                            grid: {
-                                color: 'rgba(0, 100, 0, 0.1)'
-                            }
+                            grid: { color: 'rgba(0, 100, 0, 0.1)' }
                         },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+                        x: { grid: { display: false } }
                     }
                 }
             });
-        </script>
+        })
+        .catch(error => {
+            console.error("Chart data fetch failed:", error);
+        });
+});
+</script>
+
+            
     </div>
 </body>
 </html>
