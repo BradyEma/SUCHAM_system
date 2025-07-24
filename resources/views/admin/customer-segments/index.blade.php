@@ -128,7 +128,7 @@
                         <span>Order Management</span>
                     </a>
                     
-                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                    <a href="{{ route('admin.raw_materials.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                         <i class="fas fa-shopping-cart w-5 text-center"></i>
                         <span>Procurement</span>
                     </a>

@@ -92,7 +92,7 @@
                             <span>Order Management</span>
                         </a>
                         
-                        <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
+                        <a href="{{ route('admin.raw_materials.index') }}" class="flex items-center space-x-3 px-4 py-3 rounded nav-item">
                             <i class="fas fa-shopping-cart w-5 text-center"></i>
                             <span>Procurement</span>
                         </a>
@@ -752,67 +752,42 @@
                     <!-- Recent Orders -->
                     <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
                         <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-medium text-gray-900">Recent Orders</h3>
+                            <h3 class="text-lg font-medium text-gray-900">REPORT REORDER LOG</h3>
                             <a href="#" class="text-sm font-medium text-primary-600 hover:text-primary-500">View all</a>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        <th scope="col" class="relative px-6 py-3"><span class="sr-only">Action</span></th>
-                                    </tr>
+                            <table class="w-full table-auto text-sm">
+                                <thead class="bg-gray-100">
+                                <tr class="text-left text-gray-700">
+                                    <th class="px-6 py-3 font-medium">Material</th>
+                                    <th class="px-6 py-3 font-medium">Quantity</th>
+                                    <th class="px-6 py-3 font-medium">Requested By</th>
+                                    <th class="px-6 py-3 font-medium">Requested At</th>
+                                </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-1001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">AgroHarvest Inc.</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$12,450</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-1002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GoldenCane Ltd.</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$8,720</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Processing</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-1003</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SugarFields Co.</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$15,300</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Shipped</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#GF-1004</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">FarmFresh Sugar</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$9,560</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Pending</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <a href="#" class="text-primary-600 hover:text-primary-900">View</a>
-                                        </td>
-                                    </tr>
+                                <tbody class="divide-y divide-gray-200">
+                                @forelse($reports as $report)
+                                <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 font-medium text-primary-700">{{ $report->material_name }}</td>
+                                    <td class="px-6 py-4">{{ $report->quantity_requested }}</td>
+                                    <td class="px-6 py-4">{{ $report->requested_by }}</td>
+                                    <td class="px-6 py-4 text-gray-600">{{ $report->requested_at->format('M d, Y H:i') }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-8 text-gray-500">
+                                    <div class="flex flex-col items-center justify-center space-y-2">
+                                        <i class="fas fa-inbox text-3xl text-gray-400"></i>
+                                        <span>No reorders found</span>
+                                    </div>
+                                    </td>
+                                </tr>
+                                @endforelse
                                 </tbody>
                             </table>
+                            <div class="mt-4">
+                                {{ $reports->links() }}
+                            </div>
                         </div>
                     </div>
                     

@@ -14,6 +14,9 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\ReorderReport;
+use App\Models\RawMaterial;
+
 
 class AdminController extends Controller
 {
@@ -38,8 +41,12 @@ class AdminController extends Controller
 
         $forecastData = $predictions->pluck('quantity');
 
+        //for a report of logs of reoredered products
+        $reports = ReorderReport::latest()->paginate(10);
+        $materials = RawMaterial::all();
+
         return view('dashboard.admin-dashboard', compact(
-            'forecastLabels', 'forecastData', 'suppliers', 'validations'
+            'forecastLabels', 'forecastData', 'suppliers', 'validations', 'reports', 'materials'
         ));
     }
 

@@ -1,51 +1,53 @@
 <?php
+use App\Models\Wishlist;
+use App\Models\SupportTicket;
 use Illuminate\Support\Facades\App;
+use App\Mail\SupportTicketReplyMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
+
 use App\Http\Controllers\AdminController;
 use App\Livewire\Admin\Messages\Messages;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\RetailerController;
-
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WholesalerController;
+
+use App\Http\Controllers\ML\ForecastController;
+use App\Http\Controllers\CustomerCartController;
+use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\RoleSelectionController;
 use App\Http\Controllers\SupportTicketController;
 use App\Livewire\Admin\Messages\ListConversation;
-use App\Http\Controllers\Admin\CustomerSegmentController;
-use Illuminate\Support\Facades\Mail;
-use App\Models\SupportTicket;
-use App\Mail\SupportTicketReplyMail;
-
-use App\Http\Controllers\Retailer\RetailerInventoryController;
-use App\Http\Controllers\VendorValidationController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\CustomerCartController;
-use App\Http\Controllers\CartController;
 use App\Http\Controllers\Retailer\OrderController;
-use App\Http\Controllers\CustomerOrderController;
 
 
 
 Route::get('/', fn () => view('welcome'));
 
+// use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\SupplierProfileController;
+
 use App\Http\Controllers\SupplierRegisterController;
-
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
  
-use App\Http\Controllers\ML\ForecastController;
-use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Controllers\VendorValidationController;
 use App\Http\Controllers\ML\ForecastExportController;
+use App\Http\Controllers\Admin\CustomerSegmentController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Retailer\RetailerInventoryController;
 
 
 
 
-
+use App\Http\Controllers\Admin\RawMaterialController;
 
 Route::get('/', fn () => view('welcome'));
 
@@ -59,11 +61,11 @@ Route::get('/admin/suppliers/{id}', [AdminController::class, 'showSupplier'])->n
 Route::post('/vendor/validate', [VendorValidationController::class, 'submit'])->name('vendor.validation.submit');
 
 
-Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
-    Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
-    Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
-});
+// Route::prefix('admin')->middleware('auth')->group(function () {
+//     Route::get('/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+//     Route::get('/inventory/create', [InventoryController::class, 'create'])->name('admin.inventory.create'); // 
+//     Route::post('/inventory', [InventoryController::class, 'store'])->name('admin.inventory.store');
+// });
 
 
 
@@ -179,10 +181,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customer/products', [CustomerController::class, 'products'])->name('customer.products');
     
     //admin
-    Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
+    // Route::get('/admin/inventory', [InventoryController::class, 'index'])->name('admin.inventory.index');
      Route::get('/admin/profile', [\App\Http\Controllers\AdminController::class, 'profile'])->name('admin.profile');
-      Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
-    Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
+    //   Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    // Route::post('/admin/profile/upload-picture', [AdminController::class, 'uploadProfilePicture'])->name('admin.uploadProfilePicture');
 
     //wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -247,13 +249,6 @@ Route::get('/admin/chat/supplier/{id}', [AdminController::class, 'chatWithSuppli
 
 
 
-//promo email button
-    // Route::post('/admin/send-promo/{cluster}', [CustomerSegmentController::class, 'sendPromotionToCluster'])
-    //     ->middleware(['auth', 'role:admin'])
-    //     ->name('admin.send.promo');
-
-
-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
@@ -270,6 +265,20 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.updateStatus');
 });
 
+// for the inventory Raw materials
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/raw-materials', [RawMaterialController::class, 'index'])->name('admin.raw_materials.index');
+    Route::post('/raw-materials', [RawMaterialController::class, 'store'])->name('admin.raw_materials.store');
+    // conversion of raw materials to final products
+    Route::post('/admin/raw-materials/convert', [RawMaterialController::class, 'checkAndConvert'])->name('admin.raw.convert');
+    // reorder report
+    Route::get('/reorders', [\App\Http\Controllers\ReorderReportController::class, 'index'])->name('admin.reorders.index');
+});
+
+// Inventory routes
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/inventory', [\App\Http\Controllers\Admin\InventoryController::class, 'index'])->name('admin.inventory.index');
+});
 
 // Auth routes
 Route::get('/login', fn () => view('auth.login'))->name('login');
